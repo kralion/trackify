@@ -5,6 +5,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { Platform } from 'react-native';
+
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
 
@@ -47,7 +48,10 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-      <Stack />
+      <Stack>
+        <Stack.Screen name="index" options={{ title: 'Registrar Pedido' }} />
+        <Stack.Screen name="shipping-status" options={{ title: 'Estado de Envío' }} />
+      </Stack>
     </ThemeProvider>
   );
 }
