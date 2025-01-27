@@ -17,6 +17,19 @@
         {
           "launchMode": "most-recent"
         }
+      ],
+      [
+        "@rnmapbox/maps",
+        {
+          //TODO: Remplezar el token y eliminar este comentario
+          "RNMapboxMapsDownloadToken": "sk.ey.."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Mostrar mi ubicación actual en el mapa."
+        }
       ]
     ],
     "experiments": {
