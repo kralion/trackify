@@ -40,7 +40,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.miguelparis.trackify"
+      "package": "com.grobles.trackify"
     },
     "extra": {
       "router": {

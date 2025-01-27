@@ -15,7 +15,7 @@ export default function ShippingStatusScreen() {
   return (
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerClassName="flex flex-col gap-4 items-center p-4">
+      contentContainerClassName="flex flex-col  gap-4 items-center p-4">
       <View className="my-4 flex w-full flex-col gap-2 rounded-xl  bg-zinc-100 p-4">
         <View className="flex flex-row items-center gap-2">
           <Text className="text-lg font-semibold">Status:</Text>
