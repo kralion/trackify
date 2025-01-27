@@ -1,10 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
-import { View, Text } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 
 type Params = {
   orderDetails: string;
@@ -13,46 +10,43 @@ type Params = {
 };
 
 export default function ShippingStatusScreen() {
-  const [status, setStatus] = useState<'En camino' | 'Entregado'>('En camino');
   const { orderDetails, destination, customerName } = useLocalSearchParams<Params>();
 
   return (
-    <Card className="bg-background flex-1 p-4">
-      <View className="space-y-6">
-        <View className="items-center">
-          <Badge variant={status === 'En camino' ? 'secondary' : 'outline'}>
-            <Text>{status}</Text>
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      contentContainerClassName="flex flex-col gap-4 items-center p-4">
+      <View className="my-4 flex w-full flex-col gap-2 rounded-xl  bg-zinc-100 p-4">
+        <View className="flex flex-row items-center gap-2">
+          <Text className="text-lg font-semibold">Status:</Text>
+          <Badge>
+            <Text>En camino</Text>
           </Badge>
         </View>
-
-        <View className="space-y-2">
+        <View className="flex flex-row items-center gap-2">
           <Text className="text-lg font-semibold">Detalles del pedido:</Text>
           <Text>{orderDetails}</Text>
         </View>
 
-        <View className="space-y-2">
+        <View className="flex flex-row items-center gap-2">
           <Text className="text-lg font-semibold">Destino:</Text>
           <Text>{destination}</Text>
         </View>
 
-        <View className="space-y-2">
+        <View className="flex flex-row items-center gap-2">
           <Text className="text-lg font-semibold">Cliente:</Text>
           <Text>{customerName}</Text>
         </View>
-
-        <View className="mt-8 flex-row justify-between">
-          <Button
-            variant="secondary"
-            onPress={() => setStatus('En camino')}
-            disabled={status === 'En camino'}>
-            <Text>Marcar como En Camino</Text>
-          </Button>
-
-          <Button onPress={() => setStatus('Entregado')} disabled={status === 'Entregado'}>
-            <Text>Marcar como Entregado</Text>
-          </Button>
-        </View>
       </View>
-    </Card>
+      <Image
+        source={{
+          uri: 'https://img.freepik.com/premium-vector/city-map-set-town-streets-with-green-line-park-river-downtown-gps-navigation-plans-abstract-transportation-urban-vector-drawing-town-small-road-maps-urban-patterns-texture_93083-1066.jpg?w=740',
+        }}
+        style={{
+          width: 350,
+          height: 500,
+        }}
+      />
+    </ScrollView>
   );
 }

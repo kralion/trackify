@@ -1,10 +1,10 @@
 import '~/global.css';
 
 import { Theme, ThemeProvider, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { Platform } from 'react-native';
+import { Button, Platform } from 'react-native';
 
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
@@ -25,9 +25,8 @@ export {
 
 export default function RootLayout() {
   const hasMounted = React.useRef(false);
-  const { colorScheme, isDarkColorScheme } = useColorScheme();
+  const { isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
-
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
       return;
@@ -49,8 +48,29 @@ export default function RootLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
       <Stack>
-        <Stack.Screen name="index" options={{ title: 'Registrar Pedido' }} />
-        <Stack.Screen name="shipping-status" options={{ title: 'Estado de Envío' }} />
+        <Stack.Screen
+          name="index"
+          options={{
+            title: 'Registrar Pedido',
+            headerLargeTitle: true,
+            headerLargeTitleShadowVisible: false,
+            // headerRight: () => (
+            //   <Button
+            //     title="Status"
+            //     onPress={() => router.push('/status')}
+            //     color="hsl(47.9, 95.8%, 53.1%)"
+            //   />
+            // ),
+          }}
+        />
+        <Stack.Screen
+          name="status"
+          options={{
+            title: 'Trackeo',
+            headerLargeTitle: true,
+            headerLargeTitleShadowVisible: false,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );
