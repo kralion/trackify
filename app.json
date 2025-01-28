@@ -21,7 +21,7 @@
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsDownloadToken": "pk.eyJ1IjoibWlndWVsMTU5NDU2NCIsImEiOiJjbTZmOWplcW4wMnphMmxxMXEydXl1cTMzIn0.AlpMqxqTRE39frsRRiW9ew"
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWlndWVsMTU5NDU2NCIsImEiOiJjbTZmdnl2cjkwNml3MmxwcWc0cHNrNG84In0.-bZ9YhZiCTaPSrDdG-81sQ"
         }
       ],
       [
