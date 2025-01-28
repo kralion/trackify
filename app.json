@@ -12,12 +12,7 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-dev-launcher",
-        {
-          "launchMode": "most-recent"
-        }
-      ],
+
       [
         "@rnmapbox/maps",
         {
