@@ -1,7 +1,15 @@
 import { Camera, LocationPuck, MapView, MarkerView, PointAnnotation } from '@rnmapbox/maps';
 import { useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import * as Location from 'expo-location';
 
 import { Badge } from '@/components/ui/badge';
 
@@ -41,16 +49,38 @@ const AnnotationContent = ({ title }: { title: string }) => (
   </View>
 );
 export default function ShippingStatusScreen() {
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const { orderDetails, destination, customerName } = useLocalSearchParams<Params>();
   const [pointList, setPointList] = React.useState<GeoJSON.Position[]>(INITIAL_COORDINATES);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
   const [allowOverlapWithPuck, setAllowOverlapWithPuck] = React.useState<boolean>(false);
 
   const onPressMap = (e: GeoJSON.Feature) => {
     const geometry = e.geometry as GeoJSON.Point;
     setPointList((pl) => [...pl, geometry.coordinates]);
   };
+
+  useEffect(() => {
+    async function getCurrentLocation() {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    }
+
+    getCurrentLocation();
+  }, []);
+
+  let text = 'Waiting...';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
 
   return (
     <ScrollView
@@ -78,11 +108,10 @@ export default function ShippingStatusScreen() {
           <Text>{customerName}</Text>
         </View>
       </View>
-
-      {errorMsg ? (
-        <Text className="text-red-500">{errorMsg}</Text>
-      ) : location ? (
-        <View className="overflow-hidden rounded-xl" style={{ width: 350, height: 500 }}>
+      {location ? (
+        <View
+          className="flex flex-col gap-4 rounded-xl bg-zinc-100 p-2"
+          style={{ width: 350, height: 500 }}>
           <MapView
             style={{ flex: 1 }}
             logoEnabled={false}
@@ -110,11 +139,11 @@ export default function ShippingStatusScreen() {
             ))}
             <LocationPuck />
           </MapView>
+          <Text className="text-center text-xl">Coordenadas: {text}</Text>
         </View>
       ) : (
-        <View
-          style={{ width: 350, height: 500 }}
-          className="items-center justify-center bg-zinc-100">
+        <View className="my-10 flex flex-row items-center justify-center gap-4 ">
+          <ActivityIndicator size="large" />
           <Text>Cargando mapa...</Text>
         </View>
       )}
