@@ -12,7 +12,6 @@
     },
     "plugins": [
       "expo-router",
-
       [
         "@rnmapbox/maps",
         {
