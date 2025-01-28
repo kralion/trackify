@@ -12,12 +12,7 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-dev-launcher",
-        {
-          "launchMode": "most-recent"
-        }
-      ],
+
       [
         "@rnmapbox/maps",
         {
@@ -52,15 +47,21 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.grobles.trackify"
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.joanpaucar.trackify"
     },
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "f956c06a-766c-479d-91c2-cb3d37712c3d"
+        "projectId": "4b9d91c5-83b7-4792-ace7-ec6a6559ade7"
       }
-    }
+    },
+
+    "owner": "joanpaucar"
   }
 }
