@@ -13,12 +13,6 @@
     "plugins": [
       "expo-router",
       [
-        "expo-dev-launcher",
-        {
-          "launchMode": "most-recent"
-        }
-      ],
-      [
         "@rnmapbox/maps",
         {
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWlndWVsMTU5NDU2NCIsImEiOiJjbTZmdnl2cjkwNml3MmxwcWc0cHNrNG84In0.-bZ9YhZiCTaPSrDdG-81sQ"
