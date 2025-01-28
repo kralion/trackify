@@ -21,8 +21,7 @@
       [
         "@rnmapbox/maps",
         {
-          //TODO: Remplezar el token y eliminar este comentario
-          "RNMapboxMapsDownloadToken": "sk.ey.."
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWlndWVsMTU5NDU2NCIsImEiOiJjbTZmdnl2cjkwNml3MmxwcWc0cHNrNG84In0.-bZ9YhZiCTaPSrDdG-81sQ"
         }
       ],
       [
