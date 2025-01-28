@@ -71,6 +71,14 @@ export default function RootLayout() {
             headerLargeTitleShadowVisible: false,
           }}
         />
+        <Stack.Screen
+          name="test"
+          options={{
+            title: 'Test',
+            headerLargeTitle: true,
+            headerLargeTitleShadowVisible: false,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );
