@@ -6,15 +6,14 @@ export default function Layout() {
     <Stack>
       <Stack.Screen
         name="(screens)/index"
-        options={{ headerShown: false, headerLargeTitle: true, title: 'Formulario' }}
+        options={{ headerShown: true, headerLargeTitle: true, title: 'Formulario' }}
       />
       <Stack.Screen
         name="(screens)/status"
         options={({ route }) => {
           const { id } = route.params as { id: number };
           return {
-            title: 'Detalles',
-            presentation: 'modal',
+            title: 'Detalles',            presentation: 'modal',
             headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
             headerTransparent: Platform.OS === 'android' ? false : true,
             headerShadowVisible: false,

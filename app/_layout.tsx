@@ -91,9 +91,9 @@ export default function RootLayout() {
   if (!isColorSchemeLoaded) {
     return null;
   }
-  if (isLoading) {
-    return <ActivityIndicator />;
-  }
+  // if (isLoading) {
+  //   return <ActivityIndicator />;
+  // }
 
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>

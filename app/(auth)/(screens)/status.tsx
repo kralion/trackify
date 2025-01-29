@@ -15,6 +15,8 @@ export default function MapScreen() {
   const form = useLocalSearchParams();
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [destinationCoords, setDestinationCoords] = useState<[number, number]>([-12.0579340, -77.1192740]);
+
   useEffect(() => {
     async function getCurrentLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -35,7 +37,7 @@ export default function MapScreen() {
     const { error } = await supabase.from('orders').insert({
       name: form.customerName,
       initial_location: [location.coords.longitude, location.coords.latitude],
-      final_location: [location.coords.longitude, location.coords.latitude],
+      final_location: destinationCoords,
       location: [location.coords.longitude, location.coords.latitude],
       description: form.orderDetails,
     });
@@ -56,7 +58,54 @@ export default function MapScreen() {
       </View>
       {location && (
         <MapboxGL.MapView style={styles.map}>
-          <MapboxGL.Camera zoomLevel={12} centerCoordinate={[-75.2187, -12.0658]} />
+          <MapboxGL.Camera
+            zoomLevel={12}
+            centerCoordinate={[-12.05793, -77.11927]}
+          />
+          
+          {/* Marcador de inicio (ubicación actual) */}
+          <MapboxGL.PointAnnotation
+            id="startPoint"
+            coordinate={[-12.05793, -77.11927]}
+          >
+            <View style={styles.markerContainer}>
+              <View style={[styles.marker, { backgroundColor: '#007AFF' }]} />
+            </View>
+          </MapboxGL.PointAnnotation>
+
+          {/* Marcador de destino */}
+          <MapboxGL.PointAnnotation
+            id="endPoint"
+            coordinate={destinationCoords}
+          >
+            <View style={styles.markerContainer}>
+              <View style={[styles.marker, { backgroundColor: '#FF3B30' }]} />
+            </View>
+          </MapboxGL.PointAnnotation>
+
+          {/* Línea de ruta */}
+          <MapboxGL.ShapeSource
+            id="routeSource"
+            shape={{
+              type: 'Feature',
+              properties: {},
+              geometry: {
+                type: 'LineString',
+                coordinates: [
+                  [location.coords.longitude, location.coords.latitude],
+                  destinationCoords
+                ],
+              },
+            }}
+          >
+            <MapboxGL.LineLayer
+              id="routeLine"
+              style={{
+                lineColor: '#007AFF',
+                lineWidth: 3,
+              }}
+            />
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
       )}
     </SafeAreaView>
@@ -66,4 +115,17 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   page: { flex: 1 },
   map: { flex: 1 },
+  markerContainer: {
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  marker: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'white',
+  },
 });
