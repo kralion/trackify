@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,8 +23,7 @@ export default function OrderFormScreen() {
       alert('Por favor complete todos los campos');
       return;
     }
-    router.push({ pathname: '/status', params: form });
-    // router.push('/test');
+    router.push({ pathname: '/(auth)/(screens)/status', params: form });
   };
 
   return (
