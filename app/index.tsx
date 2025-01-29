@@ -23,8 +23,8 @@ export default function OrderFormScreen() {
       alert('Por favor complete todos los campos');
       return;
     }
-    // router.push({ pathname: '/status', params: form });
-    router.push('/test');
+    router.push({ pathname: '/status', params: form });
+    // router.push('/test');
   };
 
   return (
