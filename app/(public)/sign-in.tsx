@@ -27,14 +27,14 @@ export default function SignInScreen() {
     <ScrollView contentInsetAdjustmentBehavior="automatic" className="bg-white  dark:bg-zinc-900">
       <View className="h-screen-safe relative flex flex-col justify-center  gap-12 web:pt-32">
         <View className="flex flex-col items-center gap-1 px-4 ">
-{/*           <Image
+          <Image
             style={{
-              width: 125,
-              height: 125,
+              width: 225,
+              height: 225,
             }}
             source={require('../../assets/logo.png')}
-          /> */}
-          <Text className="text-center text-4xl font-bold">Bienvenido a Trackify</Text>
+          />
+          <Text className="text-center text-3xl font-bold">Bienvenido a Trackify</Text>
           <Text className="text-center">Vincula una de tus cuentas para continuar</Text>
         </View>
         <View className="flex w-full flex-col justify-center gap-4 p-4 align-middle">

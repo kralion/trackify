@@ -28,10 +28,18 @@ export default function OrderFormScreen() {
       return;
     }
     router.push({ pathname: '/status', params: form });
+    router.push({ pathname: '/status', params: form });
     // router.push('/test');
   };
 
   return (
+    <View
+      className=" flex flex-col gap-4 p-4">
+      <Input
+        placeholder="Descripción del producto"
+        value={form.orderDetails}
+        onChangeText={(text) => setForm({ ...form, orderDetails: text })}
+      />
     <View style={{ flex: 1 }}>
       <Stack.Screen
         name="index"
@@ -57,6 +65,14 @@ export default function OrderFormScreen() {
           onChangeText={(text) => setForm({ ...form, customerName: text })}
         />
 
+      <Button className="mt-4" onPress={handleSubmit} accessibilityLabel="Enviar pedido">
+        <Text>Registrar Pedido</Text>
+      </Button>
+      {/* // TODO: logout button */}
+      <Button className="mt-4" onPress={() => signOut()} accessibilityLabel="Cerrar Sesión" variant={'destructive'}>
+        <Text className='text-white'>Cerrar Sesión</Text>
+      </Button>
+    </View>
         <Button className="mt-4" onPress={handleSubmit} accessibilityLabel="Enviar pedido">
           <Text>Registrar Pedido</Text>
         </Button>
