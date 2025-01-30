@@ -1,7 +1,8 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useEffect, useRef } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Text, Image, View, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from './Button';
 
@@ -35,12 +36,7 @@ export default function SelectedScooterSheet() {
         <BottomSheetView style={{ flex: 1, padding: 10, gap: 20 }}>
           {/* TOP part */}
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-            <Image
-              source={{
-                uri: 'https://img.icons8.com/?size=400&id=uTI4SjCIkNJp&format=png&color=000000',
-              }}
-              style={{ width: 60, height: 60 }}
-            />
+            <Image source={{ uri: 'https://img.icons8.com/?size=400&id=uTI4SjCIkNJp&format=png&color=000000' }} style={{ width: 60, height: 60 }} />
             <View style={{ flex: 1, gap: 5 }}>
               <Text style={{ color: 'white', fontSize: 20, fontWeight: '600' }}>Lime - S</Text>
               <Text style={{ color: 'gray', fontSize: 18 }}>

@@ -59,7 +59,9 @@ export default function MapScreen() {
           {location?.coords.latitude}, {location?.coords.longitude}
         </Text>
       </View>
-      <Map />
+      {location && (
+        <Map/>
+      )}
     </SafeAreaView>
   );
 }

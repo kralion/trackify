@@ -35,37 +35,16 @@ export default function OrderFormScreen() {
         value={form.orderDetails}
         onChangeText={(text) => setForm({ ...form, orderDetails: text })}
       />
-
-      <Input
-        placeholder="Descripción del producto"
-        value={form.orderDetails}
-        onChangeText={(text) => setForm({ ...form, orderDetails: text })}
-      />
-
       <Input
         placeholder="Dirección de entrega"
         value={form.destination}
         onChangeText={(text) => setForm({ ...form, destination: text })}
       />
-
       <Input
         placeholder="Destinatario"
         value={form.customerName}
         onChangeText={(text) => setForm({ ...form, customerName: text })}
       />
-
-      <Button className="mt-4" onPress={handleSubmit} accessibilityLabel="Enviar pedido">
-        <Text>Registrar Pedido</Text>
-      </Button>
-      {/* // TODO: logout button */}
-      <Button
-        className="mt-4"
-        onPress={() => signOut()}
-        accessibilityLabel="Cerrar Sesión"
-        variant={'destructive'}>
-        <Text className="text-white">Cerrar Sesión</Text>
-      </Button>
-
       <Button className="mt-4" onPress={handleSubmit} accessibilityLabel="Enviar pedido">
         <Text>Registrar Pedido</Text>
       </Button>

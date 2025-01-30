@@ -35,28 +35,28 @@ export default function RideProvider({ children }: PropsWithChildren) {
   const [rideRoute, setRideRoute] = useState<[number, number][]>([]);
   const { user } = useUser();
   //TODO: Comment this useEffect for testing purposes
-  useEffect(() => {
-    const fetchActiveRide = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('rides')
-          .select('*')
-          .eq('user_id', user?.id)
-          .is('finished_at', null)
-          .limit(1)
-          .single();
-        if (error) throw error;
-        if (data) setRide(data);
-        console.log(data);
-      } catch (error) {
-        console.error('Error fetching active ride:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchActiveRide = async () => {
+  //     try {
+  //       const { data, error } = await supabase
+  //         .from('rides')
+  //         .select('*')
+  //         .eq('user_id', user?.id)
+  //         .is('finished_at', null)
+  //         .limit(1)
+  //         .single();
+  //       if (error) throw error;
+  //       if (data) setRide(data);
+  //       console.log(data);
+  //     } catch (error) {
+  //       console.error('Error fetching active ride:', error);
+  //     }
+  //   };
 
-    if (user?.id) {
-      fetchActiveRide();
-    }
-  }, [user?.id]);
+  //   if (user?.id) {
+  //     fetchActiveRide();
+  //   }
+  // }, [user?.id]);
 
   useEffect(() => {
     if (!ride) return;
