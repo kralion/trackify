@@ -1,3 +1,4 @@
+import Map from '@/components/Map';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { supabase } from '@/utils/supabase';
@@ -15,7 +16,9 @@ export default function MapScreen() {
   const form = useLocalSearchParams();
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [destinationCoords, setDestinationCoords] = useState<[number, number]>([-12.0579340, -77.1192740]);
+  const [destinationCoords, setDestinationCoords] = useState<[number, number]>([
+    -12.057934, -77.119274,
+  ]);
 
   useEffect(() => {
     async function getCurrentLocation() {
@@ -56,58 +59,7 @@ export default function MapScreen() {
           {location?.coords.latitude}, {location?.coords.longitude}
         </Text>
       </View>
-      {location && (
-        <MapboxGL.MapView style={styles.map}>
-          <MapboxGL.Camera
-            zoomLevel={12}
-            centerCoordinate={[-12.05793, -77.11927]}
-          />
-          
-          {/* Marcador de inicio (ubicación actual) */}
-          <MapboxGL.PointAnnotation
-            id="startPoint"
-            coordinate={[-12.05793, -77.11927]}
-          >
-            <View style={styles.markerContainer}>
-              <View style={[styles.marker, { backgroundColor: '#007AFF' }]} />
-            </View>
-          </MapboxGL.PointAnnotation>
-
-          {/* Marcador de destino */}
-          <MapboxGL.PointAnnotation
-            id="endPoint"
-            coordinate={destinationCoords}
-          >
-            <View style={styles.markerContainer}>
-              <View style={[styles.marker, { backgroundColor: '#FF3B30' }]} />
-            </View>
-          </MapboxGL.PointAnnotation>
-
-          {/* Línea de ruta */}
-          <MapboxGL.ShapeSource
-            id="routeSource"
-            shape={{
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'LineString',
-                coordinates: [
-                  [location.coords.longitude, location.coords.latitude],
-                  destinationCoords
-                ],
-              },
-            }}
-          >
-            <MapboxGL.LineLayer
-              id="routeLine"
-              style={{
-                lineColor: '#007AFF',
-                lineWidth: 3,
-              }}
-            />
-          </MapboxGL.ShapeSource>
-        </MapboxGL.MapView>
-      )}
+      <Map />
     </SafeAreaView>
   );
 }

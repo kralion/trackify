@@ -1,0 +1,78 @@
+{
+  "routes": [
+    {
+      "weight_name": "pedestrian",
+      "weight": 1787.941,
+      "duration": 1557.903,
+      "distance": 2240.436,
+      "legs": [
+        {
+          "via_waypoints": [],
+          "admins": [{ "iso_3166_1_alpha3": "USA", "iso_3166_1": "US" }],
+          "weight": 1787.941,
+          "duration": 1557.903,
+          "steps": [
+            {
+              "intersections": [
+                {
+                  "bearings": [134],
+                  "entry": [true],
+                  "mapbox_streets_v8": { "class": "service" },
+                  "is_urban": true,
+                  "admin_index": 0,
+                  "out": 0,
+                  "geometry_index": 0,
+                  "location": [-122.0836, 37.4220]
+                }
+              ],
+              "maneuver": {
+                "type": "depart",
+                "instruction": "Camine hacia el sureste por Amphitheatre Parkway.",
+                "bearing_after": 134,
+                "bearing_before": 0,
+                "location": [-122.0836, 37.4220]
+              },
+              "name": "Amphitheatre Parkway",
+              "duration": 17.091,
+              "distance": 26.966,
+              "driving_side": "right",
+              "weight": 17.091,
+              "mode": "walking",
+              "geometry": {
+                "coordinates": [
+                  [-122.0836, 37.4220],
+                  [-122.0834, 37.4218],
+                  [-122.0832, 37.4216]
+                ],
+                "type": "LineString"
+              }
+            }
+          ],
+          "distance": 2240.436,
+          "summary": "Amphitheatre Parkway, Charleston Road"
+        }
+      ],
+      "geometry": {
+        "coordinates": [
+          [-122.0836, 37.4220],
+          [-122.0834, 37.4218],
+          [-122.0832, 37.4216],
+          [-122.0830, 37.4214],
+          [-122.0828, 37.4212],
+          [-122.0826, 37.4210],
+          [-122.0824, 37.4208],
+          [-122.0822, 37.4206],
+          [-122.0820, 37.4204],
+          [-122.0818, 37.4202]
+        ],
+        "type": "LineString"
+      }
+    }
+  ],
+  "waypoints": [
+    { "distance": 31.713, "name": "Amphitheatre Parkway", "location": [-122.0836, 37.4220] },
+    { "distance": 9.246, "name": "Charleston Road", "location": [-122.0818, 37.4202] }
+  ],
+  "code": "Ok",
+  "uuid": "p2gRN__8_QcJCSZwx-YN0Rln0Q50uFp2_kHwClQiSx5_X06Q36ff5g=="
+}
