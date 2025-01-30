@@ -6,7 +6,12 @@ export default function Layout() {
     <Stack>
       <Stack.Screen
         name="(screens)/index"
-        options={{ headerShown: true, headerLargeTitle: true, title: 'Formulario' }}
+        options={{
+          title: 'Formulario',            presentation: 'modal',
+          headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
+          headerTransparent: Platform.OS === 'android' ? false : true,
+          headerShadowVisible: false,
+        }}
       />
       <Stack.Screen
         name="(screens)/status"
