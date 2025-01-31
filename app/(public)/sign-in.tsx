@@ -26,7 +26,7 @@ WebBrowser.maybeCompleteAuthSession();
 export default function SignInScreen() {
   return (
     <LinearGradient
-      colors={['#459de2', '#c6e1f2',  '#bbe0f4', '#f2f9fd']}
+      colors={['#459de2', '#bbe0f4', '#c6e1f2', '#f2f9fd']}
       style={{ flex: 1 }}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
