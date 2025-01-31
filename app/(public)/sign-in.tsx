@@ -5,6 +5,7 @@ import React from 'react';
 import { Image, Platform, ScrollView, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Button } from '~/components/ui/button';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '~/components/ui/text';
 export const useWarmUpBrowser = () => {
   React.useEffect(() => {
@@ -24,26 +25,37 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function SignInScreen() {
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic" className="bg-white  dark:bg-zinc-900">
-      <View className="h-screen-safe relative flex flex-col justify-center  gap-12 web:pt-32">
-        <View className="flex flex-col items-center gap-1 px-4 ">
-          <Image
-            style={{
-              width: 225,
-              height: 225,
-            }}
-            source={require('../../assets/logo.png')}
-          />
-          <Text className="text-center text-3xl font-bold">Bienvenido a Trackify</Text>
-          <Text className="text-center">Vincula una de tus cuentas para continuar</Text>
+    <LinearGradient
+      colors={['#459de2', '#c6e1f2',  '#bbe0f4', '#f2f9fd']}
+      style={{ flex: 1 }}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+    >
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View className="h-screen-safe relative flex flex-col justify-center gap-12 web:pt-32">
+          <View className="flex flex-col items-center gap-1 px-4">
+            <Image
+              style={{
+                width: 225,
+                height: 225,
+              }}
+              source={require('../../assets/logo.png')}
+            />
+            <Text className="text-center text-3xl font-bold text-gray-700">
+              Bienvenido
+            </Text>
+            <Text className="text-center text-gray-700">
+              Vincula una de tus cuentas para continuar
+            </Text>
+          </View>
+          <View className="flex w-full flex-col justify-center gap-4 p-4 align-middle">
+            <SignInWithOAuthGoogle />
+            <SignInWithOAuthFacebook />
+            <SignInWithOAuthTiktok />
+          </View>
         </View>
-        <View className="flex w-full flex-col justify-center gap-4 p-4 align-middle">
-          <SignInWithOAuthGoogle />
-          <SignInWithOAuthFacebook />
-          <SignInWithOAuthTiktok />
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
