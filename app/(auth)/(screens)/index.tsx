@@ -7,12 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useAuth } from '@clerk/clerk-expo';
 import { FlatList } from 'react-native';
 import { Plus } from 'lucide-react-native';
-
-type FormState = {
-  orderDetails: string;
-  destination: string;
-  customerName: string;
-};
+import { useCartStore } from '@/store';
 
 const categories = [
   { id: '1', name: 'Todos', icon: '🍽️' },
@@ -27,6 +22,7 @@ const sampleProducts = [
     name: 'Briyani Rice',
     category: 'Especialidades',
     price: 'S/20.25',
+    quantity: 10,
     image:
       'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
@@ -35,6 +31,7 @@ const sampleProducts = [
     name: 'Italian Spaghetti',
     category: 'Especialidades',
     price: 'S/20.25',
+    quantity: 10,
     image:
       'https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
@@ -43,6 +40,7 @@ const sampleProducts = [
     name: 'Tortas de Mil Hojas',
     category: 'Postres',
     price: 'S/15.50',
+    quantity: 10,
     image:
       'https://images.pexels.com/photos/243011/pexels-photo-243011.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
@@ -51,6 +49,7 @@ const sampleProducts = [
     name: 'Caf  con Leche',
     category: 'Bebidas',
     price: 'S/4.25',
+    quantity: 10,
     image:
       'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600',
   },
@@ -79,44 +78,36 @@ const ProductCard = ({
     name: string;
     price: string;
     image: string;
-    rating: number;
     category: string;
+    quantity: number;
   };
-}) => (
-  <View className="my-2 mr-6 flex w-48 flex-col gap-6 rounded-lg  bg-white p-2 shadow-sm">
-    <Image source={{ uri: product.image }} className="mb-2 h-24 w-44 rounded" />
-    <View className="flex flex-col gap-2">
-      <Text className="text-center text-muted-foreground">{product.name}</Text>
-      <Text className="text-center text-sm text-muted-foreground">{product.category}</Text>
+}) => {
+  const { addItem } = useCartStore();
+  return (
+    <View className="my-2 mr-6 flex w-48 flex-col gap-4 rounded-lg  bg-white shadow-sm">
+      <Image source={{ uri: product.image }} className="h-36 w-full rounded-t-lg" />
+      <View className="flex flex-col gap-2">
+        <Text className="text-center text-muted-foreground">{product.name}</Text>
+        <Text className="text-center text-sm text-muted-foreground">{product.category}</Text>
+      </View>
+      <View className="flex flex-row items-center justify-between p-2">
+        <Text className="  p-2 text-xl font-bold">{product.price}</Text>
+        <Button
+          size="icon"
+          className=" rounded-full"
+          onPress={() => addItem({ ...product, quantity: 1 })}>
+          <Plus color="white" size={18} />
+        </Button>
+      </View>
     </View>
-    <View className="flex flex-row items-center justify-between">
-      <Text className="  p-2 text-xl font-bold">{product.price}</Text>
-      <Button size="icon" className=" rounded-full">
-        <Plus color="white" size={18} />
-      </Button>
-    </View>
-  </View>
-);
+  );
+};
 
 export default function OrderFormScreen() {
-  const { signOut } = useAuth();
-  const [form, setForm] = useState<FormState>({
-    orderDetails: '',
-    destination: '',
-    customerName: '',
-  });
-
-  const handleSubmit = () => {
-    if (!form.orderDetails || !form.destination || !form.customerName) {
-      alert('Por favor complete todos los campos');
-      return;
-    }
-    router.push({ pathname: '/status', params: form });
-  };
-
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName="pb-24">
-      <View className="flex flex-col gap-4 p-4">
+      <View className="flex flex-col gap-4 py-4">
+        <Text className="px-4  uppercase text-muted-foreground">Categorías</Text>
         <FlatList
           data={categories}
           renderItem={({ item }) => <CategoryCard category={item} active={item.id === '1'} />}
@@ -125,53 +116,33 @@ export default function OrderFormScreen() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, marginBottom: 20 }}
         />
+        <Text className="px-4  uppercase text-muted-foreground">Más Pedidos</Text>
         <FlatList
           data={sampleProducts}
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
+          contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 16 }}
         />
-        <Input
-          placeholder="Descripción del producto"
-          value={form.orderDetails}
-          onChangeText={(text) => setForm({ ...form, orderDetails: text })}
+        <Text className="px-4  uppercase text-muted-foreground">Agregados Recientes</Text>
+        <FlatList
+          data={sampleProducts}
+          renderItem={({ item }) => <ProductCard product={item} />}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 16 }}
         />
-        <Input
-          placeholder="Dirección de entrega"
-          value={form.destination}
-          onChangeText={(text) => setForm({ ...form, destination: text })}
+        <Text className="px-4  uppercase text-muted-foreground">Clásicos</Text>
+        <FlatList
+          data={sampleProducts}
+          renderItem={({ item }) => <ProductCard product={item} />}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 16 }}
         />
-        <Input
-          placeholder="Destinatario"
-          value={form.customerName}
-          onChangeText={(text) => setForm({ ...form, customerName: text })}
-        />
-      </View>
-      <View className="p-4">
-        <Button className="mt-4" onPress={handleSubmit} accessibilityLabel="Enviar pedido">
-          <Text>Registrar Pedido</Text>
-        </Button>
-        <Button
-          className="mt-4"
-          onPress={() => router.push({ pathname: '/(auth)/(screens)/tracker' })}
-          accessibilityLabel="Enviar pedido">
-          <Text>Form Tracking</Text>
-        </Button>
-        <Button
-          className="mt-4"
-          onPress={() => router.push({ pathname: '/(auth)/(screens)/tracking' })}
-          accessibilityLabel="Enviar pedido">
-          <Text>Map Tracking</Text>
-        </Button>
-        <Button
-          className="mt-4"
-          onPress={() => signOut()}
-          accessibilityLabel="Cerrar Sesión"
-          variant={'destructive'}>
-          <Text className="text-white">Cerrar Sesión</Text>
-        </Button>
       </View>
     </ScrollView>
   );

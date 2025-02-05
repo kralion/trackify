@@ -3,7 +3,8 @@ import SelectedScooterSheet from '@/components/SelectedScooterSheet';
 import RideProvider from '@/providers/RideProvider';
 import ScooterProvider from '@/providers/ScooterProvider';
 import { router, Stack } from 'expo-router';
-import { Button, Platform } from 'react-native';
+import { Button as NativeButton, Platform, View, StyleSheet } from 'react-native';
+import ShoppingCartIcon from '../../components/ShoppingCartIcon';
 
 export default function Layout() {
   return (
@@ -13,7 +14,7 @@ export default function Layout() {
           <Stack.Screen
             name="(screens)/index"
             options={{
-              title: 'Formulario',
+              title: 'Productos',
               presentation: 'modal',
               headerLargeTitle: true,
               headerLargeTitleShadowVisible: false,
@@ -21,9 +22,14 @@ export default function Layout() {
               headerTransparent: Platform.OS === 'android' ? false : true,
               headerShadowVisible: false,
               headerSearchBarOptions: {
-                placeholder: 'Buscar productos...',
+                placeholder: 'Buscar producto...',
                 hideWhenScrolling: true,
               },
+              headerRight: () => (
+                <View>
+                  <ShoppingCartIcon />
+                </View>
+              ),
             }}
           />
           <Stack.Screen
@@ -48,7 +54,7 @@ export default function Layout() {
                 headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
-                headerRight: () => <Button title="Cerrar" onPress={() => router.back()} />,
+                headerRight: () => <NativeButton title="Cerrar" onPress={() => router.back()} />,
               };
             }}
           />
@@ -61,7 +67,7 @@ export default function Layout() {
                 headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
-                headerRight: () => <Button title="Cerrar" onPress={() => router.back()} />,
+                headerRight: () => <NativeButton title="Cerrar" onPress={() => router.back()} />,
               };
             }}
           />

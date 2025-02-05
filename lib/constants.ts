@@ -5,6 +5,8 @@ export const NAV_THEME = {
     card: 'hsl(0 0% 100%)', // card
     notification: 'hsl(0 84.2% 60.2%)', // destructive
     primary: 'hsl(47.9, 95.8%, 53.1%)',
+    // primaryHex: '#FFD500',
+
     text: 'hsl(240 10% 3.9%)', // foreground
   },
   dark: {
