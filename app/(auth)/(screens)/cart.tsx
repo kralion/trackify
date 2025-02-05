@@ -143,7 +143,9 @@ export default function ShoppingCart() {
           headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
           headerTransparent: Platform.OS === 'android' ? false : true,
           headerShadowVisible: false,
-          headerRight: () => <NativeButton title="Cerrar" onPress={() => router.back()} />,
+          headerRight: () => (
+            <NativeButton title="Cerrar" color="#FFD500" onPress={() => router.back()} />
+          ),
         }}
       />
       <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
@@ -181,10 +183,6 @@ export default function ShoppingCart() {
                     className="rounded-full"
                     onPress={() => {
                       const [lat, lng] = form.destination.split(',');
-                      if (!lat || !lng) {
-                        toast.error('Please enter a valid latitude and longitude.');
-                        return;
-                      }
                       Location.getCurrentPositionAsync().then((location) => {
                         const newLat = Number(lat) || location.coords.latitude;
                         const newLng = Number(lng) || location.coords.longitude;
