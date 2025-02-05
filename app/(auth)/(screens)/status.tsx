@@ -1,16 +1,16 @@
-import Map from '@/components/Map';
+// import Map from '@/components/Map';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { supabase } from '@/utils/supabase';
-import MapboxGL from '@rnmapbox/maps';
+// import MapboxGL from '@rnmapbox/maps';
 import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 
-MapboxGL.setAccessToken(
-  'sk.eyJ1IjoibWlndWVsMTU5NDU2NCIsImEiOiJjbTZpM3o3dG8wNDl6MmpwcmlyenBnbDd3In0.tMvbSDsgL69lYp6BLBoAig'
-);
+// MapboxGL.setAccessToken(
+//   'sk.eyJ1IjoibWlndWVsMTU5NDU2NCIsImEiOiJjbTZpM3o3dG8wNDl6MmpwcmlyenBnbDd3In0.tMvbSDsgL69lYp6BLBoAig'
+// );
 
 export default function MapScreen() {
   const form = useLocalSearchParams();
@@ -59,9 +59,9 @@ export default function MapScreen() {
           {location?.coords.latitude}, {location?.coords.longitude}
         </Text>
       </View>
-      {location && (
+      {/* {location && (
         <Map/>
-      )}
+      )} */}
     </SafeAreaView>
   );
 }

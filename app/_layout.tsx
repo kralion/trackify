@@ -85,15 +85,16 @@ export default function RootLayout() {
       setIsColorSchemeLoaded(true);
     })().finally(() => {
       SplashScreen.hide();
+      setIsLoading(false);
     });
   }, []);
 
   if (!isColorSchemeLoaded) {
     return null;
   }
-  // if (isLoading) {
-  //   return <ActivityIndicator />;
-  // }
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
