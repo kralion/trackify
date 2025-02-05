@@ -8,6 +8,7 @@ import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { ActivityIndicator, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Toaster } from 'sonner-native';
 import '~/global.css';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { NAV_THEME } from '~/lib/constants';
@@ -123,6 +124,7 @@ function RootLayoutNav() {
 
   return (
     <GestureHandlerRootView>
+      <Toaster />
       <Slot />
     </GestureHandlerRootView>
   );
