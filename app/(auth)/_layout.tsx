@@ -3,7 +3,13 @@ import SelectedScooterSheet from '@/components/SelectedScooterSheet';
 import RideProvider from '@/providers/RideProvider';
 import ScooterProvider from '@/providers/ScooterProvider';
 import { router, Stack } from 'expo-router';
-import { Button as NativeButton, Platform, View, StyleSheet } from 'react-native';
+import {
+  Button as NativeButton,
+  NativeSyntheticEvent,
+  Platform,
+  TextInputFocusEventData,
+  View,
+} from 'react-native';
 import ShoppingCartIcon from '../../components/ShoppingCartIcon';
 
 export default function Layout() {
@@ -23,7 +29,18 @@ export default function Layout() {
               headerShadowVisible: false,
               headerSearchBarOptions: {
                 placeholder: 'Buscar producto...',
-                hideWhenScrolling: true,
+                onSearchButtonPress: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                  const text = event.nativeEvent.text;
+                  router.setParams({
+                    query: text,
+                  });
+                },
+                cancelButtonText: 'Cancelar',
+                onCancelButtonPress: () => {
+                  router.setParams({
+                    query: '',
+                  });
+                },
               },
               headerRight: () => (
                 <View>
@@ -72,6 +89,7 @@ export default function Layout() {
             }}
           />
         </Stack>
+
         <SelectedScooterSheet />
         <ActiveRideSheet />
       </RideProvider>

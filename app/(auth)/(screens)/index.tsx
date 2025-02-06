@@ -1,13 +1,11 @@
-import { router } from 'expo-router';
-import { useState } from 'react';
-import { ScrollView, Text, View, Image, TextInput } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useAuth } from '@clerk/clerk-expo';
-import { FlatList } from 'react-native';
-import { Plus } from 'lucide-react-native';
 import { useCartStore } from '@/store';
+import { Plus } from 'lucide-react-native';
+import { FlatList } from 'react-native';
 
 const categories = [
   { id: '1', name: 'Todos', icon: '🍽️' },
@@ -55,19 +53,23 @@ const sampleProducts = [
   },
 ];
 
-const CategoryCard = ({
+const Category = ({
   category,
   active,
+  onPress,
 }: {
   category: { id: string; name: string; icon: string };
   active: boolean;
+  onPress: () => void;
 }) => (
-  <View className="mr-8 items-center">
+  <TouchableOpacity
+    onPress={onPress}
+    className={`mr-8 items-center ${active ? 'opacity-100' : 'opacity-50'}`}>
     <Text className="text-5xl">{category.icon}</Text>
-    <Text className={`text-sm  ${active ? 'text-black' : 'text-muted-foreground'}`}>
+    <Text className={`text-sm ${active ? 'text-black' : 'text-muted-foreground'}`}>
       {category.name}
     </Text>
-  </View>
+  </TouchableOpacity>
 );
 
 const ProductCard = ({
@@ -103,7 +105,31 @@ const ProductCard = ({
   );
 };
 
-export default function OrderFormScreen() {
+export default function HomeScreen() {
+  const { query } = useLocalSearchParams();
+  const [filteredProducts, setFilteredProducts] = useState(sampleProducts);
+  const [activeCategory, setActiveCategory] = useState('Todos');
+
+  useEffect(() => {
+    if (query) {
+      setFilteredProducts(
+        sampleProducts.filter((product) =>
+          product.name.toLowerCase().includes(query.toString().toLowerCase())
+        )
+      );
+    } else {
+      setFilteredProducts(sampleProducts);
+    }
+  }, [query]);
+  const handleCategoryPress = (category: string) => {
+    setActiveCategory(category);
+    if (category === 'Todos') {
+      setFilteredProducts(sampleProducts);
+    } else {
+      setFilteredProducts(sampleProducts.filter((product) => product.category === category));
+    }
+  };
+
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName="pb-24">
       <Button
@@ -124,7 +150,13 @@ export default function OrderFormScreen() {
         <Text className="px-4  uppercase text-muted-foreground">Categorías</Text>
         <FlatList
           data={categories}
-          renderItem={({ item }) => <CategoryCard category={item} active={item.id === '1'} />}
+          renderItem={({ item }) => (
+            <Category
+              category={item}
+              active={activeCategory === item.name}
+              onPress={() => handleCategoryPress(item.name)}
+            />
+          )}
           keyExtractor={(item) => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -132,7 +164,7 @@ export default function OrderFormScreen() {
         />
         <Text className="px-4  uppercase text-muted-foreground">Más Pedidos</Text>
         <FlatList
-          data={sampleProducts}
+          data={filteredProducts}
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => item.id}
           horizontal
@@ -141,7 +173,7 @@ export default function OrderFormScreen() {
         />
         <Text className="px-4  uppercase text-muted-foreground">Agregados Recientes</Text>
         <FlatList
-          data={sampleProducts}
+          data={filteredProducts}
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => item.id}
           horizontal
@@ -150,7 +182,7 @@ export default function OrderFormScreen() {
         />
         <Text className="px-4  uppercase text-muted-foreground">Clásicos</Text>
         <FlatList
-          data={sampleProducts}
+          data={filteredProducts}
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => item.id}
           horizontal
