@@ -63,15 +63,12 @@ export default function Layout() {
             }}
           />
           <Stack.Screen
-            name="(screens)/tracking"
+            name="(screens)/map-tracking"
             options={({ route }) => {
               const { id } = route.params as { id: number };
               return {
                 title: 'Tracker',
-                headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
-                headerTransparent: Platform.OS === 'android' ? false : true,
-                headerShadowVisible: false,
-                headerRight: () => <NativeButton title="Cerrar" onPress={() => router.back()} />,
+                headerShown: false,
               };
             }}
           />
@@ -80,7 +77,7 @@ export default function Layout() {
             options={({ route }) => {
               const { id } = route.params as { id: number };
               return {
-                title: 'Tracker',
+                title: 'Seguimiento',
                 headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,

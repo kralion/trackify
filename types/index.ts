@@ -1,12 +1,26 @@
+import * as Location from 'expo-location';
 export type Order = {
-  id?: string;
-  origin: string;
+  id?: number;
+  origin: Location.LocationObjectCoords;
   status: string;
-  destination: string;
+  distance: number;
+  duration: number;
+  destination: Location.LocationObjectCoords;
   id_delivery?: string | null;
+  deliveries?: Delivery[];
   customer: string;
   items: CartItem[];
 };
+
+export type Delivery = {
+  id_delivery: string;
+  name: string;
+  phone: string;
+  status: string;
+  percentage: number;
+  color: string;
+};
+
 export interface CartItem {
   id: string;
   name: string;
@@ -26,6 +40,7 @@ export interface CartState {
 export interface OrderStore {
   orders: Order[];
   addOrder: (order: Order) => void;
-  updateOrder: (orderId: string, update: Partial<Order>) => void;
-  deleteOrder: (orderId: string) => void;
+  updateOrder: (orderId: number, update: Partial<Order>) => void;
+  deleteOrder: (orderId: number) => void;
+  getOrder: (orderId: number) => Promise<Order | undefined>;
 }

@@ -5,6 +5,8 @@ import { Progress } from '@/components/ui/progress';
 import { BellDot, Dot } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Input } from '@/components/ui/input';
+import { router } from 'expo-router';
 
 type Status = {
   status: string;
@@ -21,6 +23,7 @@ const orderStats: Status[] = [
 ];
 const TrackerScreen = () => {
   const [status, setStatus] = React.useState<Status>(orderStats[0]);
+  const [orderFound, setOrderFound] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -33,46 +36,67 @@ const TrackerScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex flex-1 flex-col gap-8 bg-zinc-100 p-4">
-      <View className="flex flex-col gap-4">
-        <Text className=" text-center text-2xl font-bold">Seguimiento de Paquete</Text>
-        <View className="mb-4 flex-row items-center rounded-full bg-white p-2">
-          <TextInput placeholder="Código de Rastreo..." className="ml-4 flex-1" />
-          <Button className="rounded-full">
-            <Text>Ubicar</Text>
-          </Button>
-        </View>
+    <ScrollView className="  bg-zinc-100 p-4" contentInsetAdjustmentBehavior="automatic">
+      {!orderFound && (
+        <Image
+          source={require('@/assets/images/tracking.png')}
+          style={{
+            width: '100%',
+            height: 250,
+          }}
+        />
+      )}
+      <View className=" flex-row items-center rounded-full bg-white p-2">
+        <Input
+          placeholder="Código de Rastreo..."
+          autoFocus
+          className="relative ml-2 flex-1 border-0 "
+        />
+        <Button
+          className="rounded-full"
+          onPress={() => {
+            setOrderFound(!orderFound);
+          }}>
+          <Text>Ubicar</Text>
+        </Button>
       </View>
-      <View className="flex flex-col gap-8 rounded-2xl bg-white p-4">
-        <Text className="mb-2 text-lg font-semibold">Estadísticas de Seguimiento</Text>
-        <Progress indicatorClassName="bg-blue-500" value={status.percentage} />
-        <Text className="text-center">Items registrados : 13 paquetes</Text>
-        <View className="flex flex-row flex-wrap justify-between">
-          {orderStats.map((stat, index) => (
-            <View
-              key={index}
-              className=" my-2 flex w-[48%] flex-col gap-4
+
+      {orderFound && (
+        <View className="mt-10 flex flex-col gap-8 rounded-2xl bg-white p-4">
+          <Text className="mb-2 text-lg font-semibold">Estadísticas de Seguimiento</Text>
+          <Progress indicatorClassName="bg-blue-500" value={status.percentage} />
+          <Text className="text-center">Items registrados : 13 paquetes</Text>
+          <View className="flex flex-row flex-wrap justify-between">
+            {orderStats.map((stat, index) => (
+              <View
+                key={index}
+                className=" my-2 flex w-[48%] flex-col gap-4
              rounded-lg border border-gray-200 p-4">
-              <View className="flex flex-row items-center gap-1">
-                <Dot strokeWidth={14} color={stat.color} size={14} />
-                <Text className="text-sm text-muted-foreground">{stat.status}</Text>
+                <View className="flex flex-row items-center gap-1">
+                  <Dot strokeWidth={14} color={stat.color} size={14} />
+                  <Text className="text-sm text-muted-foreground">{stat.status}</Text>
+                </View>
+                <View className="flex flex-row  items-baseline justify-between gap-2">
+                  <Text className="text-xl font-bold">{stat.percentage}%</Text>
+                  <Text className="text-sm">{stat.time}</Text>
+                </View>
               </View>
-              <View className="flex flex-row  items-baseline justify-between gap-2">
-                <Text className="text-xl font-bold">{stat.percentage}%</Text>
-                <Text className="text-sm">{stat.time}</Text>
-              </View>
-            </View>
-          ))}
+            ))}
+          </View>
+          <View className="flex flex-col  ">
+            <Text className="text-sm text-muted-foreground">RECEPTOR</Text>
+            <Text className="font-bold">Jhon Ramirez Caballero</Text>
+            <Button
+              className="mt-4 rounded-full "
+              onPress={() => {
+                router.push('/(auth)/(screens)/map-tracking');
+              }}>
+              <Text>Ver Mapa</Text>
+            </Button>
+          </View>
         </View>
-        <View className="flex flex-col  ">
-          <Text className="text-sm text-muted-foreground">RECEPTOR</Text>
-          <Text className="font-bold">Jhon Ramirez Caballero</Text>
-          <Button className="mt-4 rounded-full ">
-            <Text>Ver Mapa</Text>
-          </Button>
-        </View>
-      </View>
-    </SafeAreaView>
+      )}
+    </ScrollView>
   );
 };
 

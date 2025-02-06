@@ -10,7 +10,19 @@ export const useOrder = create<OrderStore>((set) => ({
     toast.success('Orden enviada');
     if (error) console.log(error);
   },
-  updateOrder: async (orderId: string, update: Partial<Order>) => {
+  getOrder: async (orderId: number) => {
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*, delivery(id_delivery, *)')
+      .eq('id', orderId)
+      .single();
+    if (error) {
+      console.log(error);
+    } else {
+      return data;
+    }
+  },
+  updateOrder: async (orderId: number, update: Partial<Order>) => {
     const { error } = await supabase
       .from('orders')
       .update({ ...update })
@@ -22,7 +34,7 @@ export const useOrder = create<OrderStore>((set) => ({
       toast.success('Orden actualizada');
     }
   },
-  deleteOrder: (orderId: string) =>
+  deleteOrder: (orderId: number) =>
     set((state) => ({
       orders: state.orders.filter((order) => order.id !== orderId),
     })),
