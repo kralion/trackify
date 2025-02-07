@@ -26,25 +26,25 @@ WebBrowser.maybeCompleteAuthSession();
 export default function SignInScreen() {
   return (
     <LinearGradient
-      colors={['#459de2', '#bbe0f4', '#c6e1f2', '#f2f9fd']}
+      colors={['#F5D076', '#F0C25F']}
       style={{ flex: 1 }}
       start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-    >
+      end={{ x: 1, y: 1 }}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View className="h-screen-safe relative flex flex-col justify-center gap-12 web:pt-32">
+        <View className="h-screen-safe relative flex flex-col justify-center gap-8 web:pt-32">
           <View className="flex flex-col items-center gap-1 px-4">
-            <Image
+            <Animated.Image
               style={{
-                width: 225,
-                height: 225,
+                width: 150,
+                height: 150,
               }}
-              source={require('../../assets/logo.png')}
+              entering={FadeInDown.damping(5).duration(500)}
+              source={{
+                uri: 'https://img.icons8.com/?size=300&id=Jpr7XcQNM2FS&format=png&color=000000',
+              }}
             />
-            <Text className="text-center text-3xl font-bold text-gray-700">
-              Bienvenido
-            </Text>
-            <Text className="text-center text-gray-700">
+            <Text className="text-center text-3xl font-bold">Bienvenido a Trackify</Text>
+            <Text className="text-center text-muted-foreground">
               Vincula una de tus cuentas para continuar
             </Text>
           </View>
@@ -82,7 +82,7 @@ export const SignInWithOAuthGoogle = () => {
 
   return (
     <Button
-      className="flex flex-row items-center gap-2"
+      className="flex flex-row items-center gap-2 rounded-full"
       variant="secondary"
       size="lg"
       onPress={onPress}>
@@ -120,7 +120,7 @@ export const SignInWithOAuthTiktok = () => {
 
   return (
     <Button
-      className="flex flex-row items-center gap-2"
+      className="flex flex-row items-center gap-2 rounded-full"
       variant="secondary"
       size="lg"
       onPress={onPress}>
@@ -158,7 +158,7 @@ export const SignInWithOAuthFacebook = () => {
 
   return (
     <Button
-      className="flex flex-row items-center gap-2"
+      className="flex flex-row items-center gap-2 rounded-full"
       variant="secondary"
       size="lg"
       onPress={onPress}>
