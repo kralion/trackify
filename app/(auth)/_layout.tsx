@@ -3,18 +3,14 @@ import SelectedScooterSheet from '@/components/SelectedScooterSheet';
 import RideProvider from '@/providers/RideProvider';
 import ScooterProvider from '@/providers/ScooterProvider';
 import { router, Stack } from 'expo-router';
-import {
-  Button as NativeButton,
-  NativeSyntheticEvent,
-  Platform,
-  TextInputFocusEventData,
-  View,
-} from 'react-native';
+import { NativeSyntheticEvent, Platform, TextInputFocusEventData, View } from 'react-native';
 import ShoppingCartIcon from '../../components/ShoppingCartIcon';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@clerk/clerk-expo';
 import { Text } from '@/components/ui/text';
 import { TouchableOpacity } from 'react-native';
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react-native';
 
 export default function Layout() {
   const { user } = useUser();
@@ -88,7 +84,15 @@ export default function Layout() {
                 headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
-                headerRight: () => <NativeButton title="Cerrar" onPress={() => router.back()} />,
+                headerRight: () => (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full"
+                    onPress={() => router.back()}>
+                    <X color="#FFD500" />
+                  </Button>
+                ),
               };
             }}
           />
@@ -102,7 +106,13 @@ export default function Layout() {
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
                 headerRight: () => (
-                  <NativeButton title="Cerrar" color="#FFD500" onPress={() => router.back()} />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full"
+                    onPress={() => router.back()}>
+                    <X color="#FFD500" />
+                  </Button>
                 ),
               };
             }}

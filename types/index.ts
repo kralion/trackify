@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 export type Order = {
-  id?: number;
+  id: number;
   origin: Location.LocationObjectCoords;
   status: string;
   distance: number;
@@ -9,11 +9,11 @@ export type Order = {
   id_delivery?: string | null;
   deliveries?: Delivery[];
   customer: string;
-  items: CartItem[];
+  items: Product[];
 };
 
 export type Delivery = {
-  id_delivery: string;
+  id: number;
   name: string;
   phone: string;
   status: string;
@@ -21,25 +21,51 @@ export type Delivery = {
   color: string;
 };
 
-export interface CartItem {
-  id: string;
+export interface Product {
+  id: number;
   name: string;
   price: string;
-  image: string;
+  image_url: string;
   quantity: number;
-  category: string;
+  stock: boolean;
+  id_category: number;
+  categories?: Category;
 }
 
+export type Category = {
+  id: number;
+  name: string;
+  icon: string;
+};
+
+export interface ProductStore {
+  products: Product[];
+  addProduct: (product: Omit<Product, 'id'>) => Promise<void>;
+  setProducts: (products: Product[]) => void;
+  getProducts: () => Promise<Product[]>;
+  updateProduct: (product: Product) => Promise<void>;
+  removeProduct: (id: number) => void;
+  itemCount: number;
+}
+
+export interface CategoryStore {
+  categories: Category[];
+  addCategory: (category: Omit<Category, 'id'>) => Promise<void>;
+  getCategories: () => Promise<Category[]>;
+  updateCategory: (category: Category) => Promise<void>;
+  deleteCategory: (id: number) => Promise<void>;
+}
 export interface CartState {
-  items: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
+  items: Product[];
+  addItem: (item: Product) => void;
+  setItems: (items: Product[]) => void;
+  removeItem: (id: number) => void;
   itemCount: number;
 }
 
 export interface OrderStore {
   orders: Order[];
-  addOrder: (order: Order) => void;
+  addOrder: (order: Omit<Order, 'id'>) => Promise<void>;
   updateOrder: (orderId: number, update: Partial<Order>) => void;
   deleteOrder: (orderId: number) => void;
   getOrder: (orderId: number) => Promise<Order | undefined>;

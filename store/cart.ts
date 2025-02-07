@@ -1,13 +1,14 @@
-import { CartState } from '@/types';
+import { CartState, Product } from '@/types';
 import { create } from 'zustand';
 
 export const useCartStore = create<CartState>((set) => ({
   items: [],
-  addItem: (item) =>
+  setItems: (items: Product[]) => set(() => ({ items })),
+  addItem: (item: Product) =>
     set((state) => ({
       items: [...state.items, item],
     })),
-  removeItem: (id) =>
+  removeItem: (id: number) =>
     set((state) => ({
       items: state.items.filter((item) => item.id !== id),
     })),

@@ -3,22 +3,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/store';
-import { useOrder } from '@/store/orders';
-import { CartItem } from '@/types';
+import { useOrder } from '@/store/order';
+import { Product } from '@/types';
 import { useHeaderHeight } from '@react-navigation/elements';
 import * as Location from 'expo-location';
 import { router, Stack } from 'expo-router';
-import { MapPinHouse, Minus, Plus, Trash } from 'lucide-react-native';
+import { MapPinHouse, Minus, Plus, Trash, X } from 'lucide-react-native';
 import { useState } from 'react';
-import {
-  FlatList,
-  Image,
-  KeyboardAvoidingView,
-  Button as NativeButton,
-  Platform,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, Image, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 type Order = {
@@ -27,13 +19,14 @@ type Order = {
   distance: number;
   duration: number;
   origin: string;
-  items: CartItem[];
+  items: Product[];
   status: 'registrado' | 'enviado' | 'entregado';
 };
 
 export default function ShoppingCart() {
   const headerHeight = useHeaderHeight();
   const { addOrder } = useOrder();
+  const { setItems } = useCartStore();
   const [form, setForm] = useState<Order>({
     destination: '',
     customer: '',
@@ -50,10 +43,7 @@ export default function ShoppingCart() {
       toast.error('Todos los campos son obligatorios');
       return;
     }
-    // addOrder({
-    //   ...form,
-    //   origin: form.destination,
-    // });
+
     setForm({
       destination: '',
       customer: '',
@@ -67,22 +57,28 @@ export default function ShoppingCart() {
   };
   const { items, removeItem } = useCartStore();
 
-  const increaseQuantity = (item: CartItem) => {
+  const increaseQuantity = (item: Product) => {
     const itemIndex = items.findIndex((i) => i.id === item.id);
     if (itemIndex !== -1) {
-      items[itemIndex].quantity++;
+      const newItems = [...items];
+      newItems[itemIndex].quantity++;
+      setItems(newItems);
     }
   };
 
-  const decreaseQuantity = (itemId: string) => {
+  const decreaseQuantity = (itemId: number) => {
     const itemIndex = items.findIndex((i) => i.id === itemId);
     if (itemIndex !== -1) {
-      items[itemIndex].quantity--;
+      const newItems = [...items];
+      if (newItems[itemIndex].quantity > 1) {
+        newItems[itemIndex].quantity--;
+        setItems(newItems);
+      }
     }
   };
   const subTotal = (cartItems: { price: string; quantity: number }[]) => {
     return cartItems.reduce((total, item) => {
-      const priceNumber = parseFloat(item.price.replace('S/', '')); // Convert price to a number
+      const priceNumber = parseFloat(item.price); // Convert price to a number
       return total + priceNumber * item.quantity;
     }, 0);
   };
@@ -99,10 +95,10 @@ export default function ShoppingCart() {
     return subTotal(items) + taxes(items) + delivery();
   };
 
-  const renderItem = ({ item }: { item: CartItem }) => (
+  const renderItem = ({ item }: { item: Product }) => (
     <View className="  mt-8 flex-row items-center">
       <Image
-        source={{ uri: item.image }}
+        source={{ uri: item.image_url }}
         className="rounded-xl"
         style={{ marginRight: 10, width: 100, height: 100 }}
       />
@@ -152,13 +148,17 @@ export default function ShoppingCart() {
         options={{
           title: 'Carrito',
           presentation: 'modal',
-          headerLargeTitle: true,
-          headerLargeTitleShadowVisible: false,
           headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
           headerTransparent: Platform.OS === 'android' ? false : true,
           headerShadowVisible: false,
           headerRight: () => (
-            <NativeButton title="Cerrar" color="#FFD500" onPress={() => router.back()} />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onPress={() => router.back()}>
+              <X color="#FFD500" />
+            </Button>
           ),
         }}
       />
@@ -168,7 +168,7 @@ export default function ShoppingCart() {
             data={items}
             renderItem={renderItem}
             contentContainerClassName="px-4"
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => String(item.id)}
             ListHeaderComponent={
               <View>
                 <Label className="my-2 px-4 text-muted-foreground">Cliente</Label>

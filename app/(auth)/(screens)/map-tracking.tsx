@@ -6,7 +6,7 @@ import { PhoneCall } from 'lucide-react-native';
 import React from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
 // import Map from '@/components/Map';
-import { useOrder } from '@/store/orders';
+import { useOrder } from '@/store/order';
 import { Order } from '@/types';
 
 export default function MapTrackingScreen() {

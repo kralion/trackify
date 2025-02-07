@@ -3,15 +3,24 @@ import { router } from 'expo-router';
 import { ShoppingCart } from 'lucide-react-native';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { toast } from 'sonner-native';
 
 const ShoppingCartIcon: React.FC = () => {
   const cartItems = useCartStore((state) => state.items);
 
+  const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   return (
-    <TouchableOpacity hitSlop={8} onPress={() => router.push('/(auth)/(screens)/cart')}>
+    <TouchableOpacity
+      hitSlop={8}
+      onPress={() =>
+        cartItemsCount === 0
+          ? toast.warning('Selecciona al menos un producto')
+          : router.push('/(auth)/(screens)/cart')
+      }>
       <View style={styles.container}>
         <ShoppingCart color="#FFD500" size={24} />
-        {cartItems.length > 0 && (
+        {cartItemsCount > 0 && (
           <View
             style={{
               position: 'absolute',
