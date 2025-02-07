@@ -142,7 +142,7 @@ export default function HomeScreen() {
       <Button
         className="mx-4 my-2 rounded-full"
         size="lg"
-        onPress={() => router.push({ pathname: '/(auth)/(screens)/tracking' })}
+        onPress={() => router.push({ pathname: '/(auth)/(screens)/map-tracking' })}
         accessibilityLabel="Enviar pedido">
         <Text>Seguimiento en Mapa</Text>
       </Button>

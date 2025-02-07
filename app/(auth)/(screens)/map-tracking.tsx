@@ -5,7 +5,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { PhoneCall } from 'lucide-react-native';
 import React from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
-import Map from '@/components/Map';
+// import Map from '@/components/Map';
 import { useOrder } from '@/store/orders';
 import { Order } from '@/types';
 
@@ -42,13 +42,13 @@ export default function MapTrackingScreen() {
   }
   return (
     <ScrollView>
-      {deliveryLocation && (
+      {/* {deliveryLocation && (
         <Map
           initialLocation={order?.origin as Location.LocationObjectCoords}
           deliveryLocation={deliveryLocation as Location.LocationObjectCoords}
           endLocation={order?.destination as Location.LocationObjectCoords}
         />
-      )}
+      )} */}
       <Image
         source={{
           uri: 'https://img.freepik.com/premium-vector/custom-location-map-interface-web-mobile-app_150101-8344.jpg?w=996',

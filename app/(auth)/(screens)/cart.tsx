@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/store';
 import { useOrder } from '@/store/orders';
-import { CartItem, Order } from '@/types';
+import { CartItem } from '@/types';
 import { useHeaderHeight } from '@react-navigation/elements';
 import * as Location from 'expo-location';
 import { router, Stack } from 'expo-router';
@@ -21,12 +21,24 @@ import {
 } from 'react-native';
 import { toast } from 'sonner-native';
 
+type Order = {
+  destination: string;
+  customer: string;
+  distance: number;
+  duration: number;
+  origin: string;
+  items: CartItem[];
+  status: 'registrado' | 'enviado' | 'entregado';
+};
+
 export default function ShoppingCart() {
   const headerHeight = useHeaderHeight();
   const { addOrder } = useOrder();
   const [form, setForm] = useState<Order>({
     destination: '',
     customer: '',
+    distance: 0,
+    duration: 0,
     origin: '',
     items: [],
     status: 'registrado',
@@ -38,14 +50,16 @@ export default function ShoppingCart() {
       toast.error('Todos los campos son obligatorios');
       return;
     }
-    addOrder({
-      ...form,
-      origin: form.destination,
-    });
+    // addOrder({
+    //   ...form,
+    //   origin: form.destination,
+    // });
     setForm({
       destination: '',
       customer: '',
       origin: '',
+      duration: 0,
+      distance: 0,
       items: [],
       status: 'registrado',
     });

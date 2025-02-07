@@ -11,8 +11,13 @@ import {
   View,
 } from 'react-native';
 import ShoppingCartIcon from '../../components/ShoppingCartIcon';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useUser } from '@clerk/clerk-expo';
+import { Text } from '@/components/ui/text';
+import { TouchableOpacity } from 'react-native';
 
 export default function Layout() {
+  const { user } = useUser();
   return (
     <ScooterProvider>
       <RideProvider>
@@ -43,25 +48,27 @@ export default function Layout() {
                 },
               },
               headerRight: () => (
-                <View>
+                <View className="flex flex-row items-center gap-8">
                   <ShoppingCartIcon />
+                  <TouchableOpacity
+                    hitSlop={8}
+                    onPress={() => router.push('/(auth)/(screens)/profile')}>
+                    <Avatar alt="avatar">
+                      <AvatarImage
+                        source={{
+                          uri: user?.imageUrl,
+                        }}
+                      />
+                      <AvatarFallback>
+                        <Text>{user?.fullName?.split(' ')[0]}</Text>
+                      </AvatarFallback>
+                    </Avatar>
+                  </TouchableOpacity>
                 </View>
               ),
             }}
           />
-          <Stack.Screen
-            name="(screens)/status"
-            options={({ route }) => {
-              const { id } = route.params as { id: number };
-              return {
-                title: 'Detalles',
-                presentation: 'modal',
-                headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
-                headerTransparent: Platform.OS === 'android' ? false : true,
-                headerShadowVisible: false,
-              };
-            }}
-          />
+
           <Stack.Screen
             name="(screens)/map-tracking"
             options={({ route }) => {
@@ -82,6 +89,21 @@ export default function Layout() {
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
                 headerRight: () => <NativeButton title="Cerrar" onPress={() => router.back()} />,
+              };
+            }}
+          />
+          <Stack.Screen
+            name="(screens)/profile"
+            options={({ route }) => {
+              const { id } = route.params as { id: number };
+              return {
+                title: 'Perfil',
+                headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
+                headerTransparent: Platform.OS === 'android' ? false : true,
+                headerShadowVisible: false,
+                headerRight: () => (
+                  <NativeButton title="Cerrar" color="#FFD500" onPress={() => router.back()} />
+                ),
               };
             }}
           />
