@@ -22,11 +22,10 @@ export default function Layout() {
             name="(screens)/index"
             options={{
               title: 'Productos',
-              presentation: 'modal',
               headerLargeTitle: true,
               headerLargeTitleShadowVisible: false,
-              headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
-              headerTransparent: Platform.OS === 'android' ? false : true,
+              headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
+              headerTransparent: Platform.OS === 'ios' ? true : false,
               headerShadowVisible: false,
               headerSearchBarOptions: {
                 placeholder: 'Buscar producto...',

@@ -31,7 +31,7 @@ export default function SignInScreen() {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View className="h-screen-safe relative flex flex-col justify-center gap-8 web:pt-32">
+        <View className="h-screen-safe relative mx-auto flex flex-col justify-center gap-8 web:pt-32 web:md:w-1/3">
           <View className="flex flex-col items-center gap-1 px-4">
             <Animated.Image
               style={{
