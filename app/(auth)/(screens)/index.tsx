@@ -7,6 +7,7 @@ import { useCartStore, useCategoryStore, useProductStore } from '@/store';
 import { Category, Product } from '@/types';
 import { Plus } from 'lucide-react-native';
 import { FlatList } from 'react-native';
+import { toast } from 'sonner-native';
 
 const CategoryItem = ({
   category,
@@ -44,7 +45,12 @@ const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> }) => {
           size="icon"
           hitSlop={10}
           className=" rounded-full"
-          onPress={() => addItem({ ...product, quantity: 1 })}>
+          onPress={() => {
+            addItem({ ...product, quantity: 1 });
+            toast.success('Item agregado al carrito', {
+              duration: 1000,
+            });
+          }}>
           <Plus color="white" size={18} />
         </Button>
       </View>
@@ -84,20 +90,6 @@ export default function HomeScreen() {
 
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName="pb-24 ">
-      <Button
-        className="mx-4 my-2 rounded-full "
-        size="lg"
-        onPress={() => router.push({ pathname: '/(auth)/(screens)/tracker' })}
-        accessibilityLabel="Enviar pedido">
-        <Text>Seguimiento Detallado</Text>
-      </Button>
-      <Button
-        className="mx-4 my-2 rounded-full"
-        size="lg"
-        onPress={() => router.push({ pathname: '/(auth)/(screens)/map-tracking' })}
-        accessibilityLabel="Enviar pedido">
-        <Text>Seguimiento en Mapa</Text>
-      </Button>
       <View className="flex flex-col gap-4 py-4">
         <Text className="px-4  uppercase text-muted-foreground">Categorías</Text>
         <FlatList
@@ -120,6 +112,11 @@ export default function HomeScreen() {
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => String(item.id)}
           horizontal
+          ListEmptyComponent={() => (
+            <Text className="px-4  uppercase text-muted-foreground">
+              No se encontraron productos
+            </Text>
+          )}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 16 }}
         />
@@ -129,6 +126,11 @@ export default function HomeScreen() {
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => String(item.id)}
           horizontal
+          ListEmptyComponent={() => (
+            <Text className="px-4  uppercase text-muted-foreground">
+              No se encontraron productos
+            </Text>
+          )}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 16 }}
         />
@@ -138,6 +140,11 @@ export default function HomeScreen() {
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => String(item.id)}
           horizontal
+          ListEmptyComponent={() => (
+            <Text className="px-4  uppercase text-muted-foreground">
+              No se encontraron productos
+            </Text>
+          )}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 16 }}
         />

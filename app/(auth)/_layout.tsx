@@ -10,7 +10,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { Text } from '@/components/ui/text';
 import { TouchableOpacity } from 'react-native';
 import { Button } from '@/components/ui/button';
-import { X } from 'lucide-react-native';
+import { Info, MapPinCheck, X } from 'lucide-react-native';
 
 export default function Layout() {
   const { user } = useUser();
@@ -35,6 +35,14 @@ export default function Layout() {
                     query: text,
                   });
                 },
+                onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                  const text = event.nativeEvent.text;
+                  Platform.OS === 'web' &&
+                    router.setParams({
+                      query: text,
+                    });
+                },
+
                 cancelButtonText: 'Cancelar',
                 onCancelButtonPress: () => {
                   router.setParams({
@@ -59,6 +67,24 @@ export default function Layout() {
                       </AvatarFallback>
                     </Avatar>
                   </TouchableOpacity>
+                  {Platform.OS === 'web' && (
+                    <View className="flex flex-row items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onPress={() => router.push({ pathname: '/(auth)/(screens)/tracker' })}
+                        accessibilityLabel="Enviar pedido">
+                        <Info />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onPress={() => router.push({ pathname: '/(auth)/(screens)/map-tracking' })}
+                        accessibilityLabel="Enviar pedido">
+                        <MapPinCheck />
+                      </Button>
+                    </View>
+                  )}
                 </View>
               ),
             }}
@@ -101,8 +127,8 @@ export default function Layout() {
               const { id } = route.params as { id: number };
               return {
                 title: 'Perfil',
-                headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
-                headerTransparent: Platform.OS === 'android' ? false : true,
+                headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
+                headerTransparent: Platform.OS === 'ios' ? true : false,
                 headerShadowVisible: false,
                 headerRight: () => (
                   <Button

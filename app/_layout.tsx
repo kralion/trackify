@@ -10,6 +10,7 @@ import { ActivityIndicator, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Toaster } from 'sonner-native';
 import '~/global.css';
+
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
@@ -98,15 +99,18 @@ export default function RootLayout() {
   }
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-        <ClerkLoaded>
-          <RootLayoutNav />
-          <PortalHost />
-        </ClerkLoaded>
-      </ThemeProvider>
-    </ClerkProvider>
+    <GestureHandlerRootView>
+      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+          <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+          <ClerkLoaded>
+            <Toaster />
+            <RootLayoutNav />
+            <PortalHost />
+          </ClerkLoaded>
+        </ThemeProvider>
+      </ClerkProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -122,10 +126,5 @@ function RootLayoutNav() {
     }
   }, [isLoaded, isSignedIn, segments]);
 
-  return (
-    <GestureHandlerRootView>
-      <Toaster />
-      <Slot />
-    </GestureHandlerRootView>
-  );
+  return <Slot />;
 }

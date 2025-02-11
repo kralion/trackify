@@ -7,6 +7,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Button } from '~/components/ui/button';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Text } from '~/components/ui/text';
+import { SafeAreaView } from 'react-native-safe-area-context';
 export const useWarmUpBrowser = () => {
   React.useEffect(() => {
     if (Platform.OS !== 'web') {
@@ -25,37 +26,31 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function SignInScreen() {
   return (
-    <LinearGradient
-      colors={['#F5D076', '#F0C25F']}
-      style={{ flex: 1 }}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}>
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View className="h-screen-safe relative mx-auto flex flex-col justify-center gap-8 web:pt-32 web:md:w-1/3">
-          <View className="flex flex-col items-center gap-1 px-4">
-            <Animated.Image
-              style={{
-                width: 150,
-                height: 150,
-              }}
-              entering={FadeInDown.damping(5).duration(500)}
-              source={{
-                uri: 'https://img.icons8.com/?size=300&id=Jpr7XcQNM2FS&format=png&color=000000',
-              }}
-            />
-            <Text className="text-center text-3xl font-bold">Bienvenido a Trackify</Text>
-            <Text className="text-center text-muted-foreground">
-              Vincula una de tus cuentas para continuar
-            </Text>
-          </View>
-          <View className="flex w-full flex-col justify-center gap-4 p-4 align-middle">
-            <SignInWithOAuthGoogle />
-            <SignInWithOAuthFacebook />
-            <SignInWithOAuthTiktok />
-          </View>
-        </View>
-      </ScrollView>
-    </LinearGradient>
+    <SafeAreaView
+      className="h-screen flex-1 items-center justify-center"
+      style={{ paddingHorizontal: 16 }}>
+      <View className="mb-10 flex flex-col items-center gap-1">
+        <Animated.Image
+          style={{
+            width: 150,
+            height: 150,
+          }}
+          entering={FadeInDown.damping(5).duration(500)}
+          source={{
+            uri: 'https://img.icons8.com/?size=300&id=Jpr7XcQNM2FS&format=png&color=000000',
+          }}
+        />
+        <Text className="text-center text-3xl font-bold">Bienvenido a Trackify</Text>
+        <Text className="text-center text-muted-foreground">
+          Vincula una de tus cuentas para continuar
+        </Text>
+      </View>
+      <View className="mx-auto flex w-full flex-col justify-center gap-4 align-middle  web:md:w-2/3 web:lg:w-1/3">
+        <SignInWithOAuthGoogle />
+        <SignInWithOAuthFacebook />
+        <SignInWithOAuthTiktok />
+      </View>
+    </SafeAreaView>
   );
 }
 

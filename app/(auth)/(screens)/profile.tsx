@@ -39,7 +39,7 @@ export default function Profile() {
   return (
     <ScrollView
       className="p-4 "
-      contentContainerClassName="pb-20"
+      contentContainerClassName="pb-20 web:md:w-1/2 w-full mx-auto"
       contentInsetAdjustmentBehavior="automatic">
       {isEditing ? (
         <View className="mb-6 flex flex-col items-center gap-4 rounded-2xl bg-zinc-100 p-6 ">
