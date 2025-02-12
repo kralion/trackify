@@ -143,25 +143,6 @@ export default function ShoppingCart() {
   );
   return (
     <View className="flex-1" style={{ marginTop: headerHeight }}>
-      <Stack.Screen
-        name="(screens)/cart"
-        options={{
-          title: 'Carrito',
-          presentation: 'modal',
-          headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
-          headerTransparent: Platform.OS === 'android' ? false : true,
-          headerShadowVisible: false,
-          headerRight: () => (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onPress={() => router.back()}>
-              <X color="#FFD500" />
-            </Button>
-          ),
-        }}
-      />
       <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
           <FlatList

@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button } from '@/components/ui/button';
 import { useCartStore, useCategoryStore, useProductStore } from '@/store';
@@ -8,6 +8,7 @@ import { Category, Product } from '@/types';
 import { Plus } from 'lucide-react-native';
 import { FlatList } from 'react-native';
 import { toast } from 'sonner-native';
+import Animated, { FadeIn } from 'react-native-reanimated';
 
 const CategoryItem = ({
   category,
@@ -20,10 +21,10 @@ const CategoryItem = ({
 }) => (
   <TouchableOpacity
     onPress={onPress}
-    className={`mr-8 items-center ${active ? 'opacity-100' : 'opacity-50'}`}>
+    className={`mr-8 flex w-28 flex-col items-center gap-4 rounded-xl  p-2 ${active ? 'bg-primary ' : 'bg-zinc-100'}`}>
     <Text className="text-5xl">{category.icon}</Text>
-    <Text className={`text-sm ${active ? 'text-black' : 'text-muted-foreground'}`}>
-      {category.name}
+    <Text className={`text-sm ${active ? 'text-white' : 'text-muted-foreground'}`}>
+      {category.name === 'N/A' ? 'Todos' : category.name}
     </Text>
   </TouchableOpacity>
 );
@@ -31,30 +32,34 @@ const CategoryItem = ({
 const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> }) => {
   const { addItem } = useCartStore();
   return (
-    <View className="my-2 mr-6 flex w-56 flex-col gap-4 rounded-xl  bg-white shadow-sm">
-      <Image source={{ uri: product.image_url }} className="h-36 w-full rounded-t-lg" />
-      <View className="flex flex-col gap-2">
-        <Text className="text-center text-muted-foreground">{product.name}</Text>
-        <Text className="text-center text-sm text-muted-foreground">
-          {product.categories?.name}
-        </Text>
+    <Animated.View entering={FadeIn.duration(500).damping(20)}>
+      <View className="my-2 mr-6 flex w-56 flex-col gap-4 rounded-xl border border-zinc-200 bg-zinc-50 ">
+        <Image source={{ uri: product.image_url }} className="h-36 w-full rounded-t-lg" />
+        <View className="flex flex-col gap-2">
+          <Text className="text-center text-xl font-semibold text-muted-foreground">
+            {product.name}
+          </Text>
+          <Text className="text-center text-sm text-muted-foreground">
+            {product.categories?.name}
+          </Text>
+        </View>
+        <View className="flex flex-row items-center justify-between p-4">
+          <Text className="  p-2 text-xl font-bold">S/ {product.price}</Text>
+          <Button
+            size="icon"
+            hitSlop={10}
+            className=" rounded-full"
+            onPress={() => {
+              addItem({ ...product, quantity: 1 });
+              toast.success('Item agregado al carrito', {
+                duration: 1000,
+              });
+            }}>
+            <Plus color="white" size={18} />
+          </Button>
+        </View>
       </View>
-      <View className="flex flex-row items-center justify-between p-4">
-        <Text className="  p-2 text-xl font-bold">S/ {product.price}</Text>
-        <Button
-          size="icon"
-          hitSlop={10}
-          className=" rounded-full"
-          onPress={() => {
-            addItem({ ...product, quantity: 1 });
-            toast.success('Item agregado al carrito', {
-              duration: 1000,
-            });
-          }}>
-          <Plus color="white" size={18} />
-        </Button>
-      </View>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -89,7 +94,25 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName="pb-24 ">
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      contentContainerClassName="pb-24 md:mx-auto ">
+      <View className="md:hidden">
+        <Button
+          className="mx-4 my-2 rounded-full "
+          size="lg"
+          onPress={() => router.push({ pathname: '/(auth)/(screens)/tracker' })}
+          accessibilityLabel="Enviar pedido">
+          <Text>Seguimiento Detallado</Text>
+        </Button>
+        <Button
+          className="mx-4 my-2 rounded-full"
+          size="lg"
+          onPress={() => router.push({ pathname: '/(auth)/(screens)/map-tracking' })}
+          accessibilityLabel="Enviar pedido">
+          <Text>Seguimiento en Mapa</Text>
+        </Button>
+      </View>
       <View className="flex flex-col gap-4 py-4">
         <Text className="px-4  uppercase text-muted-foreground">Categorías</Text>
         <FlatList

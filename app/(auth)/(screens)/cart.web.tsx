@@ -97,13 +97,13 @@ export default function ShoppingCart() {
   };
 
   const renderItem = ({ item }: { item: Product }) => (
-    <View className="   flex-row items-center gap-8">
+    <View className="   flex-row items-center  gap-4  md:gap-8">
       <Image
         source={{ uri: item.image_url }}
         className="rounded-xl"
         style={{ marginRight: 10, width: 100, height: 100 }}
       />
-      <View className="ml-4  flex-1">
+      <View className="  flex-1">
         <View className="flex flex-col gap-2">
           <Text className="text-lg font-bold">{item.name} </Text>
           <Text className="text-gray-500">S/. {item.price} PEN x porcion</Text>
@@ -144,28 +144,9 @@ export default function ShoppingCart() {
   );
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <Stack.Screen
-        name="(screens)/cart"
-        options={{
-          title: 'Carrito',
-          presentation: 'modal',
-          headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
-          headerTransparent: Platform.OS === 'ios' ? true : false,
-          headerShadowVisible: false,
-          headerRight: () => (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="mr-4 rounded-full"
-              onPress={() => router.back()}>
-              <X color="#FFD500" />
-            </Button>
-          ),
-        }}
-      />
-      <View className="mx-auto w-fit flex-row gap-16 ">
-        <View className=" w-[400px] flex-col gap-8">
-          <Text className="mb-4 text-center text-2xl font-bold">Informacion del Pedido</Text>
+      <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4  lg:flex-row">
+        <View className="mx-auto w-full flex-col  gap-8 md:w-[500px]">
+          <Text className="mb-4 text-center text-2xl font-bold">Información del Pedido</Text>
           <View>
             <Label className="my-2 px-4 text-muted-foreground">Nombre del Cliente</Label>
             <Input
@@ -233,8 +214,8 @@ export default function ShoppingCart() {
           <FlatList
             data={items}
             renderItem={renderItem}
-            ItemSeparatorComponent={() => <Separator className="my-8" />}
-            contentContainerClassName=" w-[600px] rounded-xl bg-zinc-50 p-8"
+            ItemSeparatorComponent={() => <Separator className="my-4 md:my-8" />}
+            contentContainerClassName=" md:w-[600px] rounded-xl bg-zinc-50 md:p-8 p-4"
             keyExtractor={(item) => String(item.id)}
           />
         </Animated.View>

@@ -22,7 +22,10 @@ export default function Layout() {
             name="(screens)/index"
             options={{
               title: 'Productos',
+              headerTitleStyle:
+                Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold' } : undefined,
               headerLargeTitle: true,
+              headerBackground: () => <View className="flex-1 bg-yellow-400" />,
               headerLargeTitleShadowVisible: false,
               headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
               headerTransparent: Platform.OS === 'ios' ? true : false,
@@ -67,25 +70,44 @@ export default function Layout() {
                       </AvatarFallback>
                     </Avatar>
                   </TouchableOpacity>
-                  {Platform.OS === 'web' && (
-                    <View className="flex flex-row items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onPress={() => router.push({ pathname: '/(auth)/(screens)/tracker' })}
-                        accessibilityLabel="Enviar pedido">
-                        <Info />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onPress={() => router.push({ pathname: '/(auth)/(screens)/map-tracking' })}
-                        accessibilityLabel="Enviar pedido">
-                        <MapPinCheck />
-                      </Button>
-                    </View>
-                  )}
+
+                  <View className="hidden flex-row items-center gap-2 md:flex">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onPress={() => router.push({ pathname: '/(auth)/(screens)/tracker' })}
+                      accessibilityLabel="Enviar pedido">
+                      <Info />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onPress={() => router.push({ pathname: '/(auth)/(screens)/map-tracking' })}
+                      accessibilityLabel="Enviar pedido">
+                      <MapPinCheck />
+                    </Button>
+                  </View>
                 </View>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="(screens)/cart"
+            options={{
+              title: 'Carrito',
+              presentation: 'modal',
+              headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+              headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
+              headerTransparent: Platform.OS === 'ios' ? true : false,
+              headerShadowVisible: false,
+              headerRight: () => (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  onPress={() => router.back()}>
+                  <X color="#FFD500" />
+                </Button>
               ),
             }}
           />
@@ -96,7 +118,20 @@ export default function Layout() {
               const { id } = route.params as { id: number };
               return {
                 title: 'Tracker',
-                headerShown: false,
+                headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+
+                headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
+                headerTransparent: Platform.OS === 'ios' ? true : false,
+                headerShadowVisible: Platform.OS === 'ios' ? true : false,
+                headerRight: () => (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full"
+                    onPress={() => router.back()}>
+                    <X color="#FFD500" />
+                  </Button>
+                ),
               };
             }}
           />
@@ -106,6 +141,8 @@ export default function Layout() {
               const { id } = route.params as { id: number };
               return {
                 title: 'Seguimiento',
+                headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+
                 headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
@@ -127,6 +164,8 @@ export default function Layout() {
               const { id } = route.params as { id: number };
               return {
                 title: 'Perfil',
+                headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+
                 headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
                 headerTransparent: Platform.OS === 'ios' ? true : false,
                 headerShadowVisible: false,

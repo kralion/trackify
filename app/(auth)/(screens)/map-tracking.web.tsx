@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import '../../../styles/map.css';
 import { ActivityIndicator, Alert, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from '@/components/ui/button';
+import { Car } from 'lucide-react-native';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 export default function MapTrackingWeb() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -68,8 +72,41 @@ export default function MapTrackingWeb() {
 
   return (
     <>
-      <Text>Map y Tu ubicacion</Text>
       <div id="map-container" ref={mapContainerRef} />
+      <div className="absolute bottom-4 left-1/2 flex h-[250px] w-[350px] -translate-x-1/2 flex-col gap-4 rounded-3xl bg-white p-4 shadow-xl md:h-[300px] md:w-[600px]">
+        <div className="flex flex-col gap-4">
+          <div>
+            <div className="text-xl font-bold text-gray-600">Preparando tu orden</div>
+            <span>
+              Llegara entre las <strong>10:15 AM - 10:30 AM</strong>
+            </span>
+          </div>
+        </div>
+        <div className="flex flex-row items-center justify-center">
+          <Badge className="rounded-full">
+            <Car />
+          </Badge>
+          <Separator className="w-1/4 md:w-1/3" />
+          <Badge className="rounded-full">
+            <Car />
+          </Badge>
+          <Separator className="w-1/4 md:w-1/3" />
+          <Badge className="rounded-full">
+            <Car />
+          </Badge>
+        </div>
+
+        <div className="mt-4">
+          <div className="h-1 w-full rounded-full bg-gray-200">
+            <div className="h-full w-1/3 rounded-full bg-[hsl(47.9,95.8%,53.1%)]"></div>
+          </div>
+        </div>
+        <div className="mt-1  text-gray-500">Roberto es quien esta trayendo tu orden</div>
+
+        <Button variant="link">
+          <Text>Ver todos los detalles</Text>
+        </Button>
+      </div>
     </>
   );
 }

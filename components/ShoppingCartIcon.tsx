@@ -19,14 +19,14 @@ const ShoppingCartIcon: React.FC = () => {
           : router.push('/(auth)/(screens)/cart')
       }>
       <View style={styles.container}>
-        <ShoppingCart color="#FFD500" size={24} />
+        <ShoppingCart color="black" size={24} />
         {cartItemsCount > 0 && (
           <View
             style={{
               position: 'absolute',
               top: -8,
               right: -8,
-              backgroundColor: '#FFD500',
+              backgroundColor: 'black',
 
               borderRadius: 12,
               width: 20,
@@ -34,7 +34,7 @@ const ShoppingCartIcon: React.FC = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Text style={{ color: 'black', fontSize: 12, fontWeight: 'bold' }}>
+            <Text style={{ color: '#FFD500', fontSize: 12, fontWeight: 'bold' }}>
               {cartItems.length}
             </Text>
           </View>

@@ -22,7 +22,7 @@ export const useProductStore = create<ProductStore>((set) => ({
   },
 
   async getProducts() {
-    const { data, error } = await supabase.from('products').select('*');
+    const { data, error } = await supabase.from('products').select('*, categories(id, name, icon)');
     if (error) throw error;
     set(() => ({
       products: data,
