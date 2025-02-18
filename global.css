@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+* {
+  font-family: 'Lato_400Regular', sans-serif;
+}
 
 @layer base {
   :root {

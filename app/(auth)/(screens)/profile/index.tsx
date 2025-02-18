@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth, useUser } from '@clerk/clerk-expo';
+import { router } from 'expo-router';
 import { Bell, Boxes, ChevronRight, Fingerprint, Lock, Notebook } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
@@ -74,8 +75,12 @@ export default function Profile() {
             placeholder="Email"
             keyboardType="email-address"
           />
+
           <Button className="rounded-full" onPress={handleSave}>
             <Text>Guardar Cambios</Text>
+          </Button>
+          <Button className="rounded-full" variant="destructive" onPress={() => setIsEditing(false)}>
+            <Text>Cancelar</Text>
           </Button>
         </View>
       ) : (
@@ -92,7 +97,7 @@ export default function Profile() {
               }}
             />
           </Avatar>
-          <Text className="mt-2 text-xl font-bold">{user?.fullName}</Text>
+          <Text className="mt-2 text-xl font-bold" style={{ fontFamily: "Bold" }}>{user?.fullName}</Text>
           <Text className="text-gray-500">{user?.emailAddresses[0].emailAddress}</Text>
           <Button className="mt-4 rounded-full" onPress={() => setIsEditing(true)}>
             <Text>Editar perfil</Text>
@@ -100,13 +105,13 @@ export default function Profile() {
         </View>
       )}
 
-      <Label className="m-2 ml-4  text-muted-foreground">Productos</Label>
+      <Label className="m-2 ml-4  text-muted-foreground" >Productos</Label>
       <View className="mb-6 rounded-2xl bg-zinc-100 p-4">
-        <TouchableOpacity activeOpacity={0.6}>
+        <TouchableOpacity activeOpacity={0.6} onPress={() => router.push('/(auth)/(screens)/profile/products')}>
           <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
             <View className="flex flex-row items-center gap-4">
               <Boxes color="black" />
-              <Text className="font-semibold">Mis productos</Text>
+              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Mis productos</Text>
             </View>
             <View className="flex flex-row items-center gap-2">
               <Text className="text-muted-foreground">148</Text>
@@ -114,11 +119,11 @@ export default function Profile() {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.6}>
+        <TouchableOpacity activeOpacity={0.6} onPress={() => router.push('/(auth)/(screens)/profile/orders')}>
           <View className="flex-row items-center justify-between  border-gray-200 py-4">
             <View className="flex flex-row items-center gap-4">
               <Notebook color="black" />
-              <Text className="font-semibold">Mis Ordenes</Text>
+              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Mis Ordenes</Text>
             </View>
             <View className="flex flex-row items-center gap-2">
               <Text className="text-muted-foreground">25</Text>
@@ -128,13 +133,13 @@ export default function Profile() {
         </TouchableOpacity>
       </View>
 
-      <Label className="m-2 ml-4 text-muted-foreground">Preferencias</Label>
+      <Label className="m-2 ml-4 text-muted-foreground" >Preferencias</Label>
       <View className="mb-6 rounded-2xl bg-zinc-100 p-4">
         <TouchableOpacity activeOpacity={0.6}>
           <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
             <View className="flex flex-row items-center gap-4">
               <Bell color="black" />
-              <Text className="font-semibold">Notificaciones push</Text>
+              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Notificaciones push</Text>
             </View>
 
             <Switch value={true} />
@@ -144,7 +149,7 @@ export default function Profile() {
           <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
             <View className="flex flex-row items-center gap-4">
               <Fingerprint color="black" />
-              <Text className="font-semibold">Face ID</Text>
+              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Face ID</Text>
             </View>
             <Switch value={true} />
           </View>
@@ -153,7 +158,7 @@ export default function Profile() {
           <View className="flex-row items-center justify-between border-gray-200 py-4">
             <View className="flex flex-row items-center gap-4">
               <Lock color="black" />
-              <Text className="font-semibold">PIN Code</Text>
+              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>PIN Code</Text>
             </View>
             <Switch value={false} />
           </View>

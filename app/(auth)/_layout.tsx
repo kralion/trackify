@@ -22,8 +22,9 @@ export default function Layout() {
             name="(screens)/index"
             options={{
               title: 'Productos',
+
               headerTitleStyle:
-                Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold' } : undefined,
+                Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
               headerLargeTitle: true,
               headerBackground: () => <View className="flex-1 bg-yellow-400" />,
               headerLargeTitleShadowVisible: false,
@@ -96,6 +97,8 @@ export default function Layout() {
             options={{
               title: 'Carrito',
               presentation: 'modal',
+              headerTitleStyle:
+                Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
               headerBackground: () => <View className="flex-1 bg-yellow-400" />,
               headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
               headerTransparent: Platform.OS === 'ios' ? true : false,
@@ -119,7 +122,8 @@ export default function Layout() {
               return {
                 title: 'Tracker',
                 headerBackground: () => <View className="flex-1 bg-yellow-400" />,
-
+                headerTitleStyle:
+                  Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
                 headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
                 headerTransparent: Platform.OS === 'ios' ? true : false,
                 headerShadowVisible: Platform.OS === 'ios' ? true : false,
@@ -142,7 +146,8 @@ export default function Layout() {
               return {
                 title: 'Seguimiento',
                 headerBackground: () => <View className="flex-1 bg-yellow-400" />,
-
+                headerTitleStyle:
+                  Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
                 headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
                 headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
@@ -160,25 +165,9 @@ export default function Layout() {
           />
           <Stack.Screen
             name="(screens)/profile"
-            options={({ route }) => {
-              const { id } = route.params as { id: number };
-              return {
-                title: 'Perfil',
-                headerBackground: () => <View className="flex-1 bg-yellow-400" />,
-
-                headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
-                headerTransparent: Platform.OS === 'ios' ? true : false,
-                headerShadowVisible: false,
-                headerRight: () => (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full"
-                    onPress={() => router.back()}>
-                    <X color="#FFD500" />
-                  </Button>
-                ),
-              };
+            options={{
+              title: 'Perfil',
+              headerShown: false,
             }}
           />
         </Stack>

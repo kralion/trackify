@@ -7,10 +7,10 @@ import { useOrder } from '@/store/order';
 import { Product } from '@/types';
 import { useHeaderHeight } from '@react-navigation/elements';
 import * as Location from 'expo-location';
-import { router, Stack } from 'expo-router';
-import { MapPinHouse, Minus, Plus, Trash, X } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { MapPinHouse, Minus, Plus, Trash } from 'lucide-react-native';
 import { useState } from 'react';
-import { FlatList, Image, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { FlatList, Image, KeyboardAvoidingView, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 type Order = {

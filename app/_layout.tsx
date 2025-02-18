@@ -10,7 +10,7 @@ import { ActivityIndicator, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Toaster } from 'sonner-native';
 import '~/global.css';
-
+import { useFonts, Lato_400Regular, Lato_700Bold } from '@expo-google-fonts/lato';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
@@ -18,6 +18,7 @@ import { useColorScheme } from '~/lib/useColorScheme';
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
   colors: NAV_THEME.light,
+
 };
 const DARK_THEME: Theme = {
   ...DarkTheme,
@@ -64,12 +65,18 @@ export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-
+  const [fontLoaded, fontError] = useFonts({
+    Lato: Lato_400Regular,
+    Bold: Lato_700Bold,
+  });
   React.useEffect(() => {
     (async () => {
       const theme = await AsyncStorage.getItem('theme');
       if (Platform.OS === 'web') {
         document.documentElement.classList.add('bg-background');
+      }
+      if (fontLoaded || fontError) {
+        SplashScreen.hideAsync();
       }
       if (!theme) {
         AsyncStorage.setItem('theme', colorScheme);
@@ -91,7 +98,7 @@ export default function RootLayout() {
     });
   }, []);
 
-  if (!isColorSchemeLoaded) {
+  if (!isColorSchemeLoaded && !fontError && !fontLoaded) {
     return null;
   }
   if (isLoading) {

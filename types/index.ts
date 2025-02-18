@@ -24,7 +24,7 @@ export type Delivery = {
 export interface Product {
   id: number;
   name: string;
-  price: string;
+  price: number;
   image_url: string;
   quantity: number;
   stock: boolean;

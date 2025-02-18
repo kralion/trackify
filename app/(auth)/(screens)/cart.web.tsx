@@ -7,10 +7,10 @@ import { useOrder } from '@/store/order';
 import { Product } from '@/types';
 import { useHeaderHeight } from '@react-navigation/elements';
 import * as Location from 'expo-location';
-import { router, Stack } from 'expo-router';
-import { MapPinHouse, Minus, Plus, Trash, X } from 'lucide-react-native';
+import { router } from 'expo-router';
+import { MapPinHouse, Minus, Plus, Trash } from 'lucide-react-native';
 import { useState } from 'react';
-import { FlatList, Image, Platform, ScrollView, Text, View } from 'react-native';
+import { FlatList, Image, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
 
@@ -77,14 +77,13 @@ export default function ShoppingCart() {
       }
     }
   };
-  const subTotal = (cartItems: { price: string; quantity: number }[]) => {
+  const subTotal = (cartItems: { price: number; quantity: number }[]) => {
     return cartItems.reduce((total, item) => {
-      const priceNumber = parseFloat(item.price); // Convert price to a number
-      return total + priceNumber * item.quantity;
+      return total + item.price * item.quantity;
     }, 0);
   };
 
-  const taxes = (cartItems: { price: string; quantity: number }[]) => {
+  const taxes = (cartItems: { price: number; quantity: number }[]) => {
     return subTotal(cartItems) * 0.18;
   };
 
@@ -105,7 +104,7 @@ export default function ShoppingCart() {
       />
       <View className="  flex-1">
         <View className="flex flex-col gap-2">
-          <Text className="text-lg font-bold">{item.name} </Text>
+          <Text className="text-lg font-bold" style={{ fontFamily: "Lato" }}>{item.name} </Text>
           <Text className="text-gray-500">S/. {item.price} PEN x porcion</Text>
 
           <View className="flex-row items-center">
@@ -146,7 +145,7 @@ export default function ShoppingCart() {
     <ScrollView contentInsetAdjustmentBehavior="automatic">
       <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4  lg:flex-row">
         <View className="mx-auto w-full flex-col  gap-8 md:w-[500px]">
-          <Text className="mb-4 text-center text-2xl font-bold">Información del Pedido</Text>
+          <Text className="mb-4 text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Información del Pedido</Text>
           <View>
             <Label className="my-2 px-4 text-muted-foreground">Nombre del Cliente</Label>
             <Input
@@ -186,27 +185,27 @@ export default function ShoppingCart() {
           </View>
           <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 ">
             <View className="flex flex-row justify-between">
-              <Text className="mb-1 text-lg font-semibold">Sub total:</Text>
-              <Text className="mb-1 text-lg text-muted-foreground">S/ {subTotal(items)}</Text>
+              <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Sub total:</Text>
+              <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>S/ {subTotal(items)}</Text>
             </View>
             <View className="flex flex-row justify-between">
-              <Text className="mb-1 text-lg font-semibold">IGV & Impuestos:</Text>
-              <Text className="mb-1 text-lg text-muted-foreground">
+              <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>IGV & Impuestos:</Text>
+              <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>
                 S/ {taxes(items).toFixed(2)}
               </Text>
             </View>
             <View className="flex flex-row justify-between">
-              <Text className="mb-1 text-lg font-semibold">Delivery:</Text>
-              <Text className="mb-1 text-lg text-muted-foreground">S/ {delivery().toFixed(2)}</Text>
+              <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Delivery:</Text>
+              <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>S/ {delivery().toFixed(2)}</Text>
             </View>
             <Separator decorative orientation="horizontal" />
             <View className="flex flex-row justify-between">
-              <Text className="text-xl font-black">Total:</Text>
-              <Text className="text-xl font-black">S/ {total().toFixed(2)}</Text>
+              <Text className="text-xl font-black" style={{ fontFamily: "Bold" }}>Total:</Text>
+              <Text className="text-xl font-black" style={{ fontFamily: "Bold" }}>S/ {total().toFixed(2)}</Text>
             </View>
           </View>
           <Button size="lg" className=" rounded-full" onPress={handleSubmit}>
-            <Text className="font-semibold">Enviar pedido</Text>
+            <Text className="font-semibold" >Enviar pedido</Text>
           </Button>
         </View>
 
