@@ -53,11 +53,11 @@ const Orders = () => {
   );
 
   return (
-    <View className='web:md:w-1/2 mx-auto p-4'>
+    <View className='web:md:w-1/2 web:md:mx-auto  flex-1'>
       <FlatList
         data={products}
         ItemSeparatorComponent={() => <Separator className="my-4 md:my-8" />}
-        contentContainerClassName='px-4'
+        contentContainerClassName='p-4'
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />

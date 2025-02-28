@@ -21,15 +21,14 @@ export default function Layout() {
           <Stack.Screen
             name="(screens)/index"
             options={{
-              title: 'Productos',
+              title: 'Mi Tienda',
 
               headerTitleStyle:
                 Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
               headerLargeTitle: true,
               headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
               headerLargeTitleShadowVisible: false,
-              headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
-              headerTransparent: Platform.OS === 'ios' ? true : false,
+
               headerShadowVisible: false,
               headerSearchBarOptions: {
                 placeholder: 'Buscar producto...',
@@ -124,21 +123,9 @@ export default function Layout() {
               const { id } = route.params as { id: number };
               return {
                 title: 'Tracker',
-                headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
-                headerTitleStyle:
-                  Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
-                headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
-                headerTransparent: Platform.OS === 'ios' ? true : false,
-                headerShadowVisible: Platform.OS === 'ios' ? true : false,
-                headerRight: () => (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full"
-                    onPress={() => router.back()}>
-                    <X color="#FFD500" />
-                  </Button>
-                ),
+                headerShown: false,
+
+
               };
             }}
           />
@@ -151,18 +138,8 @@ export default function Layout() {
                 headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
                 headerTitleStyle:
                   Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
-                headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
-                headerTransparent: Platform.OS === 'android' ? false : true,
                 headerShadowVisible: false,
-                headerRight: () => (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full"
-                    onPress={() => router.back()}>
-                    <X color="#FFD500" />
-                  </Button>
-                ),
+
               };
             }}
           />
@@ -171,11 +148,8 @@ export default function Layout() {
             options={{
               title: 'Perfil',
               headerTitleStyle:
-            Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } ,
-
-          headerBackground: () => Platform.OS === 'web' && <View className="flex-1 bg-yellow-400" /> ,
-
-          headerShadowVisible: false,
+            Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined ,
+                  headerShadowVisible: false,
           headerShown: true,
 
             }}

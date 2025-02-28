@@ -2,12 +2,13 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import * as Location from 'expo-location';
 import { router, useLocalSearchParams } from 'expo-router';
-import { PhoneCall } from 'lucide-react-native';
+import { ChevronLeft, PhoneCall } from 'lucide-react-native';
 import React from 'react';
-import { Image, ScrollView, Text, View } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 // import Map from '@/components/Map';
 import { useOrder } from '@/store/order';
 import { Order } from '@/types';
+import { Label } from '@/components/ui/label';
 
 export default function MapTrackingScreen() {
   const { id } = useLocalSearchParams();
@@ -34,12 +35,8 @@ export default function MapTrackingScreen() {
     });
     getCurrentLocation();
   }, []);
-  let text = 'Waiting...';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
+
+
   return (
     <ScrollView>
       {/* {deliveryLocation && (
@@ -49,21 +46,34 @@ export default function MapTrackingScreen() {
           endLocation={order?.destination as Location.LocationObjectCoords}
         />
       )} */}
+
+ <View style={{ position: "relative", width: "100%", height: 500 }}>
+
       <Image
         source={{
           uri: 'https://img.freepik.com/premium-vector/custom-location-map-interface-web-mobile-app_150101-8344.jpg?w=996',
         }}
         className="h-full w-full"
-      />
-      <Text>{text}</Text>
-      <View className="flex flex-col gap-6  px-4 py-8 ">
+        />
+        </View>
+           <View
+          className="p-4 flex-row mt-10 justify-between items-center absolute top-0 left-0 right-0 z-10"
+        >
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="w-10 h-10 justify-center items-center bg-black/20 rounded-full"
+          >
+            <ChevronLeft size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      <View className="flex flex-col   p-4 ">
         <View className="flex flex-col gap-2">
           <Text className="text-lg text-muted-foreground  ">DIRECCION DE ENTREGA</Text>
           <Text className="font-bold">
             Jr. Mariscal Castilla No. 123, San Juan de Miraflores, Lima, Peru
           </Text>
         </View>
-        <View className=" flex flex-row justify-between rounded-xl bg-zinc-100 p-4">
+        <View className=" flex flex-row justify-between rounded-xl bg-zinc-100 my-4 p-4">
           <View>
             <Text className="text-xs text-muted-foreground">DISTANCIA APROXIMADA</Text>
             <Text className="text-lg font-bold">214.8 km</Text>
@@ -74,7 +84,9 @@ export default function MapTrackingScreen() {
             <Text className="text-lg font-bold">7.4 horas</Text>
           </View>
         </View>
-        <View className="flex  flex-row items-center justify-between rounded-2xl bg-zinc-100 p-4">
+
+<Label className="m-2 ml-4  text-muted-foreground" >Delivery</Label>
+       <View className='flex flex-row items-center justify-between bg-muted p-4 rounded-xl'>
           <View className=" flex flex-row items-center ">
             <Image
               source={{ uri: 'https://mighty.tools/mockmind-api/content/human/91.jpg' }}
@@ -90,9 +102,7 @@ export default function MapTrackingScreen() {
           </Button>
         </View>
       </View>
-      <Button className="rounded-full" variant="ghost" onPress={() => router.back()}>
-        <Text>Cerrar</Text>
-      </Button>
+
     </ScrollView>
   );
 }

@@ -46,14 +46,13 @@ const TrackerScreen = () => {
           }}
         />
       )}
-      <View className=" flex-row items-center rounded-full bg-white p-2">
+      <View className=" flex-row items-center  bg-white p-2 rounded-xl">
         <Input
           placeholder="Código de Rastreo..."
           autoFocus
-          className="relative ml-2 flex-1 border-0 "
+          className="relative  flex-1 border-0 rounded-xl"
         />
         <Button
-          className="rounded-full"
           onPress={() => {
             setOrderFound(!orderFound);
           }}>
@@ -87,7 +86,7 @@ const TrackerScreen = () => {
             <Text className="text-sm text-muted-foreground">RECEPTOR</Text>
             <Text className="font-bold">Jhon Ramirez Caballero</Text>
             <Button
-              className="mt-4 rounded-full "
+              className="mt-4"
               onPress={() => {
                 router.push('/(auth)/(screens)/map-tracking');
               }}>

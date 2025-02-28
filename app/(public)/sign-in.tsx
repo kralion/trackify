@@ -77,7 +77,7 @@ export const SignInWithOAuthGoogle = () => {
 
   return (
     <Button
-      className="flex flex-row items-center gap-2 rounded-full"
+      className="flex flex-row items-center gap-2 "
       variant="secondary"
       size="lg"
       onPress={onPress}>
@@ -115,7 +115,7 @@ export const SignInWithOAuthTiktok = () => {
 
   return (
     <Button
-      className="flex flex-row items-center gap-2 rounded-full"
+      className="flex flex-row items-center gap-2 "
       variant="secondary"
       size="lg"
       onPress={onPress}>
@@ -153,7 +153,7 @@ export const SignInWithOAuthFacebook = () => {
 
   return (
     <Button
-      className="flex flex-row items-center gap-2 rounded-full"
+      className="flex flex-row items-center gap-2 "
       variant="secondary"
       size="lg"
       onPress={onPress}>

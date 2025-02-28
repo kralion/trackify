@@ -3,18 +3,17 @@ import React from 'react'
 import { router, Stack } from 'expo-router';
 import { PlusCircle, X } from 'lucide-react-native';
 import { Button } from '@/components/ui/button';
+import { TouchableOpacity } from 'react-native';
 
 export default function ProfileLayout() {
   return (
     <Stack>
       <Stack.Screen
         name="index"
-       options={{
-
+        options={{
           headerShown: false,
-          title: "Perfil"
-
-            }}
+          title: 'Perfil',
+        }}
       />
       <Stack.Screen
         name="products"
@@ -31,9 +30,7 @@ export default function ProfileLayout() {
           presentation: 'modal',
           headerTitleStyle:
             Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
-          headerBackground: () => <View className="flex-1 bg-yellow-400" />,
-          headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
-          headerTransparent: Platform.OS === 'ios' ? true : false,
+          headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
           headerShadowVisible: false,
           headerSearchBarOptions: {
             placeholder: 'Buscar producto...',
@@ -58,16 +55,13 @@ export default function ProfileLayout() {
               });
             },
           },
-          headerRight: () => (
-            <Button
-              variant="ghost"
-              size="icon"
-              onPress={() => router.push({ pathname: '/(auth)/(screens)/profile/add-product' })}
-              accessibilityLabel="Enviar pedido">
-              <PlusCircle />
-            </Button>
+          headerLeft: () =>  <TouchableOpacity
+              hitSlop={8}
+              onPress={() => router.back()}
+              accessibilityLabel="Atrás">
+              <Text className='text-primary text-xl'>Cerrar</Text>
+            </TouchableOpacity>,
 
-          ),
         }}
       />
 

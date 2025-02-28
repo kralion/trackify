@@ -1,7 +1,7 @@
-import { View, Text, Platform, NativeSyntheticEvent, TextInputFocusEventData } from 'react-native'
+import { View, Text, Platform, NativeSyntheticEvent, TextInputFocusEventData, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { router, Stack } from 'expo-router';
-import { PlusCircle, X } from 'lucide-react-native';
+import { Plus, PlusCircle, X } from 'lucide-react-native';
 import { Button } from '@/components/ui/button';
 
 export default function ProfileLayout() {
@@ -15,7 +15,6 @@ export default function ProfileLayout() {
           headerTitleStyle:
             Platform.OS !== 'ios' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
           headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
-          headerShadowVisible: false,
           headerSearchBarOptions: {
             placeholder: 'Buscar producto...',
             onSearchButtonPress: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
@@ -39,21 +38,19 @@ export default function ProfileLayout() {
               });
             },
           },
-          headerLeft: () => Platform.OS === 'ios' && <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full"
-            onPress={() => router.back()}>
-            <X color="#FFD500" />
-          </Button>,
+          headerLeft: () =>  <TouchableOpacity
+              hitSlop={8}
+              onPress={() => router.back()}
+              accessibilityLabel="Atrás">
+              <Text className='text-primary text-xl'>Atrás</Text>
+            </TouchableOpacity>,
           headerRight: () => (
-            <Button
-              variant="ghost"
-              size="icon"
+            <TouchableOpacity
+              hitSlop={8}
               onPress={() => router.push({ pathname: '/(auth)/(screens)/profile/products/add-product' })}
-              accessibilityLabel="Enviar pedido">
-              <PlusCircle />
-            </Button>
+              accessibilityLabel="Agregar producto">
+              <Text className='text-primary text-xl'>Agregar</Text>
+            </TouchableOpacity>
 
           ),
         }}
@@ -66,7 +63,8 @@ export default function ProfileLayout() {
         options={({ route }) => {
           const { id } = route.params as { id: number };
           return {
-            title: 'Agregar Producto',
+            title: 'Agregar',
+            headerBackTitle: "Cancelar",
             presentation: "card",
             headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
             headerTitleStyle:
@@ -74,13 +72,13 @@ export default function ProfileLayout() {
 
             headerShadowVisible: false,
             headerRight: () => (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onPress={() => router.back()}>
-                <X color="#FFD500" />
-              </Button>
+             Platform.OS !== 'ios' && <Button
+             variant="ghost"
+             size="icon"
+             className="rounded-full"
+             onPress={() => router.back()}>
+             <X color="#FFD500" />
+             </Button>
             ),
           };
         }}

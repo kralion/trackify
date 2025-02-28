@@ -42,26 +42,28 @@ const AddProduct = () => {
     console.log('Price:', price);
     console.log('Image:', image);
 
-    router.push('/(auth)/(screens)/profile/products');
+    router.back();
   };
 
   return (
-    <View className='p-4 web:md:mx-auto web:md:w-1/2 flex-col gap-4 web:md:gap-8'>
+    <View className='p-4 web:md:mx-auto web:md:w-1/2 flex-col gap-8'>
 
-      <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+      <TouchableOpacity className='h-40 w-full items-center justify-center rounded-xl border border-dashed border-muted-foreground bg-muted' onPress={pickImage}>
         {image ? (
-          <Image source={{ uri: image }} style={styles.image} />
+          <Image source={{ uri: image }} style={{
+            height: 100,
+            width: 100
+          }} />
         ) : (
           <Button className='flex flex-row gap-4' variant="outline">
             <UploadCloud color="gray" size={20} />
-            <Text style={styles.imagePickerText}>Selecciona una imagen</Text>
+            <Text className='text-lg text-muted-foreground'>Selecciona una imagen</Text>
           </Button>
         )}
       </TouchableOpacity>
       <View>
         <Label className="my-2 px-4 text-muted-foreground">Nombre </Label>
         <Input
-          className="rounded-full"
           placeholder="Nombre"
           value={name}
           onChangeText={setName}
@@ -70,7 +72,6 @@ const AddProduct = () => {
         <View className="flex flex-row items-center gap-3">
           <View className="flex-1">
             <Input
-              className="rounded-full"
               placeholder="S/. 50.00"
               value={
                 price
@@ -83,61 +84,12 @@ const AddProduct = () => {
         </View>
       </View>
 
-      <Button className='rounded-full' onPress={handleAddProduct}>
-        <Text >Add Product</Text>
+      <Button size="lg" onPress={handleAddProduct}>
+        <Text >Agregar Producto</Text>
       </Button>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  imagePicker: {
-    width: '100%',
-    height: 200,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  imagePickerText: {
-    fontSize: 16,
-    color: '#888',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#007bff',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
 
 export default AddProduct;

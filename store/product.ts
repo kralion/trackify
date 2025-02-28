@@ -4,6 +4,7 @@ import { create } from 'zustand';
 
 export const useProductStore = create<ProductStore>((set) => ({
   products: [],
+  loading: false,
   setProducts: (products) => set(() => ({ products })),
   itemCount: 0,
   async removeProduct(id: number) {
@@ -14,35 +15,84 @@ export const useProductStore = create<ProductStore>((set) => ({
     }));
   },
   addProduct: async (product: Omit<Product, 'id'>) => {
+    set(() => ({
+      loading: true,
+    }));
     const { data, error } = await supabase.from('products').insert(product).select().single();
     if (error) throw error;
     set((state) => ({
       products: [...state.products, data],
     }));
+    set(() => ({
+      loading: false,
+    }));
   },
 
-  async getProducts() {
-    const { data, error } = await supabase.from('products').select('*, categories(id, name, icon)');
-    if (error) throw error;
-    set(() => ({
-      products: data,
-    }));
-    return data;
-  },
+async getAllProductByUser(userId: string) {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('categories.id', 1);
+  if (error) throw error;
+ return data;
+},
+async getProductsByCategoryOrSearch(categoryId: number | null, search: string, userId: string) {
+  set(() => ({
+    loading: true,
+  }));
+  let query = supabase
+    .from('products')
+    .select('*, categories(id, name, icon)')
+    .eq('user_id', userId);
+
+  if (categoryId !== null) {
+    query = query.eq('categories.id', categoryId);
+  }
+
+  if (search !== '') {
+    query = query.ilike('name', `%${search}%`);
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  set(() => ({
+    products: data,
+  }));
+  set(() => ({
+    loading: false,
+  }));
+
+  return data;
+},
 
   async updateProduct(product) {
+    set(() => ({
+      loading: true,
+    }));
     const { data, error } = await supabase.from('products').update(product).eq('id', product.id);
     if (error) throw error;
     set((state) => ({
       products: state.products.map((p) => (p.id === product.id ? product : p)),
     }));
+    set(() => ({
+      loading: false,
+    }));
   },
 
   async deleteProduct(id: number) {
+    set(() => ({
+      loading: true,
+    }));
     const { error } = await supabase.from('products').delete().eq('id', id);
     if (error) throw error;
     set((state) => ({
       products: state.products.filter((p) => p.id !== id),
+    }));
+    set(() => ({
+      loading: false,
     }));
   },
 }));

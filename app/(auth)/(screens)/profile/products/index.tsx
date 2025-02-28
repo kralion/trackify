@@ -53,7 +53,7 @@ const Products = () => {
   );
 
   return (
-    <View className='web:md:w-1/2 mx-auto p-4'>
+    <View className='web:md:w-1/2 web:md:mx-auto p-4'>
       <FlatList
         data={products}
         ItemSeparatorComponent={() => <Separator className="my-4 md:my-8" />}

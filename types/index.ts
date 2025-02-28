@@ -42,7 +42,9 @@ export interface ProductStore {
   products: Product[];
   addProduct: (product: Omit<Product, 'id'>) => Promise<void>;
   setProducts: (products: Product[]) => void;
-  getProducts: () => Promise<Product[]>;
+  loading: boolean;
+  getAllProductByUser: (userId: string) => Promise<Product[]>;
+  getProductsByCategoryOrSearch: (categoryId: number | null, search: string, userId: string) => Promise<Product[]>;
   updateProduct: (product: Product) => Promise<void>;
   removeProduct: (id: number) => void;
   itemCount: number;

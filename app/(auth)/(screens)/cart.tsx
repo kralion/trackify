@@ -153,7 +153,6 @@ export default function ShoppingCart() {
               <View>
                 <Label className="my-2 px-4 text-muted-foreground">Cliente</Label>
                 <Input
-                  className="rounded-full"
                   placeholder="Jorge Ramirez Centeno"
                   value={form.customer}
                   onChangeText={(text) => setForm({ ...form, customer: text })}
@@ -162,7 +161,6 @@ export default function ShoppingCart() {
                 <View className="flex flex-row items-center gap-3">
                   <View className="flex-1">
                     <Input
-                      className="rounded-full"
                       placeholder="-123.456.789, -123.456.789"
                       value={
                         form.destination.length > 30
