@@ -9,31 +9,12 @@ export default function ProfileLayout() {
     <Stack>
       <Stack.Screen
         name="index"
-       options={{
-
-          headerShown: false,
-          title: "Perfil"
-
-            }}
-      />
-      <Stack.Screen
-        name="products"
-        options={{
-          headerShown: false,
+         options={{
           title: 'Productos',
           presentation: 'modal',
-        }}
-      />
-      <Stack.Screen
-        name="orders"
-        options={{
-          title: 'Mis Ordenes',
-          presentation: 'modal',
           headerTitleStyle:
-            Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
-          headerBackground: () => <View className="flex-1 bg-yellow-400" />,
-          headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
-          headerTransparent: Platform.OS === 'ios' ? true : false,
+            Platform.OS !== 'ios' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
+          headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
           headerShadowVisible: false,
           headerSearchBarOptions: {
             placeholder: 'Buscar producto...',
@@ -58,16 +39,50 @@ export default function ProfileLayout() {
               });
             },
           },
+          headerLeft: () => Platform.OS === 'ios' && <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+            onPress={() => router.back()}>
+            <X color="#FFD500" />
+          </Button>,
           headerRight: () => (
             <Button
               variant="ghost"
               size="icon"
-              onPress={() => router.push({ pathname: '/(auth)/(screens)/profile/add-product' })}
+              onPress={() => router.push({ pathname: '/(auth)/(screens)/profile/products/add-product' })}
               accessibilityLabel="Enviar pedido">
               <PlusCircle />
             </Button>
 
           ),
+        }}
+      />
+
+
+
+      <Stack.Screen
+        name="add-product"
+        options={({ route }) => {
+          const { id } = route.params as { id: number };
+          return {
+            title: 'Agregar Producto',
+            presentation: "card",
+            headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
+            headerTitleStyle:
+              Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" },
+
+            headerShadowVisible: false,
+            headerRight: () => (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                onPress={() => router.back()}>
+                <X color="#FFD500" />
+              </Button>
+            ),
+          };
         }}
       />
 

@@ -10,7 +10,7 @@ import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { MapPinHouse, Minus, Plus, Trash } from 'lucide-react-native';
 import { useState } from 'react';
-import { FlatList, Image, KeyboardAvoidingView, Text, View } from 'react-native';
+import { FlatList, Image, KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 type Order = {
@@ -76,14 +76,13 @@ export default function ShoppingCart() {
       }
     }
   };
-  const subTotal = (cartItems: { price: string; quantity: number }[]) => {
+  const subTotal = (cartItems: Product[]) => {
     return cartItems.reduce((total, item) => {
-      const priceNumber = parseFloat(item.price); // Convert price to a number
-      return total + priceNumber * item.quantity;
+      return total + item.price * item.quantity;
     }, 0);
   };
 
-  const taxes = (cartItems: { price: string; quantity: number }[]) => {
+  const taxes = (cartItems: Product[]) => {
     return subTotal(cartItems) * 0.18;
   };
 
@@ -142,7 +141,7 @@ export default function ShoppingCart() {
     </View>
   );
   return (
-    <View className="flex-1" style={{ marginTop: headerHeight }}>
+    <View className="flex-1" style={{ marginTop: Platform.OS !== 'ios' ? headerHeight : 0 }}>
       <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
           <FlatList

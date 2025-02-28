@@ -1,7 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-
 import { Button } from '@/components/ui/button';
 import { useCartStore, useCategoryStore, useProductStore } from '@/store';
 import { Category, Product } from '@/types';

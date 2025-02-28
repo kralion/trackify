@@ -26,7 +26,7 @@ export default function Layout() {
               headerTitleStyle:
                 Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
               headerLargeTitle: true,
-              headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+              headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
               headerLargeTitleShadowVisible: false,
               headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
               headerTransparent: Platform.OS === 'ios' ? true : false,
@@ -98,20 +98,23 @@ export default function Layout() {
               title: 'Carrito',
               presentation: 'modal',
               headerTitleStyle:
-                Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
+                Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } ,
               headerBackground: () => <View className="flex-1 bg-yellow-400" />,
-              headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
-              headerTransparent: Platform.OS === 'ios' ? true : false,
-              headerShadowVisible: false,
-              headerRight: () => (
-                <Button
+
+              headerLeft: () => Platform.OS === 'ios' && <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full"
+                onPress={() => router.back()}>
+                <X color="white" />
+              </Button>,
+              headerRight: () => Platform.OS !== 'ios' && <Button
                   variant="ghost"
                   size="icon"
                   className="rounded-full"
                   onPress={() => router.back()}>
                   <X color="#FFD500" />
-                </Button>
-              ),
+                </Button>,
             }}
           />
 
@@ -121,7 +124,7 @@ export default function Layout() {
               const { id } = route.params as { id: number };
               return {
                 title: 'Tracker',
-                headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+                headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
                 headerTitleStyle:
                   Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
                 headerBlurEffect: Platform.OS === 'ios' ? 'regular' : 'none',
@@ -145,7 +148,7 @@ export default function Layout() {
               const { id } = route.params as { id: number };
               return {
                 title: 'Seguimiento',
-                headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+                headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
                 headerTitleStyle:
                   Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
                 headerBlurEffect: Platform.OS === 'android' ? 'none' : 'regular',
@@ -167,7 +170,14 @@ export default function Layout() {
             name="(screens)/profile"
             options={{
               title: 'Perfil',
-              headerShown: false,
+              headerTitleStyle:
+            Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } ,
+
+          headerBackground: () => Platform.OS === 'web' && <View className="flex-1 bg-yellow-400" /> ,
+
+          headerShadowVisible: false,
+          headerShown: true,
+
             }}
           />
         </Stack>
