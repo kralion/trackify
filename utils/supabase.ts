@@ -13,6 +13,8 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
     persistSession: true,
     detectSessionInUrl: false,
   },
+   db: {schema: "trackify"}
+
 });
 
 export function createClerkSupabaseClient() {
@@ -32,7 +34,7 @@ export function createClerkSupabaseClient() {
         // Get the custom Supabase token from Clerk
         fetch: async (url, options = {}) => {
           const clerkToken = await getToken({
-            template: 'trackify',
+            template: 'supabase',
           });
 
           // Insert the Clerk Supabase token into the headers
@@ -45,7 +47,11 @@ export function createClerkSupabaseClient() {
             headers,
           });
         },
+
       },
+      db: {schema: "trackify"}
+
+
     }
   );
 }

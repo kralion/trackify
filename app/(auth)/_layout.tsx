@@ -1,7 +1,5 @@
 import ActiveRideSheet from '@/components/ActiveRideSheet';
-import SelectedScooterSheet from '@/components/SelectedScooterSheet';
 import RideProvider from '@/providers/RideProvider';
-import ScooterProvider from '@/providers/ScooterProvider';
 import { router, Stack } from 'expo-router';
 import { NativeSyntheticEvent, Platform, TextInputFocusEventData, View } from 'react-native';
 import ShoppingCartIcon from '../../components/ShoppingCartIcon';
@@ -15,7 +13,6 @@ import { Info, MapPinCheck, X } from 'lucide-react-native';
 export default function Layout() {
   const { user } = useUser();
   return (
-    <ScooterProvider>
       <RideProvider>
         <Stack>
           <Stack.Screen
@@ -156,9 +153,7 @@ export default function Layout() {
           />
         </Stack>
 
-        <SelectedScooterSheet />
         <ActiveRideSheet />
       </RideProvider>
-    </ScooterProvider>
   );
 }

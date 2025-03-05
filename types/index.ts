@@ -53,7 +53,7 @@ export interface ProductStore {
 export interface CategoryStore {
   categories: Category[];
   addCategory: (category: Omit<Category, 'id'>) => Promise<void>;
-  getCategories: () => Promise<Category[]>;
+  getCategories: (userId: string) => Promise<Category[]>;
   updateCategory: (category: Category) => Promise<void>;
   deleteCategory: (id: number) => Promise<void>;
 }

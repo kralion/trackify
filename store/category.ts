@@ -11,8 +11,8 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
       categories: [...state.categories, data],
     }));
   },
-  async getCategories() {
-    const { data, error } = await supabase.from('categories').select('*');
+  async getCategories(userId: string) {
+    const { data, error } = await supabase.from('categories').select('*').eq('user_id', userId);
     if (error) throw error;
     set(() => ({
       categories: data,
