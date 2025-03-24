@@ -1,13 +1,12 @@
+import { useOAuth } from '@clerk/clerk-expo';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
-import { useOAuth } from '@clerk/clerk-expo';
 import React from 'react';
-import { Image, Platform, ScrollView, View } from 'react-native';
+import { Image, Platform, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
-import { Button } from '~/components/ui/button';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Text } from '~/components/ui/text';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from '~/components/ui/button';
+import { Text } from '~/components/ui/text';
 export const useWarmUpBrowser = () => {
   React.useEffect(() => {
     if (Platform.OS !== 'web') {

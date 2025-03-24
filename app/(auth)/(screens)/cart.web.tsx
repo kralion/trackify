@@ -1,15 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/store';
 import { useOrder } from '@/store/order';
 import { Product } from '@/types';
 import { useUser } from '@clerk/clerk-expo';
-import { useHeaderHeight } from '@react-navigation/elements';
-import * as Location from 'expo-location';
 import { router } from 'expo-router';
-import { MapPinHouse, Minus, Plus, Trash } from 'lucide-react-native';
+import { Minus, Plus, Trash } from 'lucide-react-native';
 import { useState } from 'react';
 import { FlatList, Image, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -160,6 +159,8 @@ export default function ShoppingCart() {
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName='pb-16'>
       <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4 md:pt-16 lg:flex-row">
         <View className="mx-auto w-full flex-col  md:gap-8 gap-4 md:w-[500px]">
+           
+
           <Text className="md:mb-4 md:text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Resumen </Text>
           <View>
             <Label className="my-2 px-2 text-muted-foreground">Nombre del Cliente</Label>
@@ -180,6 +181,26 @@ export default function ShoppingCart() {
                   }
                   onChangeText={(text) => setForm({ ...form, destination: text })}
                 />
+                <Label className="my-2 px-2 text-muted-foreground">Método de Pago</Label>
+                <Select defaultValue={{ value: 'efectivo', label: 'Efectivo' }} >
+      <SelectTrigger className='w-[250px] rounded-lg md:w-full'>
+        <SelectValue
+          className='text-foreground text-sm native:text-lg'
+          placeholder='Selecciona'
+        />
+      </SelectTrigger>
+      <SelectContent  className='w-[350px] rounded-xl md:w-full' >
+        <SelectGroup>
+          <SelectItem  label='Yape' value='yape'>
+            Yape
+          </SelectItem>
+          <SelectItem  label='Efectivo' value='efectivo'>
+            Efectivo
+          </SelectItem>
+          
+        </SelectGroup>
+      </SelectContent>
+    </Select>
               </View>
               {/* <Button
                 size="icon"

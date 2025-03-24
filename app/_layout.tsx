@@ -106,25 +106,22 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView>
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
           <ClerkLoaded>
-            <Toaster />
             <RootLayoutNav />
             <PortalHost />
+
           </ClerkLoaded>
         </ThemeProvider>
       </ClerkProvider>
-    </GestureHandlerRootView>
   );
 }
 
 function RootLayoutNav() {
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
-
   React.useEffect(() => {
     if (!isSignedIn && segments[0] === '(auth)') {
       router.push('/(public)/sign-in');
@@ -133,5 +130,9 @@ function RootLayoutNav() {
     }
   }, [isLoaded, isSignedIn, segments]);
 
-  return <Slot />;
+  return <GestureHandlerRootView>
+        <Toaster />
+        <Slot />
+
+    </GestureHandlerRootView>
 }
