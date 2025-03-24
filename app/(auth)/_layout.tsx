@@ -8,7 +8,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { Text } from '@/components/ui/text';
 import { TouchableOpacity } from 'react-native';
 import { Button } from '@/components/ui/button';
-import { Info, MapPinCheck, X } from 'lucide-react-native';
+import { ArrowLeft, Info, MapPinCheck, X } from 'lucide-react-native';
 
 export default function Layout() {
   const { user } = useUser();
@@ -18,7 +18,7 @@ export default function Layout() {
           <Stack.Screen
             name="(screens)/index"
             options={{
-              title: 'Mi Tienda' ,
+              title: 'Tito\'s Restaurant' ,
 
               headerTitleStyle:
                 Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
@@ -35,13 +35,14 @@ export default function Layout() {
                     query: text,
                   });
                 },
-                onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                  const text = event.nativeEvent.text;
-                  Platform.OS === 'web' &&
-                    router.setParams({
-                      query: text,
-                    });
-                },
+                
+                // onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                //   const text = event.nativeEvent.text;
+                //   Platform.OS === 'web' &&
+                //     router.setParams({
+                //       query: text,
+                //     });
+                // },
 
                 cancelButtonText: 'Cancelar',
                 onCancelButtonPress: () => {
@@ -51,7 +52,7 @@ export default function Layout() {
                 },
               },
               headerRight: () => (
-                <View className="flex flex-row items-center gap-8">
+                <View className="flex flex-row items-center gap-4">
                   <ShoppingCartIcon />
                   <TouchableOpacity
                     hitSlop={8}
@@ -68,7 +69,7 @@ export default function Layout() {
                     </Avatar>
                   </TouchableOpacity>
 
-                  <View className="hidden flex-row items-center gap-2 md:flex">
+                  {/* <View className="hidden flex-row items-center gap-2 md:flex">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -83,7 +84,7 @@ export default function Layout() {
                       accessibilityLabel="Enviar pedido">
                       <MapPinCheck />
                     </Button>
-                  </View>
+                  </View> */}
                 </View>
               ),
             }}
@@ -91,26 +92,26 @@ export default function Layout() {
           <Stack.Screen
             name="(screens)/cart"
             options={{
-              title: 'Carrito',
+              title: 'Información del Pedido',
               presentation: 'modal',
               headerTitleStyle:
                 Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } ,
               headerBackground: () => <View className="flex-1 bg-yellow-400" />,
 
-              headerLeft: () => Platform.OS === 'ios' && <Button
+              headerLeft: () => Platform.OS === 'ios' ? <Button
                 variant="ghost"
                 size="icon"
                 className="rounded-full"
                 onPress={() => router.back()}>
-                <X color="white" />
-              </Button>,
-              headerRight: () => Platform.OS !== 'ios' && <Button
-                  variant="ghost"
+                <X color="white" /> 
+              </Button> : <Button
+                  variant="link"
                   size="icon"
                   className="rounded-full"
                   onPress={() => router.back()}>
-                  <X color="#FFD500" />
+                  <ArrowLeft color="black" />
                 </Button>,
+            
             }}
           />
 

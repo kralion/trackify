@@ -1,4 +1,4 @@
-import { Product, ProductStore } from '@/types';
+import { Product, ProductStore, Order } from '@/types';
 import { supabase } from '@/utils/supabase';
 import { create } from 'zustand';
 
@@ -43,20 +43,16 @@ async getAllProductByUser(userId: string) {
   }));
  return data;
 },
-async getProductsByCategoryOrSearch(categoryId: number | null, search: string, userId: string) {
+async getProductsByCategoryOrSearch(categoryId: number | null, search: string) {
   set(() => ({
     loading: true,
   }));
   let query = supabase
     .from('products')
     .select('*, categories(id, name, icon)')
-    .eq('user_id', "user_2rDGYUufUg0RLAGqQoz1cNX8urm")
-    .eq('id_category', 1);
-
-  if (categoryId !== null) {
-    query = query.eq('categories.id', categoryId);
-  }
-
+    .eq('id_category', categoryId)
+    .order('id', { ascending: true });
+ 
   if (search !== '') {
     query = query.ilike('name', `%${search}%`);
   }

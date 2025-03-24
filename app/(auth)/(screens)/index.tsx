@@ -21,30 +21,29 @@ export default function HomeScreen() {
   const isMobile = width < 768;
   
   useEffect(() => {
-    getCategories(user?.id as string);
+    getCategories();
      
   }, []);
 
   async function onRefresh() {
     setRefreshing(true);
     if (query) {
-      await getProductsByCategoryOrSearch(null, query as string, user?.id as string);
+      await getProductsByCategoryOrSearch(null, query as string,);
 
     } else {
-      await getProductsByCategoryOrSearch(activeCategory, '', user?.id as string);
+      await getProductsByCategoryOrSearch(activeCategory, '');
 
     }
     setRefreshing(false);
   }
 
   useEffect(() => {
-    getProductsByCategoryOrSearch(null, query as string, user?.id as string);
+    getProductsByCategoryOrSearch(null, query as string);
 
   }, [query]);
 
   useEffect(() => {
-    getProductsByCategoryOrSearch(activeCategory, '', user?.id as string);
-
+    getProductsByCategoryOrSearch(activeCategory, '');
   }, [activeCategory]);
 
   return (
@@ -81,7 +80,7 @@ export default function HomeScreen() {
           />
          
           
-          <Text className="px-4 uppercase text-muted-foreground text-lg font-bold" style={{ fontFamily: "Bold" }}>Clásicos</Text>
+          <Text className="px-4 uppercase text-muted-foreground text-lg font-bold" style={{ fontFamily: "Bold" }}>Platos</Text>
 
           <FlatList
             key={String(isMobile)}

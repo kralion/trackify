@@ -44,8 +44,7 @@ export interface ProductStore {
   addProduct: (product: Omit<Product, 'id'>) => Promise<void>;
   setProducts: (products: Product[]) => void;
   loading: boolean;
-  getAllProductByUser: (userId: string) => Promise<Product[]>;
-  getProductsByCategoryOrSearch: (categoryId: number | null, search: string, userId: string) => Promise<Product[]>;
+  getProductsByCategoryOrSearch: (categoryId: number | null, search: string) => Promise<Product[]>;
   updateProduct: (product: Product) => Promise<void>;
   removeProduct: (id: number) => void;
   itemCount: number;
@@ -55,7 +54,7 @@ export interface CategoryStore {
   categories: Category[];
   loading: boolean;
   addCategory: (category: Omit<Category, 'id'>) => Promise<void>;
-  getCategories: (userId: string) => Promise<Category[]>;
+  getCategories: () => Promise<Category[]>;
   updateCategory: (category: Category) => Promise<void>;
   deleteCategory: (id: number) => Promise<void>;
 }

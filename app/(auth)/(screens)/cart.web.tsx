@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/store';
 import { useOrder } from '@/store/order';
 import { Product } from '@/types';
+import { useUser } from '@clerk/clerk-expo';
 import { useHeaderHeight } from '@react-navigation/elements';
 import * as Location from 'expo-location';
 import { router } from 'expo-router';
@@ -25,8 +26,8 @@ type Order = {
 };
 
 export default function ShoppingCart() {
-  const headerHeight = useHeaderHeight();
   const { addOrder } = useOrder();
+  const {user} = useUser();
   const { setItems } = useCartStore();
   const [form, setForm] = useState<Order>({
     destination: '',
@@ -57,6 +58,20 @@ export default function ShoppingCart() {
     router.back();
   };
   const { items, removeItem } = useCartStore();
+
+  const handleReset = () => {
+    setForm({
+      destination: '',
+      customer: '',
+      origin: '',
+      duration: 0,
+      distance: 0,
+      items: [],
+      status: 'registrado',
+    });
+    setItems([]);
+    router.back();
+  }
 
   const increaseQuantity = (item: Product) => {
     const itemIndex = items.findIndex((i) => i.id === item.id);
@@ -142,22 +157,22 @@ export default function ShoppingCart() {
     </View>
   );
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4  lg:flex-row">
-        <View className="mx-auto w-full flex-col  gap-8 md:w-[500px]">
-          <Text className="mb-4 text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Información del Pedido</Text>
+    <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName='pb-16'>
+      <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4 md:pt-16 lg:flex-row">
+        <View className="mx-auto w-full flex-col  md:gap-8 gap-4 md:w-[500px]">
+          <Text className="md:mb-4 md:text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Resumen </Text>
           <View>
-            <Label className="my-2 px-4 text-muted-foreground">Nombre del Cliente</Label>
+            <Label className="my-2 px-2 text-muted-foreground">Nombre del Cliente</Label>
             <Input
-              placeholder="Jorge Ramirez Centeno"
-              value={form.customer}
+              placeholder="Ingresa tu nombre"
+              value={user?.fullName || form.customer}
               onChangeText={(text) => setForm({ ...form, customer: text })}
             />
-            <Label className="my-2 mt-4 px-4 text-muted-foreground">Ubicación</Label>
-            <View className="flex flex-row items-center gap-3">
-              <View className="flex-1">
+            <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación y Referencia</Label>
+            {/* <View className="flex flex-row items-center gap-3">
+              <View className="flex-1"> */}
                 <Input
-                  placeholder="-123.456.789, -123.456.789"
+                  placeholder="Av. Oswaldo N Regal 485 , Ref Colegio San Ramon"
                   value={
                     form.destination.length > 30
                       ? `${form.destination.slice(0, 30)}...`
@@ -166,7 +181,7 @@ export default function ShoppingCart() {
                   onChangeText={(text) => setForm({ ...form, destination: text })}
                 />
               </View>
-              <Button
+              {/* <Button
                 size="icon"
                 className="rounded-full"
                 onPress={() => {
@@ -180,7 +195,7 @@ export default function ShoppingCart() {
                 <MapPinHouse color="black" size={18} />
               </Button>
             </View>
-          </View>
+          </View> */}
           <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 ">
             <View className="flex flex-row justify-between">
               <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Sub total:</Text>
@@ -202,9 +217,15 @@ export default function ShoppingCart() {
               <Text className="text-xl font-black" style={{ fontFamily: "Bold" }}>S/ {total().toFixed(2)}</Text>
             </View>
           </View>
+          <View className='flex flex-col gap-4'>
+
           <Button size="lg" onPress={handleSubmit}>
             <Text className="font-semibold" >Enviar pedido</Text>
           </Button>
+          <Button size="lg"  variant="secondary" onPress={handleReset}>
+            <Text className="font-semibold" style={{color: 'red'}} >Cancelar Pedido</Text>
+          </Button>
+          </View>
         </View>
 
         <Animated.View entering={FadeInUp.duration(200).damping(10).delay(100)}>
