@@ -10,67 +10,63 @@ import { useUser } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
 import { Minus, Plus, Trash } from 'lucide-react-native';
 import { useState } from 'react';
-import { FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
 
 type Order = {
-  destination: string;
+  location: string;
   customer: string;
-  distance: number;
-  duration: number;
-  origin: string;
+  phone: string;
+  user_id?: string;
+  paymentMethod: string;
   items: Product[];
-  status: 'registrado' | 'enviado' | 'entregado';
 };
 
 export default function ShoppingCart() {
-  const { addOrder } = useOrder();
+  const { addOrder, loading } = useOrder();
   const {user} = useUser();
+  const { items, removeItem } = useCartStore();
   const { setItems } = useCartStore();
   const [form, setForm] = useState<Order>({
-    destination: '',
-    customer: '',
-    distance: 0,
-    duration: 0,
-    origin: '',
+    location: user?.unsafeMetadata.location as string || '',
+    customer: user?.fullName || '',
+    user_id: user?.id || '',
+    phone: user?.unsafeMetadata.phone as string || '',
+    paymentMethod: 'efectivo',
     items: [],
-    status: 'registrado',
   });
 
-  //TODO: Handle the locations cause on the db it receives a geometry object type and here is a string, we need to convert it somehow
-  const handleSubmit = () => {
-    if (!form.items || !form.destination || !form.customer) {
-      toast.error('Todos los campos son obligatorios');
-      return;
-    }
-
-    setForm({
-      destination: '',
-      customer: '',
-      origin: '',
-      duration: 0,
-      distance: 0,
-      items: [],
-      status: 'registrado',
-    });
-    router.back();
-  };
-  const { items, removeItem } = useCartStore();
 
   const handleReset = () => {
     setForm({
-      destination: '',
+      location: '',
       customer: '',
-      origin: '',
-      duration: 0,
-      distance: 0,
+      phone: '',
+      paymentMethod: 'efectivo',
       items: [],
-      status: 'registrado',
     });
     setItems([]);
     router.back();
   }
+  const handleSubmit = () => {
+    if (!form.items || !form.location || !form.customer) {
+      toast.error('Todos los campos son obligatorios');
+      return;
+    }
+    addOrder({
+      ...form,
+      items,
+      customer: user?.fullName || form.customer ,
+      user_id: user?.id ,
+      phone: user?.unsafeMetadata.phone as string || form.phone,
+      location: form.location,
+      totalPrice: total(),
+    });
+    handleReset();  
+    router.back();
+  };
+
 
   const increaseQuantity = (item: Product) => {
     const itemIndex = items.findIndex((i) => i.id === item.id);
@@ -166,7 +162,7 @@ export default function ShoppingCart() {
             <Label className="my-2 px-2 text-muted-foreground">Nombre del Cliente</Label>
             <Input
               placeholder="Ingresa tu nombre"
-              value={user?.fullName || form.customer}
+              value={form.customer}
               onChangeText={(text) => setForm({ ...form, customer: text })}
             />
             <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación y Referencia</Label>
@@ -175,23 +171,24 @@ export default function ShoppingCart() {
                 <Input
                   placeholder="Av. Oswaldo N Regal 485 , Ref Colegio San Ramon"
                   value={
-                    form.destination.length > 30
-                      ? `${form.destination.slice(0, 30)}...`
-                      : form.destination
+                    form.location.length > 30
+                      ? `${form.location.slice(0, 30)}...`
+                      : form.location
                   }
-                  onChangeText={(text) => setForm({ ...form, destination: text })}
+                  onChangeText={(text) => setForm({ ...form, location: text })}
                 />
+             
                 <Label className="my-2 px-2 text-muted-foreground">Método de Pago</Label>
-                <Select defaultValue={{ value: 'efectivo', label: 'Efectivo' }} >
+                <Select defaultValue={{ value: 'efectivo', label: 'Efectivo' }} onValueChange={(value) => setForm({ ...form, paymentMethod: value?.value || 'efectivo' })} >
       <SelectTrigger className='w-[250px] rounded-lg md:w-full'>
-        <SelectValue
+        <SelectValue 
           className='text-foreground text-sm native:text-lg'
           placeholder='Selecciona'
         />
       </SelectTrigger>
       <SelectContent  className='w-[350px] rounded-xl md:w-full' >
-        <SelectGroup>
-          <SelectItem  label='Yape' value='yape'>
+        <SelectGroup >
+          <SelectItem  label='Yape' value='yape'  >
             Yape
           </SelectItem>
           <SelectItem  label='Efectivo' value='efectivo'>
@@ -240,8 +237,8 @@ export default function ShoppingCart() {
           </View>
           <View className='flex flex-col gap-4'>
 
-          <Button size="lg" onPress={handleSubmit}>
-            <Text className="font-semibold" >Enviar pedido</Text>
+          <Button size="lg"  onPress={handleSubmit}>
+            {loading ? <ActivityIndicator size='small' />: <Text className="font-semibold" >Enviar pedido</Text>}
           </Button>
           <Button size="lg"  variant="secondary" onPress={handleReset}>
             <Text className="font-semibold" style={{color: 'red'}} >Cancelar Pedido</Text>

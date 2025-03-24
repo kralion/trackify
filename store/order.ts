@@ -1,17 +1,19 @@
 import { Order, OrderStore } from '@/types';
 import { supabase } from '@/utils/supabase';
+import { sendWhatsAppMessage } from '@/utils/whatsapp';
 import { toast } from 'sonner-native';
 import { create } from 'zustand';
 
 export const useOrder = create<OrderStore>((set) => ({
   orders: [] as Order[],
+  loading: false,
   addOrder: async (order: Omit<Order, 'id'>) => {
-    const { data, error } = await supabase.from('orders').insert(order).select().single();
-    if (error) throw error;
-    set((state) => ({
-      orders: [...state.orders, data],
-    }));
-    toast.success('Orden enviada');
+    set({ loading: true });
+  const {  error } = await supabase.from('orders').insert(order);
+  if (error) console.log(error);
+  toast.success('Orden enviada');
+  sendWhatsAppMessage(order, '51914019629');
+  set({ loading: false });
   },
   getOrder: async (orderId: number) => {
     const { data, error } = await supabase

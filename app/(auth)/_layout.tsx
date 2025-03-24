@@ -8,10 +8,20 @@ import { useUser } from '@clerk/clerk-expo';
 import { Text } from '@/components/ui/text';
 import { TouchableOpacity } from 'react-native';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Info, MapPinCheck, X } from 'lucide-react-native';
+import { ArrowLeft, Moon, Sun, X } from 'lucide-react-native';
+import { useState } from 'react';
+import { Appearance } from 'react-native';
+import { useColorScheme } from '@/lib/useColorScheme';
 
 export default function Layout() {
   const { user } = useUser();
+  const { isDarkColorScheme } = useColorScheme();
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(isDarkColorScheme);
+const handleToggleDarkMode = () => {
+  setIsDarkMode(prevMode => !prevMode);
+    const newColorScheme = isDarkMode ? 'light' : 'dark';
+    Appearance.setColorScheme(newColorScheme);
+};
   return (
       <RideProvider>
         <Stack>
@@ -149,6 +159,15 @@ export default function Layout() {
             Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined ,
                   headerShadowVisible: false,
           headerShown: true,
+          headerRight: () => (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onPress={handleToggleDarkMode}>
+              {isDarkColorScheme ? <Sun /> : <Moon />}
+            </Button>
+          ),
 
             }}
           />

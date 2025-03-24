@@ -1,8 +1,7 @@
 import { Linking } from "react-native";
 
-export const sendWhatsAppMessage = (order: any, customer: any, businessPhone: string) => {
-    const { location, items, totalPrice, quantity, paymentMethod, extras } = order;
-    const { name, phone } = customer;
+export const sendWhatsAppMessage = (order: any, businessPhone: string) => {
+    const { location, items, totalPrice, paymentMethod, extras, customer, phone } = order;
 
     const formattedItems = items.map((item: any) => `- ${item.name} (x${item.quantity})`).join("\n");
     const formattedExtras = extras ? `\nAdicionales: ${extras}` : "";
@@ -11,20 +10,20 @@ export const sendWhatsAppMessage = (order: any, customer: any, businessPhone: st
 
 Quisiera hacer un pedido con los siguientes detalles:
 
-Ubicación: ${location}
+*UBICACIÓN*: ${location}
 
-Datos del cliente:
-- Nombre: ${name}
-- Teléfono: ${phone}
+*DATOS DEL CLIENTE*:
+- Nombre: ${customer}
+- Telefono: ${phone}
 
-Productos solicitados:
+*PRODUCTOS SOLICITADOS*:
 ${formattedItems}
 
-Precio total: S/. ${totalPrice}
-Cantidad: ${quantity}
-Método de pago: ${paymentMethod}${formattedExtras}
+*PRECIO TOTAL*: S/. ${totalPrice}
+*MÉTODO DE PAGO*: ${paymentMethod}
+${formattedExtras}
 
-Quedo atento a la confirmación. Gracias.`;
+Espero la confirmación. Gracias.`;
 
     const url = `https://wa.me/${businessPhone}?text=${encodeURIComponent(message)}`;
 
