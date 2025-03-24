@@ -18,7 +18,7 @@ export default function Layout() {
           <Stack.Screen
             name="(screens)/index"
             options={{
-              title: 'Tito\'s Restaurant' ,
+              title: 'Mi Tienda' ,
 
               headerTitleStyle:
                 Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
