@@ -25,6 +25,7 @@ export interface Product {
   id: number;
   name: string;
   price: number;
+  description: string;
   image_url: string;
   quantity: number;
   stock: boolean;
@@ -52,6 +53,7 @@ export interface ProductStore {
 
 export interface CategoryStore {
   categories: Category[];
+  loading: boolean;
   addCategory: (category: Omit<Category, 'id'>) => Promise<void>;
   getCategories: (userId: string) => Promise<Category[]>;
   updateCategory: (category: Category) => Promise<void>;

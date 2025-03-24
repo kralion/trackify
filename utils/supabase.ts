@@ -50,8 +50,6 @@ export function createClerkSupabaseClient() {
 
       },
       db: {schema: "trackify"}
-
-
     }
   );
 }

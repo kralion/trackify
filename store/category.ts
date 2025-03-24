@@ -4,6 +4,7 @@ import { create } from 'zustand';
 
 export const useCategoryStore = create<CategoryStore>((set) => ({
   categories: [],
+  loading: false,
   async addCategory(category: Omit<Category, 'id'>) {
     const { data, error } = await supabase.from('categories').insert(category).select().single();
     if (error) throw error;
@@ -12,10 +13,16 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
     }));
   },
   async getCategories(userId: string) {
-    const { data, error } = await supabase.from('categories').select('*').eq('user_id', userId);
+    set(() => ({
+      loading: true,
+    }));
+      const { data, error } = await supabase.from('categories').select('*').eq('user_id', 'user_2rDGYUufUg0RLAGqQoz1cNX8urm');
     if (error) throw error;
     set(() => ({
       categories: data,
+    }));
+    set(() => ({
+      loading: false,
     }));
     return data;
   },

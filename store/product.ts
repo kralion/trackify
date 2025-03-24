@@ -29,12 +29,18 @@ export const useProductStore = create<ProductStore>((set) => ({
   },
 
 async getAllProductByUser(userId: string) {
+  set(() => ({
+    loading: true,
+  }));
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('user_id', userId)
+    .eq('user_id', "user_2rDGYUufUg0RLAGqQoz1cNX8urm")
     .eq('categories.id', 1);
   if (error) throw error;
+  set(() => ({
+    loading: false,
+  }));
  return data;
 },
 async getProductsByCategoryOrSearch(categoryId: number | null, search: string, userId: string) {
@@ -44,7 +50,8 @@ async getProductsByCategoryOrSearch(categoryId: number | null, search: string, u
   let query = supabase
     .from('products')
     .select('*, categories(id, name, icon)')
-    .eq('user_id', userId);
+    .eq('user_id', "user_2rDGYUufUg0RLAGqQoz1cNX8urm")
+    .eq('id_category', 1);
 
   if (categoryId !== null) {
     query = query.eq('categories.id', categoryId);
