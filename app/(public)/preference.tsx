@@ -53,8 +53,7 @@ export default function PreferencesScreen() {
 
   
 
-  
- const onSubmit = async (data: PreferencesForm) => {
+const onSubmit = async (data: PreferencesForm) => {
     try {
       setIsLoading(true);
 
@@ -71,8 +70,9 @@ export default function PreferencesScreen() {
         unsafeMetadata: {
           location: data.location,
           phone: `51${data.phone}`
-        }
+        },
       });
+      console.log("2")
 
       if (!signUpAttempt) {
         toast.error("Error al crear la cuenta");
@@ -85,6 +85,7 @@ export default function PreferencesScreen() {
         return;
       }
 
+    
       await setActive?.({
         session: signUpAttempt.createdSessionId,
       });
@@ -97,7 +98,6 @@ export default function PreferencesScreen() {
       setIsLoading(false);
     }
   };
- 
 
   return (
     <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
@@ -209,7 +209,7 @@ export default function PreferencesScreen() {
                   />
                 )}
               />
-              {errors.phone?.message && (
+              {errors.phone && (
                 <Text className="text-xs text-red-500">
                   {errors.phone?.message}
                 </Text>

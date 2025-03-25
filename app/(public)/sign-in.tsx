@@ -35,38 +35,31 @@ export default function SignInScreen() {
     resolver: zodResolver(signInSchema),
   });
 
- const onSubmit = React.useCallback(async (data: SignInForm) => {
-    if (!isLoaded) return
-    setIsLoading(true);
+const onSubmit = React.useCallback(async (data: SignInForm) => {
+  if (!isLoaded) return;
+  setIsLoading(true);
 
-    // Start the sign-in process using the email and password provided
-    try {
-      console.log("hello")
-      const signInAttempt = await signIn.create({
-        identifier: data.username,
-        password: data.password,
-      })
-      console.log("hello", signInAttempt)
+  try {
+    console.log("hello");
+    const signInAttempt = await signIn.create({
+      identifier: data.username,
+      password: data.password,
+      strategy:"password"
+    });
+    console.log("hello2", signInAttempt);
 
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
-      if (signInAttempt.status === 'complete') {
-        await setActive({ session: signInAttempt.createdSessionId })
-        router.replace('/(auth)/(screens)')
-      } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        console.error(JSON.stringify(signInAttempt, null, 2))
-      }
-    } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
-      console.error(JSON.stringify(err, null, 2))
+    if (signInAttempt.status === 'complete') {
+      await setActive({ session: signInAttempt.createdSessionId });
+      router.replace('/(auth)/(screens)');
+    } else {
+      console.error(JSON.stringify(signInAttempt, null, 2));
     }
-    finally {
-      setIsLoading(false);
-    }
-  }, [isLoaded, handleSubmit])
+  } catch (err) {
+    console.error(JSON.stringify(err, null, 2));
+  } finally {
+    setIsLoading(false);
+  }
+}, [isLoaded, signIn, setActive, router]);
 
   return (
       <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>

@@ -16,13 +16,13 @@ export default function Profile() {
   const [firstName, setFirstName] = useState(user?.firstName || '');
   const [location, setLocation] = useState(user?.unsafeMetadata.location || '');
   const [lastName, setLastName] = useState(user?.lastName || '');
-  const [email, setEmail] = useState(user?.emailAddresses[0].emailAddress || '');
+  const [username, setUsername] = useState(user?.username || '');
   
   useEffect(() => {
     if (user) {
       setFirstName(user.firstName || '');
       setLastName(user.lastName || '');
-      setEmail(user.emailAddresses[0].emailAddress || '');
+      setUsername(user.username || '');
       setPhone(user.unsafeMetadata.phone || '');
       setLocation(user.unsafeMetadata.location || '');
     }
@@ -93,7 +93,7 @@ export default function Profile() {
             placeholder="914 151 151"
           />
           <Input
-            value={email}
+            value={username}
             editable={false}
             className="w-full "
             placeholder="Email"
@@ -123,7 +123,7 @@ export default function Profile() {
             />
           </Avatar>
           <Text className="mt-2 text-xl font-bold" style={{ fontFamily: "Bold" }}>{user?.fullName}</Text>
-          <Text className="text-gray-500">{user?.emailAddresses[0].emailAddress}</Text>
+          <Text className="text-gray-500">{user?.username}</Text>
          
           <Button className="mt-4 " onPress={() => setIsEditing(true)}>
             <Text>Editar perfil</Text>

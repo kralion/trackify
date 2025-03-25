@@ -20,9 +20,9 @@ import { Text } from "~/components/ui/text";
 
 
 const signUpSchema = z.object({
-  username: z.string().min(5, "El usuario debe tener al menos 5 caracteres"),
-  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
-  repeatPassword: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+  username: z.string().min(6, "El usuario debe tener al menos 6 caracteres"),
+  password: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
+  repeatPassword: z.string().min(8, "La contraseña debe tener al menos 8 caracteres"),
 }).superRefine((data, ctx) => {
   if (data.password !== data.repeatPassword) {
     ctx.addIssue({
