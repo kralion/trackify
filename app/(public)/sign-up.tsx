@@ -16,16 +16,35 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 
+
+
+
 const signUpSchema = z.object({
-  email: z.string().email("El correo electrónico es requerido"),
+  username: z.string().min(5, "El usuario debe tener al menos 5 caracteres"),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+  repeatPassword: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+}).superRefine((data, ctx) => {
+  if (data.password !== data.repeatPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Las contraseñas no coinciden",
+      path: ["repeatPassword"], 
+    });
+  }
 });
+
+
+
+
+
+
 
 type SignUpForm = z.infer<typeof signUpSchema>;
 
 export default function SignUpScreen() {
   const [isLoading, setIsLoading] = React.useState(false);
   const { setClerkCredentials } = useSignUpStore();
+  const [passwordsMatch, setPasswordsMatch] = React.useState(false);
   const {
     control,
     handleSubmit,
@@ -35,15 +54,19 @@ export default function SignUpScreen() {
   });
 
   const onSubmit = async (data: SignUpForm) => {
+    setPasswordsMatch(data.password === data.repeatPassword);
+    if (!passwordsMatch) {
+      return;
+    }
 
     try {
       setIsLoading(true);
       setClerkCredentials({
-        email: data.email,
+        username: data.username,
         password: data.password,
       });
 
-      router.push("/onboarding/auth/preference");
+      router.push("/(public)/preference");
     } catch (err: any) {
       console.error(err);
       toast.error("Error al guardar los datos");
@@ -55,14 +78,14 @@ export default function SignUpScreen() {
   return (
     <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
       <ScrollView>
-        <View className="flex flex-col gap-8 h-screen-safe justify-center p-6 web:md:max-w-xl web:md:mx-auto">
+        <View className="flex flex-col gap-8 h-screen-safe justify-center p-6 web:md:w-[500px] web:md:mx-auto">
           <View className="flex flex-col items-center">
             <Image
               style={{
                 width: 125,
                 height: 125,
               }}
-              source={require("../../../../assets/logo.png")}
+              source={require("../../assets/logo.png")}
             />
             <Text className="text-4xl font-bold">Crear Cuenta</Text>
             <View>
@@ -83,25 +106,24 @@ export default function SignUpScreen() {
          
 
             <View>
-              <Text className="font-medium mb-2">Email</Text>
+              <Text className="font-medium mb-2">Usuario</Text>
               <Controller
                 control={control}
-                name="email"
+                name="username"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
-                    placeholder="email@.com"
+                    placeholder="miguel1234"
                     onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
                     size="lg"
                     autoCapitalize="none"
-                    keyboardType="email-address"
                   />
                 )}
               />
-              {errors.email?.message && (
-                <Text className="text-xs text-red-500">
-                  {errors.email?.message}
+              {errors.username?.message && (
+                <Text className="text-xs text-red-500 mt-2">
+                  {errors.username?.message}
                 </Text>
               )}
             </View>
@@ -115,6 +137,7 @@ export default function SignUpScreen() {
                   <Input
                     placeholder="********"
                     onChangeText={onChange}
+                    autoCapitalize="none"
                     onBlur={onBlur}
                     value={value}
                     size="lg"
@@ -123,10 +146,37 @@ export default function SignUpScreen() {
                 )}
               />
               {errors.password?.message && (
-                <Text className="text-xs text-red-500">
+                <Text className="text-xs text-red-500 mt-2">
                   {errors.password?.message}
                 </Text>
               )}
+            </View>
+            <View>
+              <Text className="font-medium mb-2">Repetir Contraseña</Text>
+             <Controller
+  control={control}
+  name="repeatPassword"
+  render={({ field: { onChange, onBlur, value } }) => (
+    <View className="flex flex-col gap-2">
+      <Input
+        placeholder="********"
+        onChangeText={onChange}
+        autoCapitalize="none"
+        onBlur={onBlur}
+        value={value}
+        size="lg"
+        secureTextEntry
+      />
+      {errors.repeatPassword?.message && (
+        <Text className="text-xs text-red-500 mt-2">
+          {errors.repeatPassword?.message}
+        </Text>
+      )}
+    </View>
+  )}
+/>
+              
+              
             </View>
           </View>
 
@@ -134,7 +184,6 @@ export default function SignUpScreen() {
             <Button
               size="lg"
               onPress={handleSubmit(onSubmit)}
-              disabled={isLoading || !!errors}
             >
               {isLoading ? (
                 <ActivityIndicator

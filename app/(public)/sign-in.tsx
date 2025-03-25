@@ -18,7 +18,7 @@ import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
 
 const signInSchema = z.object({
-  email: z.string().email("El correo electrónico es requerido"),
+  username: z.string().min(1, "El correo electrónico es requerido"),
   password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
 });
 
@@ -26,7 +26,7 @@ type SignInForm = z.infer<typeof signInSchema>;
 
 export default function SignInScreen() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const { signIn, setActive } = useSignIn();
+   const { signIn, setActive, isLoaded } = useSignIn()
   const {
     control,
     handleSubmit,
@@ -35,33 +35,45 @@ export default function SignInScreen() {
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit = async (data: SignInForm) => {
-    try {
-      setIsLoading(true);
-      const completeSignIn = await signIn?.create({
-        strategy: "email_link",
-      });
+ const onSubmit = React.useCallback(async (data: SignInForm) => {
+    if (!isLoaded) return
+    setIsLoading(true);
 
-      if (completeSignIn?.status === "complete") {
-        await setActive?.({
-          session: completeSignIn.createdSessionId,
-        });
+    // Start the sign-in process using the email and password provided
+    try {
+      console.log("hello")
+      const signInAttempt = await signIn.create({
+        identifier: data.username,
+        password: data.password,
+      })
+      console.log("hello", signInAttempt)
+
+      // If sign-in process is complete, set the created session as active
+      // and redirect the user
+      if (signInAttempt.status === 'complete') {
+        await setActive({ session: signInAttempt.createdSessionId })
+        router.replace('/(auth)/(screens)')
       } else {
-        toast.error("Hubo un error al iniciar sesión");
+        // If the status is not complete, check why. User may need to
+        // complete further steps.
+        console.error(JSON.stringify(signInAttempt, null, 2))
       }
-    } catch (err: any) {
-      console.log(err);
-    } finally {
+    } catch (err) {
+      // See https://clerk.com/docs/custom-flows/error-handling
+      // for more info on error handling
+      console.error(JSON.stringify(err, null, 2))
+    }
+    finally {
       setIsLoading(false);
     }
-  };
+  }, [isLoaded, handleSubmit])
 
   return (
       <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
         <ScrollView>
           <View
             style={styles.container}
-            className="flex flex-col gap-8 h-screen-safe justify-center p-6 web:md:max-w-xl web:md:mx-auto"
+            className="flex flex-col gap-8 h-screen-safe justify-center p-6 web:md:w-[500px] web:md:mx-auto"
           >
             <View className="flex flex-col items-center">
               <Image
@@ -69,7 +81,7 @@ export default function SignInScreen() {
                   width: 125,
                   height: 125,
                 }}
-                source={require("../../../../assets/logo.png")}
+                source={require("../../assets/logo.png")}
               />
               <Text className="text-4xl font-bold">Bienvenido</Text>
               <Text className="text-center text-muted-foreground">
@@ -83,13 +95,13 @@ export default function SignInScreen() {
                w-full"
             >
               <View>
-                <Text className="font-medium mb-2">Email</Text>
+                <Text className="font-medium mb-2">Usuario</Text>
                 <Controller
                   control={control}
-                  name="email"
+                  name="username"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
-                      placeholder="Nombre de usuario"
+                      placeholder="miguel1234"
                       onChangeText={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -97,9 +109,9 @@ export default function SignInScreen() {
                     />
                   )}
                 />
-                {errors.email?.message && (
+                {errors.username?.message && (
                   <Text className="text-xs text-red-500">
-                    {errors.email?.message}
+                    {errors.username?.message}
                   </Text>
                 )}
               </View>
@@ -156,18 +168,7 @@ export default function SignInScreen() {
                 </Text>
               </View>
             </View>
-            <View className="mt-10">
-              <Text className="text-center text-muted-foreground web:md:text-sm">
-                Al inciar sesión aceptas nuestros{" "}
-                <Text className="text-primary font-semibold underline">
-                  Términos y condiciones
-                </Text>{" "}
-                y nuestra{" "}
-                <Text className="text-primary font-semibold underline">
-                  Política de Privacidad
-                </Text>
-              </Text>
-            </View>
+          
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

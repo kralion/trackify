@@ -1,21 +1,21 @@
+import { useSignUpStore } from "@/store";
+import { useSignUp } from "@clerk/clerk-expo";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+import { ChevronLeft } from "lucide-react-native";
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
-  View,
-  ScrollView,
   ActivityIndicator,
   KeyboardAvoidingView,
+  ScrollView,
+  View,
 } from "react-native";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { router } from "expo-router";
-import { z } from "zod";
 import { toast } from "sonner-native";
+import { z } from "zod";
 import { Button } from "~/components/ui/button";
-import { Text } from "~/components/ui/text";
 import { Input } from "~/components/ui/input";
-import { useSignUpStore } from "@/store";
-import { useSignUp, useUser } from "@clerk/clerk-expo";
-import { ChevronLeft } from "lucide-react-native";
+import { Text } from "~/components/ui/text";
 
 
 
@@ -34,15 +34,12 @@ const preferencesSchema = z.object({
 type PreferencesForm = z.infer<typeof preferencesSchema>;
 
 export default function PreferencesScreen() {
-  const {  reset } = useSignUpStore();
-  const { signUp, setActive } = useSignUp();
- 
+  const {  signUp, setActive } = useSignUp()
   const [isLoading, setIsLoading] = React.useState(false);
 
   const {
     control,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<PreferencesForm>({
     resolver: zodResolver(preferencesSchema),
@@ -57,24 +54,23 @@ export default function PreferencesScreen() {
   
 
   
-
-  const onSubmit = async (data: PreferencesForm) => {
+ const onSubmit = async (data: PreferencesForm) => {
     try {
       setIsLoading(true);
 
       // Get credentials from store
-      const { email, password } =
+      const { username, password } =
         useSignUpStore.getState();
 
       // Create Clerk user
       const signUpAttempt = await signUp?.create({
-        emailAddress: email,
+        username,
         password,
-        firstName : data.firstName,
+        firstName: data.firstName,
         lastName: data.lastName,
         unsafeMetadata: {
-          phone:  `+51${data.phone}`,
-          location : data.location,
+          location: data.location,
+          phone: `51${data.phone}`
         }
       });
 
@@ -89,8 +85,6 @@ export default function PreferencesScreen() {
         return;
       }
 
-      
-
       await setActive?.({
         session: signUpAttempt.createdSessionId,
       });
@@ -103,11 +97,13 @@ export default function PreferencesScreen() {
       setIsLoading(false);
     }
   };
+ 
 
   return (
     <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
       <ScrollView
         className="flex-1 bg-background"
+        contentContainerClassName="web:md:w-[500px] web:md:mx-auto"
         contentInsetAdjustmentBehavior="automatic"
       >
         <View className="flex flex-col gap-12 p-6">
@@ -126,7 +122,7 @@ export default function PreferencesScreen() {
             </Text>
           </View>
 
-          <View className="flex flex-col gap-10">
+          <View className="flex flex-col gap-4">
              <View>
               <Text className="font-medium mb-2 text-muted-foreground">
                 Nombres
@@ -224,9 +220,7 @@ export default function PreferencesScreen() {
           <Button
             size="lg"
             onPress={handleSubmit(onSubmit)}
-            disabled={
-              !!errors
-            }
+           
           >
             {isLoading ? (
               <ActivityIndicator

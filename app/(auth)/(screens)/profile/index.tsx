@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth, useUser } from '@clerk/clerk-expo';
-import { Boxes, MapPin, Phone } from 'lucide-react-native';
+import { MapPin, Phone } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { toast } from 'sonner-native';

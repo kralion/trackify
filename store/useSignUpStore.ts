@@ -1,14 +1,14 @@
 import { create } from "zustand";
 
 interface SignUpState {
-  email: string;
+  username: string;
   password: string;
   firstName: string;
   lastName: string;
   location: string;
   phone: string;
   setClerkCredentials: (credentials: {
-    email: string;
+    username: string;
     password: string;
   }) => void;
   setPreferences: (preferences: Partial<SignUpState>) => void;
@@ -17,7 +17,7 @@ interface SignUpState {
 }
 
 const initialState = {
-  email: "",
+  username: "",
   password: "",
   firstName: "",
   lastName: "",
