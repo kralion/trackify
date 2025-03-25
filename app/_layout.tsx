@@ -8,12 +8,12 @@ import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { ActivityIndicator, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Toaster } from 'sonner-native';
 import '~/global.css';
 import { useFonts, Lato_400Regular, Lato_700Bold } from '@expo-google-fonts/lato';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
+import { Toaster } from 'sonner-native';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -114,6 +114,7 @@ export default function RootLayout() {
             <PortalHost />
 
           </ClerkLoaded>
+           <Toaster />
         </ThemeProvider>
       </ClerkProvider>
   );
@@ -131,8 +132,6 @@ function RootLayoutNav() {
   }, [isLoaded, isSignedIn, segments]);
 
   return <GestureHandlerRootView>
-        <Toaster />
         <Slot />
-
     </GestureHandlerRootView>
 }
