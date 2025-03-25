@@ -33,7 +33,7 @@ const handleToggleDarkMode = () => {
               headerTitleStyle:
                 Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
               headerLargeTitle: true,
-              headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
+              headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
               headerLargeTitleShadowVisible: false,
 
               headerShadowVisible: false,
@@ -106,7 +106,7 @@ const handleToggleDarkMode = () => {
               presentation: 'modal',
               headerTitleStyle:
                 Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } ,
-              headerBackground: () => <View className="flex-1 bg-yellow-400" />,
+              headerBackground: () => <View className="flex-1 bg-orange-400" />,
 
               headerLeft: () => Platform.OS === 'ios' ? <Button
                 variant="ghost"
@@ -143,7 +143,7 @@ const handleToggleDarkMode = () => {
               const { id } = route.params as { id: number };
               return {
                 title: 'Seguimiento',
-                headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-yellow-400" /> : undefined,
+                headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
                 headerTitleStyle:
                   Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
                 headerShadowVisible: false,
