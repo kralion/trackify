@@ -54,21 +54,22 @@ export default function HomeScreen() {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         contentContainerClassName="pb-24 bg-background md:mx-auto ">
         <View className="flex flex-col gap-4 py-4">
+
           <Text className="px-4 uppercase text-muted-foreground text-lg font-bold" style={{ fontFamily: "Bold" }}>Categorías</Text>
           <FlatList
             data={categories}
             renderItem={({ item }) => (
               <CategoryItem
-                category={item}
-                active={activeCategory === item.id}
-                onPress={() => setActiveCategory(item.id)}
+              category={item}
+              active={activeCategory === item.id}
+              onPress={() => setActiveCategory(item.id)}
               />
             )}
-           ListEmptyComponent={() => loadingCategories ? <ActivityIndicator /> :  <View className='flex-col gap-2 items-center my-8'>
+            ListEmptyComponent={() => loadingCategories ? <ActivityIndicator /> :  <View className='flex-col gap-2 items-center my-8'>
                 <Image source={{ uri: "https://img.icons8.com/?size=200&id=BkgItq3pNAZa&format=png&color=000000" }} style={{
                   width: 70,
                   height: 70
-
+                  
                 }} />
                 <Text className="px-8 text-muted-foreground">
                   No se encontraron categorías
@@ -78,7 +79,7 @@ export default function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{  marginBottom: 16 }}
-          />
+            />
          
           
           {activeCategory === 6 && (

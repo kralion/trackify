@@ -12,16 +12,24 @@ import { ArrowLeft, Moon, Sun, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { Appearance } from 'react-native';
 import { useColorScheme } from '@/lib/useColorScheme';
+import {debounce} from 'lodash'
 
 export default function Layout() {
   const { user } = useUser();
   const { isDarkColorScheme } = useColorScheme();
   const [isDarkMode, setIsDarkMode] = useState<boolean>(isDarkColorScheme);
-const handleToggleDarkMode = () => {
-  setIsDarkMode(prevMode => !prevMode);
-    const newColorScheme = isDarkMode ? 'light' : 'dark';
-    Appearance.setColorScheme(newColorScheme);
-};
+  const [search, setSearch] = useState('');
+  
+  const handleToggleDarkMode = () => {
+    setIsDarkMode(prevMode => !prevMode);
+      const newColorScheme = isDarkMode ? 'light' : 'dark';
+      Appearance.setColorScheme(newColorScheme);
+  };
+  const handleSearchDebounce = debounce((text: string) => {
+    router.setParams({
+      query: text,
+    });
+  }, 500);
   return (
       <RideProvider>
         <Stack>
@@ -39,26 +47,23 @@ const handleToggleDarkMode = () => {
               headerShadowVisible: false,
               headerSearchBarOptions: {
                 placeholder: 'Buscar producto...',
+                
                 onSearchButtonPress: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
                   const text = event.nativeEvent.text;
-                  router.setParams({
-                    query: text,
-                  });
+                  setSearch(text);
+                  handleSearchDebounce(text);
                 },
-                
-                // onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                //   const text = event.nativeEvent.text;
-                //   Platform.OS === 'web' &&
-                //     router.setParams({
-                //       query: text,
-                //     });
-                // },
-
+                onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                  const text = event.nativeEvent.text;
+                  setSearch(text);
+                  handleSearchDebounce(text);
+                },
                 cancelButtonText: 'Cancelar',
                 onCancelButtonPress: () => {
                   router.setParams({
                     query: '',
                   });
+                  setSearch('');
                 },
               },
               headerRight: () => (

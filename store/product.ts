@@ -54,7 +54,7 @@ async getProductsByCategoryOrSearch(categoryId: number | null, search: string) {
     .order('id', { ascending: true });
  
   if (search !== '') {
-    query = query.ilike('name', `%${search}%`);
+    query = supabase.from('products').select('*, categories(id, name, icon)').ilike('name', `%${search}%`);
   }
 
   const { data, error } = await query;
