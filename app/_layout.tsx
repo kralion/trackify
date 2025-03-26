@@ -6,7 +6,7 @@ import { router, Slot, SplashScreen, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { ActivityIndicator, Platform } from 'react-native';
+import { ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import '~/global.css';
 import { useFonts, Lato_400Regular, Lato_700Bold } from '@expo-google-fonts/lato';
@@ -63,6 +63,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
+  const width = useWindowDimensions().width;
+  const isMobile = width < 768;
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [fontLoaded, fontError] = useFonts({
@@ -115,7 +117,7 @@ export default function RootLayout() {
             <RootLayoutNav />
             <PortalHost />
           </ClerkLoaded>
-           <Toaster />
+           <Toaster style={{ width: isMobile ? '100%' : '30%', marginHorizontal: 'auto' }} />
         </ThemeProvider>
       </ClerkProvider>
     </GestureHandlerRootView>

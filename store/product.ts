@@ -21,7 +21,6 @@ export const useProductStore = create<ProductStore>((set) => ({
     }));
     const { data, error } = await supabase.from('products').insert(product).select().single();
     if (error) throw error;
-    toast.success('Producto agregado');
     set((state) => ({
       products: [...state.products, data],
     }));

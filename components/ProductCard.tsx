@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Image, View } from "react-native";
 import { Button } from "./ui/button";
 import { Text } from "./ui/text";
+import { toast } from "sonner-native";
 
 export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> }) => {
   const { addItem } = useCartStore();
@@ -51,6 +52,9 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
             className=" rounded-full"
             onPress={() => {
               addItem({ ...product, quantity: 1 });
+              toast.success("Producto agregado", {
+                duration: 1000,
+              });
 
             }}>
             <Plus color="white" size={18} />

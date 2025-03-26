@@ -11,7 +11,7 @@ import { Product } from '@/types';
 import { useUser } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
 import { Minus, Plus, Trash } from 'lucide-react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, ScrollView, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
@@ -40,6 +40,10 @@ export default function ShoppingCart() {
     items: [],
   });
 
+
+  useEffect(() => {
+    items.length <=0 ? router.back() : null;
+  }, [items]);
 
   const handleReset = () => {
     setForm({
