@@ -69,7 +69,7 @@ const onSubmit = async (data: PreferencesForm) => {
         lastName: data.lastName,
         unsafeMetadata: {
           location: data.location,
-          phone: `51${data.phone}`
+          phone: `${data.phone}`
         },
       });
       console.log("2")

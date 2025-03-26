@@ -88,13 +88,13 @@ export default function HomeScreen() {
             <Text className="px-4 uppercase text-muted-foreground text-lg font-bold" style={{ fontFamily: "Bold" }}>Pizzas</Text>
             <View className='ml-4 flex flex-row gap-2'>
               <Badge variant="secondary">
-                <Text className=' text-lg'>Personal s/. 15.00</Text>
+                <Text className=' text-lg dark:text-foreground'>Personal s/. 15.00</Text>
               </Badge>
               <Badge variant="secondary">
-                <Text   className=' text-lg'>Biper s/. 20.00</Text>
+                <Text   className=' text-lg dark:text-foreground'>Biper s/. 20.00</Text>
               </Badge>
               <Badge variant="secondary">
-                <Text className=' text-lg'>Familiar s/. 30.00</Text>
+                <Text className=' text-lg dark:text-foreground'>Familiar s/. 30.00</Text>
               </Badge>
             </View>
             </View>

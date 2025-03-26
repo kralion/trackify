@@ -1,10 +1,10 @@
 import { useCartStore } from "@/store";
 import { Product } from "@/types";
 import { Plus } from "lucide-react-native";
-import { Image, Text, View } from "react-native";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { useState } from "react";
+import { Image, View } from "react-native";
+import { Button } from "./ui/button";
+import { Text } from "./ui/text";
 
 export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> }) => {
   const { addItem } = useCartStore();
@@ -16,11 +16,11 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
     addItem({ ...product, quantity: 1, price: price, name: `${product.name} ${size}` });
   };
   return (
-      <View className="my-4 mr-8 flex w-64 flex-col justify-between rounded-xl border border-zinc-200 bg-zinc-50 md:h-[400px] h-[450px]">
+      <View className="my-4 mr-8 flex w-64 flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 md:h-[400px] h-[450px]">
         <Image source={{ uri: product.image_url }} className="md:h-48 h-64 w-full rounded-t-lg " />
 
         <View className="flex flex-col  px-4 gap-1">
-          <Text className=" text-xl font-semibold text-muted-foreground " style={{ fontFamily: "Lato" }}>
+          <Text className=" text-xl font-semibold text-muted-foreground dark:text-foreground" style={{ fontFamily: "Lato" }}>
             {product.name}
           </Text>
 
@@ -34,7 +34,7 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
               <Button size="sm" onPress={() => handleAddToCart(12, "Personal")} className=" rounded-full">
                 <Text>Personal </Text>
               </Button>
-              <Button size="sm" onPress={() => handleAddToCart(20, "Biper")}  className=" rounded-full px-5">
+      <Button size="sm" onPress={() => handleAddToCart(20, "Biper")}  className=" rounded-full px-5">
                 <Text>Biper </Text>
               </Button>
               <Button size="sm" onPress={() => handleAddToCart(30, "Familiar")} className=" rounded-full">

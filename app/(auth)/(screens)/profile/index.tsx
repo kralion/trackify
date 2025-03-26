@@ -2,15 +2,18 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Text } from '@/components/ui/text';
+import { useColorScheme } from '@/lib/useColorScheme';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { MapPin, Phone } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 export default function Profile() {
   const { user } = useUser();
   const { signOut } = useAuth();
+  const {isDarkColorScheme} = useColorScheme();
   const [isEditing, setIsEditing] = useState(false);
   const [phone, setPhone] = useState(user?.unsafeMetadata.phone || '');
   const [firstName, setFirstName] = useState(user?.firstName || '');
@@ -54,7 +57,7 @@ export default function Profile() {
       contentInsetAdjustmentBehavior="automatic"
       >
       {isEditing ? (
-        <View className="mb-6 flex flex-col items-center gap-4 rounded-2xl bg-zinc-100 p-6">
+        <View className="mb-6 flex flex-col items-center gap-4 rounded-2xl bg-zinc-100 p-6 dark:bg-zinc-900">
           <Avatar
             alt="avatar"
             style={{
@@ -69,35 +72,43 @@ export default function Profile() {
           </Avatar>
           <View className='flex flex-col gap-2 w-full'>
           <Input
+          size='lg'
             className="w-full"
             onChangeText={setFirstName}
             value={firstName}
             placeholder="First Name"
           />
           <Input
+          size='lg'
+
             className="w-full"
             onChangeText={setLastName}
             value={lastName}
             placeholder="Last Name"
           />
           <Input
+          size='lg'
+
             className="w-full"
             onChangeText={setLocation}
             value={location as string}
             placeholder="Jr. Oswaldo N Regal 485"
           />
           <Input
+          size='lg'
+
             className="w-full"
             onChangeText={setPhone}
             value={phone as string}
             placeholder="914 151 151"
           />
           <Input
+          size='lg'
+
             value={username}
             editable={false}
             className="w-full "
-            placeholder="Email"
-            keyboardType="email-address"
+            placeholder="Nombre de usuario"
           /></View>
 
           <Button  onPress={handleSave}>
@@ -109,7 +120,7 @@ export default function Profile() {
         </View>
       ) : (
         <>
-        <View className="mb-6 items-center rounded-2xl bg-zinc-100 p-6">
+        <View className="mb-6 items-center rounded-2xl bg-zinc-100 dark:bg-zinc-900 p-6">
           <Avatar
             alt="avatar"
             style={{
@@ -133,19 +144,19 @@ export default function Profile() {
 
 
 <Label className="m-2 ml-4  text-muted-foreground" >Ubicación</Label>
-      <View className="mb-6 rounded-2xl bg-zinc-100 px-4">
-          <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
+      <View className="mb-6 rounded-2xl bg-zinc-100 dark:bg-zinc-900 px-4">
+          <View className="flex-row items-center justify-between border-b border-gray-200 dark:border-gray-800 py-4">
             <View className="flex flex-row items-center gap-4">
-              <MapPin color="black" />
+              <MapPin color={isDarkColorScheme ? 'white' : 'black'} />
               <Text className="font-semibold" style={{ fontFamily: "Lato" }}>{user?.unsafeMetadata.location as string}</Text>
             </View>
           </View>
       </View>
 <Label className="m-2 ml-4  text-muted-foreground" >Teléfono</Label>
-      <View className="mb-6 rounded-2xl bg-zinc-100 px-4">
-          <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
+      <View className="mb-6 rounded-2xl bg-zinc-100 px-4 dark:bg-zinc-900">
+          <View className="flex-row items-center justify-between border-b border-gray-200 dark:border-gray-800 py-4">
             <View className="flex flex-row items-center gap-4">
-              <Phone color="black" />
+              <Phone color={isDarkColorScheme ? 'white' : 'black'} />
               <Text className="font-semibold" style={{ fontFamily: "Lato" }}>{user?.unsafeMetadata.phone as string}</Text>
             </View>
           </View>

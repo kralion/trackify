@@ -106,17 +106,19 @@ export default function RootLayout() {
   }
 
   return (
+    <GestureHandlerRootView>
+
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
           <ClerkLoaded>
             <RootLayoutNav />
             <PortalHost />
-
           </ClerkLoaded>
            <Toaster />
         </ThemeProvider>
       </ClerkProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -131,7 +133,7 @@ function RootLayoutNav() {
     }
   }, [isLoaded, isSignedIn, segments]);
 
-  return <GestureHandlerRootView>
-        <Slot />
-    </GestureHandlerRootView>
+  return (
+      <Slot />
+  );
 }

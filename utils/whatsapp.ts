@@ -25,7 +25,7 @@ ${formattedExtras}
 
 Espero la confirmación. Gracias.`;
 
-    const url = `https://wa.me/${businessPhone}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/+51${businessPhone}?text=${encodeURIComponent(message)}`;
 
     Linking.openURL(url)
         .then(() => console.log("Mensaje enviado a WhatsApp:", url))

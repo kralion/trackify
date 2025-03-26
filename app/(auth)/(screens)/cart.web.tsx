@@ -3,6 +3,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Text } from '@/components/ui/text';
+import { useColorScheme } from '@/lib/useColorScheme';
 import { useCartStore } from '@/store';
 import { useOrder } from '@/store/order';
 import { Product } from '@/types';
@@ -10,7 +12,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
 import { Minus, Plus, Trash } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, ScrollView, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
 
@@ -27,6 +29,7 @@ export default function ShoppingCart() {
   const { addOrder, loading } = useOrder();
   const {user} = useUser();
   const { items, removeItem } = useCartStore();
+  const {isDarkColorScheme} = useColorScheme();
   const { setItems } = useCartStore();
   const [form, setForm] = useState<Order>({
     location: user?.unsafeMetadata.location as string || '',
@@ -125,7 +128,7 @@ export default function ShoppingCart() {
               onPress={() => {
                 decreaseQuantity(item.id);
               }}>
-              <Minus color="black" size={18} />
+              <Minus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
             </Button>
             <Text className="mx-2 text-lg">{item.quantity}</Text>
             <Button
@@ -135,7 +138,7 @@ export default function ShoppingCart() {
               onPress={() => {
                 increaseQuantity(item);
               }}>
-              <Plus color="black" size={18} />
+              <Plus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
             </Button>
           </View>
         </View>
@@ -214,7 +217,7 @@ export default function ShoppingCart() {
               </Button>
             </View>
           </View> */}
-          <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 ">
+          <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 dark:border-zinc-800 ">
             <View className="flex flex-row justify-between">
               <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Sub total:</Text>
               <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>S/ {subTotal(items)}</Text>
@@ -251,7 +254,7 @@ export default function ShoppingCart() {
             data={items}
             renderItem={renderItem}
             ItemSeparatorComponent={() => <Separator className="my-4 md:my-8" />}
-            contentContainerClassName=" md:w-[600px] rounded-xl bg-zinc-50 md:p-8 p-4"
+            contentContainerClassName=" md:w-[600px] rounded-xl bg-zinc-50 dark:bg-zinc-900 md:p-8 p-4"
             keyExtractor={(item) => String(item.id)}
           />
         </Animated.View>

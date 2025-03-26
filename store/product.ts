@@ -1,5 +1,6 @@
 import { Product, ProductStore, Order } from '@/types';
 import { supabase } from '@/utils/supabase';
+import { toast } from 'sonner-native';
 import { create } from 'zustand';
 
 export const useProductStore = create<ProductStore>((set) => ({
@@ -20,6 +21,7 @@ export const useProductStore = create<ProductStore>((set) => ({
     }));
     const { data, error } = await supabase.from('products').insert(product).select().single();
     if (error) throw error;
+    toast.success('Producto agregado');
     set((state) => ({
       products: [...state.products, data],
     }));

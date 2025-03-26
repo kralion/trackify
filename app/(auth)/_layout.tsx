@@ -1,7 +1,7 @@
 import ActiveRideSheet from '@/components/ActiveRideSheet';
 import RideProvider from '@/providers/RideProvider';
 import { router, Stack } from 'expo-router';
-import { NativeSyntheticEvent, Platform, TextInputFocusEventData, View } from 'react-native';
+import { Image, NativeSyntheticEvent, Platform, TextInputFocusEventData, View } from 'react-native';
 import ShoppingCartIcon from '../../components/ShoppingCartIcon';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@clerk/clerk-expo';
@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { Appearance } from 'react-native';
 import { useColorScheme } from '@/lib/useColorScheme';
 import {debounce} from 'lodash'
+import { ThemeToggle } from '@/components/ThemeToogle';
 
 export default function Layout() {
   const { user } = useUser();
@@ -36,14 +37,16 @@ export default function Layout() {
           <Stack.Screen
             name="(screens)/index"
             options={{
-              title: 'Tito\'s Restaurant' ,
-
+              title: '' ,
+            
               headerTitleStyle:
                 Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
               headerLargeTitle: true,
               headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
               headerLargeTitleShadowVisible: false,
-
+              headerLeft: ()=> <View className='flex flex-row items-center'> <Image style={{ width: 80, height: 80 }} source={require('@/assets/logo2.png')} />
+              <Text className='text-2xl font-bold -ml-2 text-black'>Tito's Restaurant</Text>
+              </View>,
               headerShadowVisible: false,
               headerSearchBarOptions: {
                 placeholder: 'Buscar producto...',
@@ -107,7 +110,7 @@ export default function Layout() {
           <Stack.Screen
             name="(screens)/cart"
             options={{
-              title: 'Información del Pedido',
+              title: 'Pedido',
               presentation: 'modal',
               headerTitleStyle:
                 Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } ,
@@ -165,13 +168,7 @@ export default function Layout() {
                   headerShadowVisible: false,
           headerShown: true,
           headerRight: () => (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onPress={handleToggleDarkMode}>
-              {isDarkColorScheme ? <Sun /> : <Moon />}
-            </Button>
+            <ThemeToggle />
           ),
 
             }}
