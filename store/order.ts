@@ -12,7 +12,7 @@ export const useOrder = create<OrderStore>((set) => ({
  
  
   toast.success('Orden enviada');
-  sendWhatsAppMessage(order, '51914019629');
+  sendWhatsAppMessage(order, '914019629');
   set({ loading: false });
   },
   getOrder: async (orderId: number) => {
