@@ -7,10 +7,10 @@ import { create } from 'zustand';
 export const useOrder = create<OrderStore>((set) => ({
   orders: [] as Order[],
   loading: false,
-  addOrder: async (order: Omit<Order, 'id'>) => {
+  addOrder:  (order: Omit<Order, 'id'>) => {
     set({ loading: true });
-  const {  error } = await supabase.from('orders').insert(order);
-  if (error) console.log(error);
+ 
+ 
   toast.success('Orden enviada');
   sendWhatsAppMessage(order, '51914019629');
   set({ loading: false });

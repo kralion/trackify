@@ -68,7 +68,7 @@ export interface CartState {
 export interface OrderStore {
   orders: Order[];
   loading: boolean;
-  addOrder: (order: Omit<Order, 'id'>) => Promise<void>;
+  addOrder: (order: Omit<Order, 'id'>) => void;
   updateOrder: (orderId: number, update: Partial<Order>) => void;
   deleteOrder: (orderId: number) => void;
   getOrder: (orderId: number) => Promise<Order | undefined>;
