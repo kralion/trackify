@@ -12,7 +12,7 @@ import { ArrowLeft, Moon, Sun, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { Appearance } from 'react-native';
 import { useColorScheme } from '@/lib/useColorScheme';
-import {debounce} from 'lodash'
+import { debounce } from 'lodash'
 import { ThemeToggle } from '@/components/ThemeToogle';
 
 export default function Layout() {
@@ -20,11 +20,11 @@ export default function Layout() {
   const { isDarkColorScheme } = useColorScheme();
   const [isDarkMode, setIsDarkMode] = useState<boolean>(isDarkColorScheme);
   const [search, setSearch] = useState('');
-  
+
   const handleToggleDarkMode = () => {
     setIsDarkMode(prevMode => !prevMode);
-      const newColorScheme = isDarkMode ? 'light' : 'dark';
-      Appearance.setColorScheme(newColorScheme);
+    const newColorScheme = isDarkMode ? 'light' : 'dark';
+    Appearance.setColorScheme(newColorScheme);
   };
   const handleSearchDebounce = debounce((text: string) => {
     router.setParams({
@@ -32,62 +32,59 @@ export default function Layout() {
     });
   }, 500);
   return (
-      <RideProvider>
-        <Stack>
-          <Stack.Screen
-            name="(screens)/index"
-            options={{
-              title: '' ,
-            
-              headerTitleStyle:
-                Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
-              headerLargeTitle: true,
-              headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
-              headerLargeTitleShadowVisible: false,
-              headerLeft: ()=> <View className='flex flex-row items-center'> <Image style={{ width: 80, height: 80 }} source={require('@/assets/logo2.png')} />
-              <Text className='text-2xl font-bold -ml-2 text-black'>Tito's Restaurant</Text>
-              </View>,
-              headerShadowVisible: false,
-              headerSearchBarOptions: {
-                placeholder: 'Buscar producto...',
-                
-                onSearchButtonPress: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                  const text = event.nativeEvent.text;
-                  setSearch(text);
-                  handleSearchDebounce(text);
-                },
-                onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                  const text = event.nativeEvent.text;
-                  setSearch(text);
-                  handleSearchDebounce(text);
-                },
-                cancelButtonText: 'Cancelar',
-                onCancelButtonPress: () => {
-                  router.setParams({
-                    query: '',
-                  });
-                  setSearch('');
-                },
-              },
-              headerRight: () => (
-                <View className="flex flex-row items-center gap-4">
-                  <ShoppingCartIcon />
-                  <TouchableOpacity
-                    hitSlop={8}
-                    onPress={() => router.push('/(auth)/(screens)/profile')}>
-                    <Avatar alt="avatar">
-                      <AvatarImage
-                        source={{
-                          uri: user?.imageUrl,
-                        }}
-                      />
-                      <AvatarFallback>
-                        <Text>{user?.fullName?.split(' ')[0]}</Text>
-                      </AvatarFallback>
-                    </Avatar>
-                  </TouchableOpacity>
+    <RideProvider>
+      <Stack>
+        <Stack.Screen
+          name="(screens)/index"
+          options={{
+            title: 'Tito\'s Restaurant',
 
-                  {/* <View className="hidden flex-row items-center gap-2 md:flex">
+            headerTitleStyle:
+              Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
+            headerLargeTitle: true,
+            headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
+            headerLargeTitleShadowVisible: false,
+            headerShadowVisible: false,
+            headerSearchBarOptions: {
+              placeholder: 'Buscar producto...',
+
+              onSearchButtonPress: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                const text = event.nativeEvent.text;
+                setSearch(text);
+                handleSearchDebounce(text);
+              },
+              onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                const text = event.nativeEvent.text;
+                setSearch(text);
+                handleSearchDebounce(text);
+              },
+              cancelButtonText: 'Cancelar',
+              onCancelButtonPress: () => {
+                router.setParams({
+                  query: '',
+                });
+                setSearch('');
+              },
+            },
+            headerRight: () => (
+              <View className="flex flex-row items-center gap-4">
+                <ShoppingCartIcon />
+                <TouchableOpacity
+                  hitSlop={8}
+                  onPress={() => router.push('/(auth)/(screens)/profile')}>
+                  <Avatar alt="avatar">
+                    <AvatarImage
+                      source={{
+                        uri: user?.imageUrl,
+                      }}
+                    />
+                    <AvatarFallback>
+                      <Text>{user?.fullName?.split(' ')[0]}</Text>
+                    </AvatarFallback>
+                  </Avatar>
+                </TouchableOpacity>
+
+                {/* <View className="hidden flex-row items-center gap-2 md:flex">
                     <Button
                       variant="ghost"
                       size="icon"
@@ -103,79 +100,79 @@ export default function Layout() {
                       <MapPinCheck />
                     </Button>
                   </View> */}
-                </View>
-              ),
-            }}
-          />
-          <Stack.Screen
-            name="(screens)/cart"
-            options={{
-              title: 'Pedido',
-              presentation: 'modal',
+              </View>
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="(screens)/cart"
+          options={{
+            title: 'Pedido',
+            presentation: 'modal',
+            headerTitleStyle:
+              Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" },
+            headerBackground: () => <View className="flex-1 bg-orange-400" />,
+
+            headerLeft: () => Platform.OS === 'ios' ? <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              onPress={() => router.back()}>
+              <X color="white" />
+            </Button> : <Button
+              variant="link"
+              size="icon"
+              className="rounded-full"
+              onPress={() => router.back()}>
+              <ArrowLeft color="black" />
+            </Button>,
+
+          }}
+        />
+
+        <Stack.Screen
+          name="(screens)/map-tracking"
+          options={({ route }) => {
+            const { id } = route.params as { id: number };
+            return {
+              title: 'Tracker',
+              headerShown: false,
+
+
+            };
+          }}
+        />
+        <Stack.Screen
+          name="(screens)/tracker"
+          options={({ route }) => {
+            const { id } = route.params as { id: number };
+            return {
+              title: 'Seguimiento',
+              headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
               headerTitleStyle:
-                Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } ,
-              headerBackground: () => <View className="flex-1 bg-orange-400" />,
+                Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
+              headerShadowVisible: false,
 
-              headerLeft: () => Platform.OS === 'ios' ? <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-                onPress={() => router.back()}>
-                <X color="white" /> 
-              </Button> : <Button
-                  variant="link"
-                  size="icon"
-                  className="rounded-full"
-                  onPress={() => router.back()}>
-                  <ArrowLeft color="black" />
-                </Button>,
-            
-            }}
-          />
+            };
+          }}
+        />
+        <Stack.Screen
+          name="(screens)/profile"
+          options={{
+            title: 'Perfil',
+            headerTitleStyle:
+              Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
+            headerShadowVisible: false,
+            headerShown: true,
+            headerRight: () => (
+              <ThemeToggle />
+            ),
 
-          <Stack.Screen
-            name="(screens)/map-tracking"
-            options={({ route }) => {
-              const { id } = route.params as { id: number };
-              return {
-                title: 'Tracker',
-                headerShown: false,
+          }}
+        />
+      </Stack>
 
-
-              };
-            }}
-          />
-          <Stack.Screen
-            name="(screens)/tracker"
-            options={({ route }) => {
-              const { id } = route.params as { id: number };
-              return {
-                title: 'Seguimiento',
-                headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
-                headerTitleStyle:
-                  Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
-                headerShadowVisible: false,
-
-              };
-            }}
-          />
-          <Stack.Screen
-            name="(screens)/profile"
-            options={{
-              title: 'Perfil',
-              headerTitleStyle:
-            Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined ,
-                  headerShadowVisible: false,
-          headerShown: true,
-          headerRight: () => (
-            <ThemeToggle />
-          ),
-
-            }}
-          />
-        </Stack>
-
-        <ActiveRideSheet />
-      </RideProvider>
+      <ActiveRideSheet />
+    </RideProvider>
   );
 }

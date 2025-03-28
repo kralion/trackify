@@ -27,9 +27,9 @@ type Order = {
 
 export default function ShoppingCart() {
   const { addOrder, loading } = useOrder();
-  const {user} = useUser();
+  const { user } = useUser();
   const { items, removeItem } = useCartStore();
-  const {isDarkColorScheme} = useColorScheme();
+  const { isDarkColorScheme } = useColorScheme();
   const { setItems } = useCartStore();
   const [form, setForm] = useState<Order>({
     location: user?.unsafeMetadata.location as string || '',
@@ -42,7 +42,7 @@ export default function ShoppingCart() {
 
 
   useEffect(() => {
-    items.length <=0 ? router.back() : null;
+    items.length <= 0 ? router.back() : null;
   }, [items]);
 
   const handleReset = () => {
@@ -64,13 +64,13 @@ export default function ShoppingCart() {
     addOrder({
       ...form,
       items,
-      customer: user?.fullName || form.customer ,
-      user_id: user?.id ,
+      customer: user?.fullName || form.customer,
+      user_id: user?.id,
       phone: user?.unsafeMetadata.phone as string || form.phone,
       location: form.location,
       totalPrice: total(),
     });
-    handleReset();  
+    handleReset();
     router.back();
   };
 
@@ -162,7 +162,7 @@ export default function ShoppingCart() {
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName='pb-16'>
       <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4 md:pt-16 lg:flex-row">
         <View className="mx-auto w-full flex-col  md:gap-8 gap-4 md:w-[500px]">
-           
+
 
           <Text className="md:mb-4 md:text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Resumen </Text>
           <View>
@@ -175,38 +175,38 @@ export default function ShoppingCart() {
             <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación y Referencia</Label>
             {/* <View className="flex flex-row items-center gap-3">
               <View className="flex-1"> */}
-                <Input
-                  placeholder="Av. Oswaldo N Regal 485 , Ref Colegio San Ramon"
-                  value={
-                    form.location.length > 30
-                      ? `${form.location.slice(0, 30)}...`
-                      : form.location
-                  }
-                  onChangeText={(text) => setForm({ ...form, location: text })}
+            <Input
+              placeholder="Av. Oswaldo N Regal 485 , Ref Colegio San Ramon"
+              value={
+                form.location.length > 30
+                  ? `${form.location.slice(0, 30)}...`
+                  : form.location
+              }
+              onChangeText={(text) => setForm({ ...form, location: text })}
+            />
+
+            <Label className="my-2 px-2 text-muted-foreground">Método de Pago</Label>
+            <Select defaultValue={{ value: 'efectivo', label: 'Efectivo' }} onValueChange={(value) => setForm({ ...form, paymentMethod: value?.value || 'efectivo' })} >
+              <SelectTrigger className='w-[250px] rounded-lg md:w-full'>
+                <SelectValue
+                  className='text-foreground text-sm native:text-lg'
+                  placeholder='Selecciona'
                 />
-             
-                <Label className="my-2 px-2 text-muted-foreground">Método de Pago</Label>
-                <Select defaultValue={{ value: 'efectivo', label: 'Efectivo' }} onValueChange={(value) => setForm({ ...form, paymentMethod: value?.value || 'efectivo' })} >
-      <SelectTrigger className='w-[250px] rounded-lg md:w-full'>
-        <SelectValue 
-          className='text-foreground text-sm native:text-lg'
-          placeholder='Selecciona'
-        />
-      </SelectTrigger>
-      <SelectContent  className='w-[350px] rounded-xl md:w-full' >
-        <SelectGroup >
-          <SelectItem  label='Yape' value='yape'  >
-            Yape
-          </SelectItem>
-          <SelectItem  label='Efectivo' value='efectivo'>
-            Efectivo
-          </SelectItem>
-          
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-              </View>
-              {/* <Button
+              </SelectTrigger>
+              <SelectContent className='w-[350px] rounded-xl md:w-full' >
+                <SelectGroup >
+                  <SelectItem label='Yape' value='yape'  >
+                    Yape
+                  </SelectItem>
+                  <SelectItem label='Efectivo' value='efectivo'>
+                    Efectivo
+                  </SelectItem>
+
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </View>
+          {/* <Button
                 size="icon"
                 className="rounded-full"
                 onPress={() => {
@@ -243,16 +243,14 @@ export default function ShoppingCart() {
             </View>
           </View>
           <View className='flex flex-col gap-4'>
-
-          <Button size="lg"  onPress={handleSubmit}>
-            {loading ? <ActivityIndicator size='small' />: <Text className="font-semibold" >Enviar pedido</Text>}
-          </Button>
-          <Button size="lg"  variant="secondary" onPress={handleReset}>
-            <Text className="font-semibold" style={{color: 'red'}} >Cancelar Pedido</Text>
-          </Button>
+            <Button size="lg" onPress={handleSubmit}>
+              {loading ? <ActivityIndicator size='small' /> : <Text className="font-semibold" >Enviar pedido</Text>}
+            </Button>
+            <Button size="lg" variant="secondary" onPress={handleReset}>
+              <Text className="font-semibold" style={{ color: 'red' }} >Cancelar Pedido</Text>
+            </Button>
           </View>
         </View>
-
         <Animated.View entering={FadeInUp.duration(200).damping(10).delay(100)}>
           <FlatList
             data={items}

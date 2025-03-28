@@ -36,8 +36,8 @@ async getAllProductByUser(userId: string) {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('user_id', "user_2rDGYUufUg0RLAGqQoz1cNX8urm")
-    .eq('categories.id', 1);
+    .eq('user_id', userId)
+    .eq('id_category', 1);
   if (error) throw error;
   set(() => ({
     loading: false,
