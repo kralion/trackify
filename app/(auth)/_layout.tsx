@@ -1,7 +1,7 @@
 import ActiveRideSheet from '@/components/ActiveRideSheet';
 import RideProvider from '@/providers/RideProvider';
 import { router, Stack } from 'expo-router';
-import { Image, NativeSyntheticEvent, Platform, TextInputFocusEventData, useWindowDimensions, View } from 'react-native';
+import { Image, NativeSyntheticEvent, Platform, TextInputFocusEventData, View } from 'react-native';
 import ShoppingCartIcon from '../../components/ShoppingCartIcon';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@clerk/clerk-expo';
@@ -20,8 +20,6 @@ export default function Layout() {
   const { isDarkColorScheme } = useColorScheme();
   const [isDarkMode, setIsDarkMode] = useState<boolean>(isDarkColorScheme);
   const [search, setSearch] = useState('');
-  const width = useWindowDimensions().width;
-  const isMobile = width < 768;
 
   const handleToggleDarkMode = () => {
     setIsDarkMode(prevMode => !prevMode);
@@ -39,7 +37,7 @@ export default function Layout() {
         <Stack.Screen
           name="(screens)/index"
           options={{
-            title: isMobile ? 'Tito\'s' : 'Tito\'s Restaurant',
+            title: 'Tito\'s Menú',
             headerTitleStyle:
               Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
             headerLargeTitle: true,
