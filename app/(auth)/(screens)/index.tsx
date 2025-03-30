@@ -53,7 +53,7 @@ export default function HomeScreen() {
 
     <View className='flex-1'>
       <View className='flex-col gap-2  bg-transparent py-4'>
-        <Text className="px-4 uppercase text-muted-foreground text-lg font-bold" style={{ fontFamily: "Bold" }}>Categorías</Text>
+        
         <FlatList
           data={categories}
           renderItem={({ item }) => (
@@ -74,16 +74,16 @@ export default function HomeScreen() {
             </Text>
           </View>}
           keyExtractor={(item) => String(item.id)}
-          horizontal
+          horizontal       
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ marginBottom: 16 }}
         />
 
 
         {activeCategory === 6 && (
-          <View className='flex flex-col gap-4 pb-4'>
+          
 
-            <Text className="px-4 uppercase text-muted-foreground text-lg font-bold" style={{ fontFamily: "Bold" }}>Pizzas</Text>
+           
             <View className='ml-4 flex flex-row flex-wrap gap-2'>
               <Badge variant="secondary">
                 <Text className=' web:md:text-lg dark:text-foreground'>Personal s/. 15.00</Text>
@@ -95,7 +95,7 @@ export default function HomeScreen() {
                 <Text className='  web:md:text-lg dark:text-foreground'>Familiar s/. 30.00</Text>
               </Badge>
             </View>
-          </View>
+          
         )}
       </View>
       <FlatList contentContainerClassName="pb-24 bg-background md:mx-auto "
