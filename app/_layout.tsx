@@ -7,10 +7,10 @@ import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import '~/global.css';
 import { useFonts, Lato_400Regular, Lato_700Bold } from '@expo-google-fonts/lato';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
 import { Toaster } from 'sonner-native';
@@ -117,7 +117,7 @@ export default function RootLayout() {
             <RootLayoutNav />
             <PortalHost />
           </ClerkLoaded>
-           <Toaster style={{ width: isMobile ? '100%' : '30%', marginHorizontal: 'auto' }} />
+          <Toaster style={{ width: isMobile ? '100%' : '30%', marginHorizontal: 'auto' }} />
         </ThemeProvider>
       </ClerkProvider>
     </GestureHandlerRootView>
@@ -136,6 +136,6 @@ function RootLayoutNav() {
   }, [isLoaded, isSignedIn, segments]);
 
   return (
-      <Slot />
+    <Slot />
   );
 }

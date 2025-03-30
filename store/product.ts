@@ -44,7 +44,7 @@ async getAllProductByUser(userId: string) {
   }));
  return data;
 },
-async getProductsByCategoryOrSearch(categoryId: number | null, search: string) {
+async getProductsByCategoryOrSearch(categoryId: number | null = 1, search: string) {
   set(() => ({
     loading: true,
   }));
