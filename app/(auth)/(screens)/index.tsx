@@ -51,8 +51,8 @@ export default function HomeScreen() {
   return (
 
 
-    <>
-      <View className='flex-col gap-2  bg-transparent '>
+    <View className='flex-1'>
+      <View className='flex-col gap-2  bg-transparent py-4'>
         <Text className="px-4 uppercase text-muted-foreground text-lg font-bold" style={{ fontFamily: "Bold" }}>Categorías</Text>
         <FlatList
           data={categories}
@@ -105,7 +105,7 @@ export default function HomeScreen() {
         data={products}
         renderItem={({ item }) => <ProductCard product={item} />}
         keyExtractor={(item) => String(item.id)}
-        numColumns={isMobile ? 2 : 4}
+        numColumns={isMobile ? 2 : 5}
         ListEmptyComponent={() => <View className='flex-col gap-2 items-center my-8'>
           <Image source={{ uri: "https://img.icons8.com/?size=200&id=BkgItq3pNAZa&format=png&color=000000" }} style={{
             width: 70,
@@ -119,7 +119,7 @@ export default function HomeScreen() {
 
         contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 16 }}
       />
-    </>
+    </View>
 
 
   );

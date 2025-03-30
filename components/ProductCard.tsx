@@ -17,11 +17,11 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
     addItem({ ...product, quantity: 1, price: price, name: `${product.name} ${size}` });
   };
   return (
-    <View className="my-4 mr-6  flex web:md:w-64 w-48  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 md:h-[400px] ">
-      <Image source={{ uri: product.image_url }} className="h-48  rounded-t-lg " />
+    <View className="my-4 mr-6  flex web:md:w-64 w-44  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] ">
+      <Image source={{ uri: product.image_url }} className="web:md:h-48 h-40  rounded-t-lg " />
 
       <View className="flex flex-col  px-4 mt-2">
-        <Text className=" web:md:text-xl text-lg font-semibold text-muted-foreground dark:text-foreground" style={{ fontFamily: "Lato" }}>
+        <Text className=" web:md:text-xl  font-semibold text-muted-foreground dark:text-foreground" style={{ fontFamily: "Lato" }}>
           {product.name}
         </Text>
 
@@ -41,7 +41,7 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
           <Button size="sm" onPress={() => handleAddToCart(30, "Familiar")} className=" rounded-full">
             <Text>Familiar</Text>
           </Button>
-        </View> : <View className="flex flex-row items-center justify-between p-4">
+        </View> : <View className="flex flex-row items-center justify-between p-2">
 
           <Text className="  p-2 web:md:text-2xl  text-xl font-bold">S/ {product.price.toFixed(2)}</Text>
 
