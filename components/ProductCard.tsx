@@ -17,7 +17,7 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
     addItem({ ...product, quantity: 1, price: price, name: `${product.name} ${size}` });
   };
   return (
-    <View className="my-4 mr-6  flex web:md:w-64 w-44  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] ">
+    <View className="my-4 mr-6  flex web:md:w-64 w-40  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] ">
       <Image source={{ uri: product.image_url }} className="web:md:h-48 h-40  rounded-t-lg " />
 
       <View className="flex flex-col  px-4 mt-2">
