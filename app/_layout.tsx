@@ -125,16 +125,6 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const { isLoaded, isSignedIn } = useAuth();
-  const segments = useSegments();
-  React.useEffect(() => {
-    if (!isSignedIn && segments[0] === '(auth)') {
-      router.push('/(public)/sign-in');
-    } else if (isSignedIn && segments[0] === '(public)') {
-      router.push('/(auth)/(screens)');
-    }
-  }, [isLoaded, isSignedIn, segments]);
-
   return (
     <Slot />
   );

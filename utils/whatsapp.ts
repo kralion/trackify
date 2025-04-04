@@ -12,9 +12,8 @@ Quisiera hacer un pedido con los siguientes detalles:
 
 *UBICACIÓN*: ${location}
 
-*DATOS DEL CLIENTE*:
-- Nombre: ${customer}
-- Telefono: ${phone}
+*CLIENTE*:
+- ${customer}
 
 *PRODUCTOS SOLICITADOS*:
 ${formattedItems}

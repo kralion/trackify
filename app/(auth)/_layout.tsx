@@ -8,7 +8,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { Text } from '@/components/ui/text';
 import { TouchableOpacity } from 'react-native';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Moon, Sun, X } from 'lucide-react-native';
+import { ArrowLeft, Moon, Sun, User, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { Appearance } from 'react-native';
 import { useColorScheme } from '@/lib/useColorScheme';
@@ -37,7 +37,7 @@ export default function Layout() {
         <Stack.Screen
           name="(screens)/index"
           options={{
-            title: 'Menú',
+            title: 'Tito\'s Menú',
             headerTitleStyle:
               Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
             headerLargeTitle: true,
@@ -68,20 +68,29 @@ export default function Layout() {
             headerRight: () => (
               <View className="flex flex-row items-center gap-4">
                 <ShoppingCartIcon />
-                <TouchableOpacity
-                  hitSlop={8}
-                  onPress={() => router.push('/(auth)/(screens)/profile')}>
-                  <Avatar alt="avatar">
-                    <AvatarImage
-                      source={{
-                        uri: user?.imageUrl,
-                      }}
-                    />
-                    <AvatarFallback>
-                      <Text>{user?.fullName?.split(' ')[0]}</Text>
-                    </AvatarFallback>
-                  </Avatar>
-                </TouchableOpacity>
+                {
+                  user ?
+
+                    <TouchableOpacity
+                      hitSlop={8}
+                      onPress={() => router.push('/(auth)/(screens)/profile')}>
+                      <Avatar alt="avatar">
+                        <AvatarImage
+                          source={{
+                            uri: user?.imageUrl,
+                          }}
+                        />
+                        <AvatarFallback>
+                          <Text>{user?.fullName?.split(' ')[0]}</Text>
+                        </AvatarFallback>
+                      </Avatar>
+                    </TouchableOpacity> : <TouchableOpacity
+                      hitSlop={8}
+                      onPress={() => router.push('/(public)/sign-in')}>
+                      <User />
+                    </TouchableOpacity>
+
+                }
 
                 {/* <View className="hidden flex-row items-center gap-2 md:flex">
                     <Button
