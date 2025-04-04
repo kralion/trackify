@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Text } from '@/components/ui/text';
 import { useColorScheme } from '@/lib/useColorScheme';
@@ -15,6 +14,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, ScrollView, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
 
 type Order = {
   location: string;
@@ -40,6 +40,11 @@ export default function ShoppingCart() {
     items: [],
   });
 
+  function onLabelPress(label: string) {
+    return () => {
+      setForm({ ...form, paymentMethod: label });
+    };
+  }
 
   useEffect(() => {
     items.length <= 0 ? router.back() : null;
@@ -172,11 +177,11 @@ export default function ShoppingCart() {
               value={form.customer}
               onChangeText={(text) => setForm({ ...form, customer: text })}
             />
-            <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación y Referencia</Label>
+            <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación</Label>
             {/* <View className="flex flex-row items-center gap-3">
               <View className="flex-1"> */}
             <Input
-              placeholder="Av. Oswaldo N Regal 485 , Ref Colegio San Ramon"
+              placeholder="Av. Oswaldo N Regal 485"
               value={
                 form.location.length > 30
                   ? `${form.location.slice(0, 30)}...`
@@ -185,42 +190,13 @@ export default function ShoppingCart() {
               onChangeText={(text) => setForm({ ...form, location: text })}
             />
 
-            <Label className="my-2 px-2 text-muted-foreground">Método de Pago</Label>
-            <Select defaultValue={{ value: 'efectivo', label: 'Efectivo' }} onValueChange={(value) => setForm({ ...form, paymentMethod: value?.value || 'efectivo' })} >
-              <SelectTrigger className='w-[250px] rounded-lg md:w-full'>
-                <SelectValue
-                  className='text-foreground text-sm native:text-lg'
-                  placeholder='Selecciona'
-                />
-              </SelectTrigger>
-              <SelectContent className='w-[350px] rounded-xl md:w-full' >
-                <SelectGroup >
-                  <SelectItem label='Yape' value='yape'  >
-                    Yape
-                  </SelectItem>
-                  <SelectItem label='Efectivo' value='efectivo'>
-                    Efectivo
-                  </SelectItem>
-
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <Label className="mt-4 mb-2 px-2 text-muted-foreground">Método de Pago</Label>
+            <RadioGroup value={form.paymentMethod} onValueChange={(value) => setForm({ ...form, paymentMethod: value })} className='gap-3'>
+              <RadioGroupItemWithLabel value='efectivo' onLabelPress={onLabelPress('efectivo')} />
+              <RadioGroupItemWithLabel value='yape' onLabelPress={onLabelPress('yape')} />
+            </RadioGroup>
           </View>
-          {/* <Button
-                size="icon"
-                className="rounded-full"
-                onPress={() => {
-                  const [lat, lng] = form.destination.split(',');
-                  Location.getCurrentPositionAsync().then((location) => {
-                    const newLat = Number(lat) || location.coords.latitude;
-                    const newLng = Number(lng) || location.coords.longitude;
-                    setForm({ ...form, destination: `${newLat},${newLng}` });
-                  });
-                }}>
-                <MapPinHouse color="black" size={18} />
-              </Button>
-            </View>
-          </View> */}
+
           <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 dark:border-zinc-800 ">
             <View className="flex flex-row justify-between">
               <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Sub total:</Text>
@@ -262,5 +238,23 @@ export default function ShoppingCart() {
         </Animated.View>
       </View>
     </ScrollView>
+  );
+}
+
+
+function RadioGroupItemWithLabel({
+  value,
+  onLabelPress,
+}: {
+  value: string;
+  onLabelPress: () => void;
+}) {
+  return (
+    <View className={'flex-row gap-2 items-center'}>
+      <RadioGroupItem aria-labelledby={`label-for-${value}`} value={value} />
+      <Label nativeID={`label-for-${value}`} onPress={onLabelPress}>
+        {value.charAt(0).toUpperCase() + value.slice(1)}
+      </Label>
+    </View>
   );
 }
