@@ -2,36 +2,32 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Text } from '@/components/ui/text';
 import { useColorScheme } from '@/lib/useColorScheme';
 import { useAuth, useUser } from '@clerk/clerk-expo';
-import { router } from 'expo-router';
-import { Bell, Boxes, ChevronRight, Fingerprint, Lock, Map, Moon, Notebook } from 'lucide-react-native';
-import { colorScheme } from 'nativewind';
+import { MapPin, Phone } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { Appearance, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { toast } from 'sonner-native';
 
 export default function Profile() {
   const { user } = useUser();
   const { signOut } = useAuth();
+  const {isDarkColorScheme} = useColorScheme();
   const [isEditing, setIsEditing] = useState(false);
+  const [phone, setPhone] = useState(user?.unsafeMetadata.phone || '');
   const [firstName, setFirstName] = useState(user?.firstName || '');
-  const { isDarkColorScheme } = useColorScheme();
-
+  const [location, setLocation] = useState(user?.unsafeMetadata.location || '');
   const [lastName, setLastName] = useState(user?.lastName || '');
-  const [email, setEmail] = useState(user?.emailAddresses[0].emailAddress || '');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(isDarkColorScheme);
-
-const handleToggleDarkMode = () => {
-  setIsDarkMode(prevMode => !prevMode);
-    const newColorScheme = isDarkMode ? 'light' : 'dark';
-    Appearance.setColorScheme(newColorScheme);
-};
+  const [username, setUsername] = useState(user?.username || '');
+  
   useEffect(() => {
     if (user) {
       setFirstName(user.firstName || '');
       setLastName(user.lastName || '');
-      setEmail(user.emailAddresses[0].emailAddress || '');
+      setUsername(user.username || '');
+      setPhone(user.unsafeMetadata.phone || '');
+      setLocation(user.unsafeMetadata.location || '');
     }
   }, [user]);
 
@@ -42,6 +38,10 @@ const handleToggleDarkMode = () => {
       await user?.update({
         firstName,
         lastName,
+        unsafeMetadata: {
+          location,
+          phone
+        }
       });
       toast.success('Cambios guardados');
     } catch (err) {
@@ -57,7 +57,7 @@ const handleToggleDarkMode = () => {
       contentInsetAdjustmentBehavior="automatic"
       >
       {isEditing ? (
-        <View className="mb-6 flex flex-col items-center gap-4 rounded-2xl bg-background p-6 ">
+        <View className="mb-6 flex flex-col items-center gap-4 rounded-2xl bg-zinc-100 p-6 dark:bg-zinc-900">
           <Avatar
             alt="avatar"
             style={{
@@ -70,25 +70,46 @@ const handleToggleDarkMode = () => {
               }}
             />
           </Avatar>
+          <View className='flex flex-col gap-2 w-full'>
           <Input
+          size='lg'
             className="w-full"
             onChangeText={setFirstName}
             value={firstName}
             placeholder="First Name"
           />
           <Input
+          size='lg'
+
             className="w-full"
             onChangeText={setLastName}
             value={lastName}
             placeholder="Last Name"
           />
           <Input
-            value={email}
+          size='lg'
+
+            className="w-full"
+            onChangeText={setLocation}
+            value={location as string}
+            placeholder="Jr. Oswaldo N Regal 485"
+          />
+          <Input
+          size='lg'
+
+            className="w-full"
+            onChangeText={setPhone}
+            value={phone as string}
+            placeholder="914 151 151"
+          />
+          <Input
+          size='lg'
+
+            value={username}
             editable={false}
             className="w-full "
-            placeholder="Email"
-            keyboardType="email-address"
-          />
+            placeholder="Nombre de usuario"
+          /></View>
 
           <Button  onPress={handleSave}>
             <Text>Guardar Cambios</Text>
@@ -98,7 +119,8 @@ const handleToggleDarkMode = () => {
           </Button>
         </View>
       ) : (
-        <View className="mb-6 items-center rounded-2xl bg-zinc-100 p-6">
+        <>
+        <View className="mb-6 items-center rounded-2xl bg-zinc-100 dark:bg-zinc-900 p-6">
           <Avatar
             alt="avatar"
             style={{
@@ -112,91 +134,37 @@ const handleToggleDarkMode = () => {
             />
           </Avatar>
           <Text className="mt-2 text-xl font-bold" style={{ fontFamily: "Bold" }}>{user?.fullName}</Text>
-          <Text className="text-gray-500">{user?.emailAddresses[0].emailAddress}</Text>
+          <Text className="text-gray-500">{user?.username}</Text>
+         
           <Button className="mt-4 " onPress={() => setIsEditing(true)}>
             <Text>Editar perfil</Text>
           </Button>
         </View>
+      <View>
+
+
+<Label className="m-2 ml-4  text-muted-foreground" >Ubicación</Label>
+      <View className="mb-6 rounded-2xl bg-zinc-100 dark:bg-zinc-900 px-4">
+          <View className="flex-row items-center justify-between border-b border-gray-200 dark:border-gray-800 py-4">
+            <View className="flex flex-row items-center gap-4">
+              <MapPin color={isDarkColorScheme ? 'white' : 'black'} />
+              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>{user?.unsafeMetadata.location as string}</Text>
+            </View>
+          </View>
+      </View>
+<Label className="m-2 ml-4  text-muted-foreground" >Teléfono</Label>
+      <View className="mb-6 rounded-2xl bg-zinc-100 px-4 dark:bg-zinc-900">
+          <View className="flex-row items-center justify-between border-b border-gray-200 dark:border-gray-800 py-4">
+            <View className="flex flex-row items-center gap-4">
+              <Phone color={isDarkColorScheme ? 'white' : 'black'} />
+              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>{user?.unsafeMetadata.phone as string}</Text>
+            </View>
+          </View>
+      </View>
+      </View>
+      </>
       )}
-
-      <Label className="m-2 ml-4  text-muted-foreground" >Productos</Label>
-      <View className="mb-6 rounded-2xl bg-zinc-100 px-4">
-        <TouchableOpacity activeOpacity={0.6} onPress={() => router.push('/(auth)/(screens)/profile/products')}>
-          <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
-            <View className="flex flex-row items-center gap-4">
-              <Boxes color="black" />
-              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Mis productos</Text>
-            </View>
-            <View className="flex flex-row items-center gap-2">
-              <Text className="text-muted-foreground">148</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.6} onPress={() => router.push('/(auth)/(screens)/tracker')}>
-          <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
-            <View className="flex flex-row items-center gap-4">
-              <Map color="black" />
-              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Seguimientos</Text>
-            </View>
-            <View className="flex flex-row items-center gap-2">
-              <Text className="text-muted-foreground">148</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.6} onPress={() => router.push('/(auth)/(screens)/profile/orders')}>
-          <View className="flex-row items-center justify-between  border-gray-200 py-4">
-            <View className="flex flex-row items-center gap-4">
-              <Notebook color="black" />
-              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Mis Ordenes</Text>
-            </View>
-            <View className="flex flex-row items-center gap-2">
-              <Text className="text-muted-foreground">25</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-
-      <Label className="m-2 ml-4 text-muted-foreground" >Preferencias</Label>
-      <View className="mb-6 rounded-2xl bg-zinc-100 px-4">
-        <TouchableOpacity activeOpacity={0.6}>
-          <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
-            <View className="flex flex-row items-center gap-4">
-              <Bell color="black" />
-              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Notificaciones push</Text>
-            </View>
-
-            <Switch value={true} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.6}>
-          <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
-            <View className="flex flex-row items-center gap-4">
-              <Fingerprint color="black" />
-              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Face ID</Text>
-            </View>
-            <Switch value={true} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.6}>
-          <View className="flex-row items-center justify-between border-b border-gray-200 py-4">
-            <View className="flex flex-row items-center gap-4">
-              <Moon color="black" />
-              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>Modo Oscuro</Text>
-            </View>
-            <Switch value={isDarkMode} onValueChange={handleToggleDarkMode} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.6}>
-          <View className="flex-row items-center justify-between border-gray-200 py-4">
-            <View className="flex flex-row items-center gap-4">
-              <Lock color="black" />
-              <Text className="font-semibold" style={{ fontFamily: "Lato" }}>PIN Code</Text>
-            </View>
-            <Switch value={false} />
-          </View>
-        </TouchableOpacity>
-
-      </View>
+      
 
       <Button className="mt-4 " size="lg" variant="destructive" onPress={() => signOut()}>
         <Text className="text-white">Cerrar Sesión</Text>

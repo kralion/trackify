@@ -8,9 +8,5 @@ export default function AuthRoutesLayout() {
     return <Redirect href="/(auth)/(screens)" />;
   }
 
-  return (
-    <Stack>
-      <Stack.Screen name="sign-in" options={{ title: 'Iniciar Sesión', headerShown: false }} />
-    </Stack>
-  );
+    return <Stack screenOptions={{ headerShown: false }} />;
 }

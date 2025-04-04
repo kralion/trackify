@@ -1,62 +1,79 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Text } from '@/components/ui/text';
+import { useColorScheme } from '@/lib/useColorScheme';
 import { useCartStore } from '@/store';
 import { useOrder } from '@/store/order';
 import { Product } from '@/types';
-import { useHeaderHeight } from '@react-navigation/elements';
-import * as Location from 'expo-location';
+import { useUser } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
-import { MapPinHouse, Minus, Plus, Trash } from 'lucide-react-native';
-import { useState } from 'react';
-import { FlatList, Image, ScrollView, Text, View } from 'react-native';
+import { Minus, Plus, Trash } from 'lucide-react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, Image, ScrollView, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
 
 type Order = {
-  destination: string;
+  location: string;
   customer: string;
-  distance: number;
-  duration: number;
-  origin: string;
+  phone: string;
+  user_id?: string;
+  paymentMethod: string;
   items: Product[];
-  status: 'registrado' | 'enviado' | 'entregado';
 };
 
 export default function ShoppingCart() {
-  const headerHeight = useHeaderHeight();
-  const { addOrder } = useOrder();
+  const { addOrder, loading } = useOrder();
+  const { user } = useUser();
+  const { items, removeItem } = useCartStore();
+  const { isDarkColorScheme } = useColorScheme();
   const { setItems } = useCartStore();
   const [form, setForm] = useState<Order>({
-    destination: '',
-    customer: '',
-    distance: 0,
-    duration: 0,
-    origin: '',
+    location: user?.unsafeMetadata.location as string || '',
+    customer: user?.fullName || '',
+    user_id: user?.id || '',
+    phone: user?.unsafeMetadata.phone as string || '',
+    paymentMethod: 'efectivo',
     items: [],
-    status: 'registrado',
   });
 
-  //TODO: Handle the locations cause on the db it receives a geometry object type and here is a string, we need to convert it somehow
+
+  useEffect(() => {
+    items.length <= 0 ? router.back() : null;
+  }, [items]);
+
+  const handleReset = () => {
+    setForm({
+      location: '',
+      customer: '',
+      phone: '',
+      paymentMethod: 'efectivo',
+      items: [],
+    });
+    setItems([]);
+    router.back();
+  }
   const handleSubmit = () => {
-    if (!form.items || !form.destination || !form.customer) {
+    if (!form.items || !form.location || !form.customer) {
       toast.error('Todos los campos son obligatorios');
       return;
     }
-
-    setForm({
-      destination: '',
-      customer: '',
-      origin: '',
-      duration: 0,
-      distance: 0,
-      items: [],
-      status: 'registrado',
+    addOrder({
+      ...form,
+      items,
+      customer: user?.fullName || form.customer,
+      user_id: user?.id,
+      phone: user?.unsafeMetadata.phone as string || form.phone,
+      location: form.location,
+      totalPrice: total(),
     });
+    handleReset();
     router.back();
   };
-  const { items, removeItem } = useCartStore();
+
 
   const increaseQuantity = (item: Product) => {
     const itemIndex = items.findIndex((i) => i.id === item.id);
@@ -115,7 +132,7 @@ export default function ShoppingCart() {
               onPress={() => {
                 decreaseQuantity(item.id);
               }}>
-              <Minus color="black" size={18} />
+              <Minus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
             </Button>
             <Text className="mx-2 text-lg">{item.quantity}</Text>
             <Button
@@ -125,7 +142,7 @@ export default function ShoppingCart() {
               onPress={() => {
                 increaseQuantity(item);
               }}>
-              <Plus color="black" size={18} />
+              <Plus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
             </Button>
           </View>
         </View>
@@ -142,31 +159,54 @@ export default function ShoppingCart() {
     </View>
   );
   return (
-    <ScrollView contentInsetAdjustmentBehavior="automatic">
-      <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4  lg:flex-row">
-        <View className="mx-auto w-full flex-col  gap-8 md:w-[500px]">
-          <Text className="mb-4 text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Información del Pedido</Text>
+    <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName='pb-16'>
+      <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4 md:pt-16 lg:flex-row">
+        <View className="mx-auto w-full flex-col  md:gap-8 gap-4 md:w-[500px]">
+
+
+          <Text className="md:mb-4 md:text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Resumen </Text>
           <View>
-            <Label className="my-2 px-4 text-muted-foreground">Nombre del Cliente</Label>
+            <Label className="my-2 px-2 text-muted-foreground">Nombre del Cliente</Label>
             <Input
-              placeholder="Jorge Ramirez Centeno"
+              placeholder="Ingresa tu nombre"
               value={form.customer}
               onChangeText={(text) => setForm({ ...form, customer: text })}
             />
-            <Label className="my-2 mt-4 px-4 text-muted-foreground">Ubicación</Label>
-            <View className="flex flex-row items-center gap-3">
-              <View className="flex-1">
-                <Input
-                  placeholder="-123.456.789, -123.456.789"
-                  value={
-                    form.destination.length > 30
-                      ? `${form.destination.slice(0, 30)}...`
-                      : form.destination
-                  }
-                  onChangeText={(text) => setForm({ ...form, destination: text })}
+            <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación y Referencia</Label>
+            {/* <View className="flex flex-row items-center gap-3">
+              <View className="flex-1"> */}
+            <Input
+              placeholder="Av. Oswaldo N Regal 485 , Ref Colegio San Ramon"
+              value={
+                form.location.length > 30
+                  ? `${form.location.slice(0, 30)}...`
+                  : form.location
+              }
+              onChangeText={(text) => setForm({ ...form, location: text })}
+            />
+
+            <Label className="my-2 px-2 text-muted-foreground">Método de Pago</Label>
+            <Select defaultValue={{ value: 'efectivo', label: 'Efectivo' }} onValueChange={(value) => setForm({ ...form, paymentMethod: value?.value || 'efectivo' })} >
+              <SelectTrigger className='w-[250px] rounded-lg md:w-full'>
+                <SelectValue
+                  className='text-foreground text-sm native:text-lg'
+                  placeholder='Selecciona'
                 />
-              </View>
-              <Button
+              </SelectTrigger>
+              <SelectContent className='w-[350px] rounded-xl md:w-full' >
+                <SelectGroup >
+                  <SelectItem label='Yape' value='yape'  >
+                    Yape
+                  </SelectItem>
+                  <SelectItem label='Efectivo' value='efectivo'>
+                    Efectivo
+                  </SelectItem>
+
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </View>
+          {/* <Button
                 size="icon"
                 className="rounded-full"
                 onPress={() => {
@@ -180,8 +220,8 @@ export default function ShoppingCart() {
                 <MapPinHouse color="black" size={18} />
               </Button>
             </View>
-          </View>
-          <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 ">
+          </View> */}
+          <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 dark:border-zinc-800 ">
             <View className="flex flex-row justify-between">
               <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Sub total:</Text>
               <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>S/ {subTotal(items)}</Text>
@@ -202,17 +242,21 @@ export default function ShoppingCart() {
               <Text className="text-xl font-black" style={{ fontFamily: "Bold" }}>S/ {total().toFixed(2)}</Text>
             </View>
           </View>
-          <Button size="lg" onPress={handleSubmit}>
-            <Text className="font-semibold" >Enviar pedido</Text>
-          </Button>
+          <View className='flex flex-col gap-4'>
+            <Button size="lg" onPress={handleSubmit}>
+              {loading ? <ActivityIndicator size='small' /> : <Text className="font-semibold" >Enviar pedido</Text>}
+            </Button>
+            <Button size="lg" variant="secondary" onPress={handleReset}>
+              <Text className="font-semibold" style={{ color: 'red' }} >Cancelar Pedido</Text>
+            </Button>
+          </View>
         </View>
-
         <Animated.View entering={FadeInUp.duration(200).damping(10).delay(100)}>
           <FlatList
             data={items}
             renderItem={renderItem}
             ItemSeparatorComponent={() => <Separator className="my-4 md:my-8" />}
-            contentContainerClassName=" md:w-[600px] rounded-xl bg-zinc-50 md:p-8 p-4"
+            contentContainerClassName=" md:w-[600px] rounded-xl bg-zinc-50 dark:bg-zinc-900 md:p-8 p-4"
             keyExtractor={(item) => String(item.id)}
           />
         </Animated.View>

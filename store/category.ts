@@ -12,11 +12,11 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
       categories: [...state.categories, data],
     }));
   },
-  async getCategories(userId: string) {
+  async getCategories() {
     set(() => ({
       loading: true,
     }));
-      const { data, error } = await supabase.from('categories').select('*').eq('user_id', 'user_2rDGYUufUg0RLAGqQoz1cNX8urm');
+      const { data, error } = await supabase.from('categories').select('*').order('id', { ascending: true });
     if (error) throw error;
     set(() => ({
       categories: data,

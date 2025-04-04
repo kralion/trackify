@@ -1,5 +1,6 @@
-import { Product, ProductStore } from '@/types';
+import { Product, ProductStore, Order } from '@/types';
 import { supabase } from '@/utils/supabase';
+import { toast } from 'sonner-native';
 import { create } from 'zustand';
 
 export const useProductStore = create<ProductStore>((set) => ({
@@ -35,30 +36,26 @@ async getAllProductByUser(userId: string) {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('user_id', "user_2rDGYUufUg0RLAGqQoz1cNX8urm")
-    .eq('categories.id', 1);
+    .eq('user_id', userId)
+    .eq('id_category', 1);
   if (error) throw error;
   set(() => ({
     loading: false,
   }));
  return data;
 },
-async getProductsByCategoryOrSearch(categoryId: number | null, search: string, userId: string) {
+async getProductsByCategoryOrSearch(categoryId: number | null = 1, search: string) {
   set(() => ({
     loading: true,
   }));
   let query = supabase
     .from('products')
     .select('*, categories(id, name, icon)')
-    .eq('user_id', "user_2rDGYUufUg0RLAGqQoz1cNX8urm")
-    .eq('id_category', 1);
-
-  if (categoryId !== null) {
-    query = query.eq('categories.id', categoryId);
-  }
-
+    .eq('id_category', categoryId)
+    .order('id', { ascending: true });
+ 
   if (search !== '') {
-    query = query.ilike('name', `%${search}%`);
+    query = supabase.from('products').select('*, categories(id, name, icon)').ilike('name', `%${search}%`);
   }
 
   const { data, error } = await query;

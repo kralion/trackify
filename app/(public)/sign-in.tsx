@@ -1,170 +1,179 @@
-import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
-import { useOAuth } from '@clerk/clerk-expo';
-import React from 'react';
-import { Image, Platform, ScrollView, View } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
-import { Button } from '~/components/ui/button';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Text } from '~/components/ui/text';
-import { SafeAreaView } from 'react-native-safe-area-context';
-export const useWarmUpBrowser = () => {
-  React.useEffect(() => {
-    if (Platform.OS !== 'web') {
-      void WebBrowser.warmUpAsync();
-    }
+import { useSignIn } from "@clerk/clerk-expo";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { router } from "expo-router";
+import React, { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
+import { toast } from "sonner-native";
+import { z } from "zod";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Text } from "~/components/ui/text";
 
-    return () => {
-      if (Platform.OS !== 'web') {
-        void WebBrowser.coolDownAsync();
-      }
-    };
-  }, []);
-};
+const signInSchema = z.object({
+  username: z.string().min(1, "El correo electrónico es requerido"),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+});
 
-WebBrowser.maybeCompleteAuthSession();
+type SignInForm = z.infer<typeof signInSchema>;
 
 export default function SignInScreen() {
+  const [isLoading, setIsLoading] = React.useState(false);
+   const { signIn, setActive, isLoaded } = useSignIn()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInForm>({
+    resolver: zodResolver(signInSchema),
+  });
+
+const onSubmit = React.useCallback(async (data: SignInForm) => {
+  if (!isLoaded) return;
+  setIsLoading(true);
+
+  try {
+    console.log("hello");
+    const signInAttempt = await signIn.create({
+      identifier: data.username,
+      password: data.password,
+      strategy:"password"
+    });
+    console.log("hello2", signInAttempt);
+
+    if (signInAttempt.status === 'complete') {
+      await setActive({ session: signInAttempt.createdSessionId });
+      router.replace('/(auth)/(screens)');
+    } else {
+      console.error(JSON.stringify(signInAttempt, null, 2));
+    }
+  } catch (err) {
+    console.error(JSON.stringify(err, null, 2));
+  } finally {
+    setIsLoading(false);
+  }
+}, [isLoaded, signIn, setActive, router]);
+
   return (
-    <SafeAreaView
-      className="h-screen flex-1 items-center justify-center"
-      style={{ paddingHorizontal: 16 }}>
-      <View className="mb-10 flex flex-col items-center gap-1">
-        <Animated.Image
-          style={{
-            width: 150,
-            height: 150,
-          }}
-          entering={FadeInDown.damping(5).duration(500)}
-          source={{
-            uri: 'https://img.icons8.com/?size=300&id=Jpr7XcQNM2FS&format=png&color=000000',
-          }}
-        />
-        <Text className="text-center text-3xl font-bold">Bienvenido a Trackify</Text>
-        <Text className="text-center text-muted-foreground">
-          Vincula una de tus cuentas para continuar
-        </Text>
-      </View>
-      <View className="mx-auto flex w-full flex-col justify-center gap-4 align-middle  web:md:w-2/3 web:lg:w-1/3">
-        <SignInWithOAuthGoogle />
-        <SignInWithOAuthFacebook />
-        <SignInWithOAuthTiktok />
-      </View>
-    </SafeAreaView>
+      <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
+        <ScrollView>
+          <View
+            style={styles.container}
+            className="flex flex-col gap-8 h-screen-safe justify-center p-6 web:md:w-[500px] web:md:mx-auto"
+          >
+            <View className="flex flex-col items-center">
+              <Image
+                style={{
+                  width: 125,
+                  height: 125,
+                }}
+                source={require("../../assets/logo.png")}
+              />
+              <Text className="text-4xl font-bold">Bienvenido</Text>
+              <Text className="text-center text-muted-foreground">
+                Inicia sesión en tu cuenta de{" "}
+                <Text className="font-semibold">Tito's</Text>
+              </Text>
+            </View>
+
+            <View
+              className="flex flex-col gap-4
+               w-full"
+            >
+              <View>
+                <Text className="font-medium mb-2">Usuario</Text>
+                <Controller
+                  control={control}
+                  name="username"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      placeholder="miguel1234"
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      value={value}
+                      size="lg"
+                    />
+                  )}
+                />
+                {errors.username?.message && (
+                  <Text className="text-xs text-red-500">
+                    {errors.username?.message}
+                  </Text>
+                )}
+              </View>
+              <View>
+                <Text className="font-medium mb-2">Contraseña</Text>
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      placeholder="********"
+                      onChangeText={onChange}
+                      onBlur={onBlur}
+                      size="lg"
+                      value={value}
+                      secureTextEntry
+                      className="bg-white"
+                    />
+                  )}
+                />
+                {errors.password?.message && (
+                  <Text className="text-xs text-red-500">
+                    {errors.password?.message}
+                  </Text>
+                )}
+              </View>
+            </View>
+            <View className="flex flex-col gap-4">
+              <Button
+                size="lg"
+                onPress={handleSubmit(onSubmit)}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <ActivityIndicator
+                    size="small"
+                    color="white"
+                    className="absolute"
+                  />
+                ) : (
+                  <Text>Iniciar sesión</Text>
+                )}
+              </Button>
+
+              <View>
+                <Text className="text-center text-muted-foreground">
+                  ¿Nuevo en la Web?{" "}
+                  <Text
+                    className="text-primary font-semibold underline"
+                    onPress={() => router.push("/(public)/sign-up")}
+                  >
+                    Crea una cuenta
+                  </Text>
+                </Text>
+              </View>
+            </View>
+          
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
   );
 }
 
-export const SignInWithOAuthGoogle = () => {
-  useWarmUpBrowser();
-
-  const { startOAuthFlow } = useOAuth({ strategy: 'oauth_google' });
-
-  const onPress = React.useCallback(async () => {
-    try {
-      const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-        redirectUrl: Linking.createURL('/(screens)', { scheme: 'trackify' }),
-      });
-
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-      } else {
-        // Use signIn or signUp for next steps such as MFA
-      }
-    } catch (err) {
-      console.error('OAuth error', err);
-    }
-  }, []);
-
-  return (
-    <Button
-      className="flex flex-row items-center gap-2 "
-      variant="secondary"
-      size="lg"
-      onPress={onPress}>
-      <Image
-        style={{ width: 24, height: 24 }}
-        source={{
-          uri: 'https://img.icons8.com/?size=96&id=17949&format=png',
-        }}
-        alt="google"
-      />
-      <Text className="text-black dark:text-black">Continuar con Google</Text>
-    </Button>
-  );
-};
-export const SignInWithOAuthTiktok = () => {
-  useWarmUpBrowser();
-
-  const { startOAuthFlow } = useOAuth({ strategy: 'oauth_tiktok' });
-
-  const onPress = React.useCallback(async () => {
-    try {
-      const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-        redirectUrl: Linking.createURL('/(screens)', { scheme: 'trackify' }),
-      });
-
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-      } else {
-        // Use signIn or signUp for next steps such as MFA
-      }
-    } catch (err) {
-      console.error('OAuth error', err);
-    }
-  }, []);
-
-  return (
-    <Button
-      className="flex flex-row items-center gap-2 "
-      variant="secondary"
-      size="lg"
-      onPress={onPress}>
-      <Image
-        style={{ width: 24, height: 24 }}
-        source={{
-          uri: 'https://cdn-icons-png.flaticon.com/128/3046/3046121.png',
-        }}
-        alt="tiktok"
-      />
-      <Text className="text-black dark:text-black">Continuar con TikTok</Text>
-    </Button>
-  );
-};
-export const SignInWithOAuthFacebook = () => {
-  useWarmUpBrowser();
-
-  const { startOAuthFlow } = useOAuth({ strategy: 'oauth_facebook' });
-
-  const onPress = React.useCallback(async () => {
-    try {
-      const { createdSessionId, signIn, signUp, setActive } = await startOAuthFlow({
-        redirectUrl: Linking.createURL('/(screens)', { scheme: 'trackify' }),
-      });
-
-      if (createdSessionId) {
-        setActive!({ session: createdSessionId });
-      } else {
-        // Use signIn or signUp for next steps such as MFA
-      }
-    } catch (err) {
-      console.error('OAuth error', err);
-    }
-  }, []);
-
-  return (
-    <Button
-      className="flex flex-row items-center gap-2 "
-      variant="secondary"
-      size="lg"
-      onPress={onPress}>
-      <Image
-        style={{ width: 24, height: 24 }}
-        source={{
-          uri: 'https://cdn-icons-png.flaticon.com/128/5968/5968764.png',
-        }}
-        alt="Facebook"
-      />
-      <Text className="text-black dark:text-black">Continuar con Facebook</Text>
-    </Button>
-  );
-};
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  container: {
+    flex: 1,
+  },
+});

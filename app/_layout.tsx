@@ -6,14 +6,14 @@ import { router, Slot, SplashScreen, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
-import { ActivityIndicator, Platform } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Toaster } from 'sonner-native';
+import { ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
 import '~/global.css';
 import { useFonts, Lato_400Regular, Lato_700Bold } from '@expo-google-fonts/lato';
 import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
+import { Toaster } from 'sonner-native';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -63,6 +63,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
+  const width = useWindowDimensions().width;
+  const isMobile = width < 768;
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
   const [fontLoaded, fontError] = useFonts({
@@ -107,14 +109,15 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
+
       <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
         <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
           <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
           <ClerkLoaded>
-            <Toaster />
             <RootLayoutNav />
             <PortalHost />
           </ClerkLoaded>
+          <Toaster style={{ width: isMobile ? '100%' : '30%', marginHorizontal: 'auto' }} />
         </ThemeProvider>
       </ClerkProvider>
     </GestureHandlerRootView>
@@ -124,7 +127,6 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
-
   React.useEffect(() => {
     if (!isSignedIn && segments[0] === '(auth)') {
       router.push('/(public)/sign-in');
@@ -133,5 +135,7 @@ function RootLayoutNav() {
     }
   }, [isLoaded, isSignedIn, segments]);
 
-  return <Slot />;
+  return (
+    <Slot />
+  );
 }

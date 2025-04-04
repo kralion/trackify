@@ -5,6 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { useCartStore } from '@/store';
 import { useOrder } from '@/store/order';
 import { Product } from '@/types';
+import { useUser } from '@clerk/clerk-expo';
 import { useHeaderHeight } from '@react-navigation/elements';
 import * as Location from 'expo-location';
 import { router } from 'expo-router';
@@ -26,6 +27,7 @@ type Order = {
 export default function ShoppingCart() {
   const headerHeight = useHeaderHeight();
   const { addOrder } = useOrder();
+  const {user} = useUser();
   const { setItems } = useCartStore();
   const [form, setForm] = useState<Order>({
     destination: '',
@@ -153,7 +155,8 @@ export default function ShoppingCart() {
               <View>
                 <Label className="my-2 px-4 text-muted-foreground">Cliente</Label>
                 <Input
-                  placeholder="Jorge Ramirez Centeno"
+                  placeholder="Ingresa tu nombre"
+                  defaultValue={user?.fullName || ''}
                   value={form.customer}
                   onChangeText={(text) => setForm({ ...form, customer: text })}
                 />
