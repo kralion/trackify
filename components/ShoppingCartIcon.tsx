@@ -19,7 +19,10 @@ const ShoppingCartIcon: React.FC = () => {
           : router.push('/(auth)/(screens)/cart')
       }>
       <View style={styles.container}>
-        <ShoppingCart color="black" size={24} />
+        <ShoppingCart
+          color="black"
+          size={24}
+        />
         {cartItemsCount > 0 && (
           <View
             style={{

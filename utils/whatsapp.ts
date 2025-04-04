@@ -1,25 +1,28 @@
 import { Linking } from "react-native";
 
 export const sendWhatsAppMessage = (order: any, businessPhone: string) => {
-    const { location, items, totalPrice, paymentMethod, extras, customer, phone } = order;
+    const { location, items, totalPrice, paymentMethod, extras, customer } = order;
 
     const formattedItems = items.map((item: any) => `- ${item.name} (x${item.quantity})`).join("\n");
-    const formattedExtras = extras ? `\nAdicionales: ${extras}` : "";
+    const formattedExtras = extras ? `\n *Adicionales:* ${extras}` : "";
 
     const message = `Hola,
 
 Quisiera hacer un pedido con los siguientes detalles:
 
-*UBICACIÓN*: ${location}
+──────────
+*UBICACIÓN:*  
+${location}
+──────────
 
-*CLIENTE*:
+*CLIENTE:*  
 - ${customer}
 
-*PRODUCTOS SOLICITADOS*:
+*PRODUCTOS SOLICITADOS:*  
 ${formattedItems}
 
-*PRECIO TOTAL*: S/. ${totalPrice}
-*MÉTODO DE PAGO*: ${paymentMethod}
+*PRECIO TOTAL:* S/. ${totalPrice}  
+*MÉTODO DE PAGO:* ${paymentMethod}  
 ${formattedExtras}
 
 Espero la confirmación. Gracias.`;

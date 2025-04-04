@@ -127,7 +127,7 @@ export default function ShoppingCart() {
       <View className="  flex-1">
         <View className="flex flex-col gap-2">
           <Text className="text-lg font-bold" style={{ fontFamily: "Lato" }}>{item.name} </Text>
-          <Text className="text-gray-500">S/. {item.price} PEN x porcion</Text>
+          <Text className="text-gray-500">S/. {item.price.toFixed(2)} x porcion</Text>
 
           <View className="flex-row items-center">
             <Button
