@@ -30,26 +30,25 @@ export const ProductCard = ({ product }: { product: Product }) => {
       <ProductAddedModal show={showProductAddedModal} onClose={() => setShowProductAddedModal(false)} product={product} />
 
 
-
       <View className="flex flex-col  px-4 mt-2">
         <Text className=" web:md:text-xl text-md  font-semibold text-muted-foreground dark:text-foreground" style={{ fontFamily: "Lato" }}>
           {product.name}
         </Text>
 
-        <Text className=" text-xs text-muted-foreground" >
+        <Text className=" web:md:text-sm text-xs text-muted-foreground" >
           {product.description}
         </Text>
       </View>
 
       {product.price <= 0 ?
         <View className=" flex-row gap-2 flex-wrap p-4">
-          <Button size="sm" onPress={() => handleAddToCart(12, "Personal")} className=" rounded-full">
+          <Button size="sm" onPress={() => { handleAddToCart(12, "Personal"), setShowProductAddedModal(true) }} className=" rounded-full">
             <Text>Personal </Text>
           </Button>
-          <Button size="sm" onPress={() => handleAddToCart(20, "Biper")} className=" rounded-full px-5">
+          <Button size="sm" onPress={() => { handleAddToCart(20, "Biper"), setShowProductAddedModal(true) }} className=" rounded-full px-5">
             <Text>Biper </Text>
           </Button>
-          <Button size="sm" onPress={() => handleAddToCart(30, "Familiar")} className=" rounded-full">
+          <Button size="sm" onPress={() => { handleAddToCart(30, "Familiar"), setShowProductAddedModal(true) }} className=" rounded-full">
             <Text>Familiar</Text>
           </Button>
         </View> : <View className="flex flex-row items-center justify-between p-2">
@@ -84,7 +83,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
 function ProductAddedModal({ show, onClose, product }: { show: boolean, onClose: () => void, product: Product }) {
   return (
     <Dialog open={show} onOpenChange={onClose}>
-      <DialogContent className='sm:w-[425px]'>
+      <DialogContent className='w-[350px] web:md:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>Producto Agregado</DialogTitle>
 
@@ -96,7 +95,7 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean, onClose:
             <Text className="text-sm text-muted-foreground">Cantidad: 1</Text>
           </View>
         </View>
-        <Text className="">Precio: S/ {product.price.toFixed(2)}</Text>
+        {product.categories?.id !== 6 && <Text className="">Precio: S/ {product.price.toFixed(2)}</Text>}
         <DialogFooter>
           <Button onPress={() => { router.push('/cart'); onClose() }}>
             <Text>Ver Carrito</Text>

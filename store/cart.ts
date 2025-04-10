@@ -7,7 +7,7 @@ export const useCartStore = create<CartState>((set) => ({
   setItems: (items: Product[]) => set(() => ({ items })),
   addItem: (item: Product) => {
     const state = useCartStore.getState();
-    const exists = state.items.some((i) => i.id === item.id);
+    const exists = state.items.some((i) => i.id === item.id && item.categories?.id !== 6);
     if (exists) {
       console.log("The product is already on the cart");
       return;

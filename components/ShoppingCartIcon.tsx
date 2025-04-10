@@ -1,3 +1,4 @@
+import { useColorScheme } from '@/lib/useColorScheme';
 import { useCartStore } from '@/store';
 import { router } from 'expo-router';
 import { ShoppingCart } from 'lucide-react-native';
@@ -7,6 +8,7 @@ import { toast } from 'sonner-native';
 
 const ShoppingCartIcon: React.FC = () => {
   const cartItems = useCartStore((state) => state.items);
+  const { isDarkColorScheme } = useColorScheme()
 
   const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
@@ -20,7 +22,7 @@ const ShoppingCartIcon: React.FC = () => {
       }>
       <View style={styles.container}>
         <ShoppingCart
-          color="black"
+          color={isDarkColorScheme ? '#fff' : '#000'}
           size={24}
         />
         {cartItemsCount > 0 && (

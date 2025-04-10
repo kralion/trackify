@@ -41,9 +41,6 @@ export default function Layout() {
             headerTitleStyle:
               Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
             headerLargeTitle: true,
-            headerBackground: () => Platform.OS !== 'ios' ? <View className="flex-1 bg-orange-400" /> : undefined,
-            headerLargeTitleShadowVisible: false,
-            headerShadowVisible: false,
             headerSearchBarOptions: {
               placeholder: 'Buscar producto...',
 
@@ -119,21 +116,7 @@ export default function Layout() {
             presentation: 'modal',
             headerTitleStyle:
               Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" },
-            headerBackground: () => <View className="flex-1 bg-orange-400" />,
 
-            headerLeft: () => Platform.OS === 'ios' ? <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-full"
-              onPress={() => router.back()}>
-              <X color="white" />
-            </Button> : <Button
-              variant="link"
-              size="icon"
-              className="rounded-full"
-              onPress={() => router.back()}>
-              <ArrowLeft color="black" />
-            </Button>,
 
           }}
         />
