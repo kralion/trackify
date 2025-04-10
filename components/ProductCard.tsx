@@ -5,10 +5,22 @@ import { useState } from "react";
 import { Image, View } from "react-native";
 import { Button } from "./ui/button";
 import { Text } from "./ui/text";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog';
 import { toast } from "sonner-native";
+import { router } from "expo-router";
 
-export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> }) => {
+export const ProductCard = ({ product }: { product: Product }) => {
   const { addItem } = useCartStore();
+  const [showProductAddedModal, setShowProductAddedModal] = useState(false);
   const [pizzaPrice, setPizzaPrice] = useState(0);
   const [pizzaSize, setPizzaSize] = useState("");
   const handleAddToCart = (price: number, size: string) => {
@@ -19,6 +31,9 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
   return (
     <View className="my-4 mr-6  flex web:md:w-60 w-40  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] ">
       <Image source={{ uri: product.image_url }} className="web:md:h-48 h-36  rounded-t-lg " />
+      <ProductAddedModal show={showProductAddedModal} onClose={() => setShowProductAddedModal(false)} product={product} />
+
+
 
       <View className="flex flex-col  px-4 mt-2">
         <Text className=" web:md:text-xl text-md  font-semibold text-muted-foreground dark:text-foreground" style={{ fontFamily: "Lato" }}>
@@ -59,11 +74,39 @@ export const ProductCard = ({ product }: { product: Omit<Product, 'quantity'> })
             className=" rounded-full"
             onPress={() => {
               addItem({ ...product, quantity: 1 })
-
+              setShowProductAddedModal(true);
             }}>
             <Plus color="white" size={18} />
           </Button>
         </View>}
+
     </View>
   );
 };
+
+
+function ProductAddedModal({ show, onClose, product }: { show: boolean, onClose: () => void, product: Product }) {
+  return (
+    <Dialog open={show} onOpenChange={onClose}>
+      <DialogContent className='sm:w-[425px]'>
+        <DialogHeader>
+          <DialogTitle>Agrega al Carrito</DialogTitle>
+
+        </DialogHeader>
+        <View className="flex flex-row items-center space-x-4">
+          <Image source={{ uri: product.image_url }} className="h-16 w-16 rounded-full" />
+          <View>
+            <Text className="text-lg font-bold">{product.name}</Text>
+            <Text className="text-sm text-muted-foreground">Cantidad: 1</Text>
+          </View>
+        </View>
+        <Text className="">Precio: S/ {product.price.toFixed(2)}</Text>
+        <DialogFooter>
+          <Button onPress={() => { router.push('/cart'); onClose() }}>
+            <Text>Ver Carrito</Text>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
