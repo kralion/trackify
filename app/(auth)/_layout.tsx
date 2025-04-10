@@ -1,31 +1,21 @@
 import ActiveRideSheet from '@/components/ActiveRideSheet';
-import RideProvider from '@/providers/RideProvider';
-import { router, Stack } from 'expo-router';
-import { Image, NativeSyntheticEvent, Platform, TextInputFocusEventData, View } from 'react-native';
-import ShoppingCartIcon from '../../components/ShoppingCartIcon';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useUser } from '@clerk/clerk-expo';
-import { Text } from '@/components/ui/text';
-import { TouchableOpacity } from 'react-native';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Moon, Sun, User, X } from 'lucide-react-native';
-import { useState } from 'react';
-import { Appearance } from 'react-native';
-import { useColorScheme } from '@/lib/useColorScheme';
-import { debounce } from 'lodash'
 import { ThemeToggle } from '@/components/ThemeToogle';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Text } from '@/components/ui/text';
+import RideProvider from '@/providers/RideProvider';
+import { useUser } from '@clerk/clerk-expo';
+import { router, Stack } from 'expo-router';
+import { debounce } from 'lodash';
+import { User } from 'lucide-react-native';
+import { useState } from 'react';
+import { NativeSyntheticEvent, Platform, TextInputFocusEventData, TouchableOpacity, View } from 'react-native';
+import ShoppingCartIcon from '../../components/ShoppingCartIcon';
 
 export default function Layout() {
   const { user } = useUser();
-  const { isDarkColorScheme } = useColorScheme();
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(isDarkColorScheme);
   const [search, setSearch] = useState('');
 
-  const handleToggleDarkMode = () => {
-    setIsDarkMode(prevMode => !prevMode);
-    const newColorScheme = isDarkMode ? 'light' : 'dark';
-    Appearance.setColorScheme(newColorScheme);
-  };
+
   const handleSearchDebounce = debounce((text: string) => {
     router.setParams({
       query: text,
@@ -43,7 +33,6 @@ export default function Layout() {
             headerLargeTitle: true,
             headerSearchBarOptions: {
               placeholder: 'Buscar producto...',
-
               onSearchButtonPress: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
                 const text = event.nativeEvent.text;
                 setSearch(text);
