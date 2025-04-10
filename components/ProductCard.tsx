@@ -1,22 +1,18 @@
 import { useCartStore } from "@/store";
 import { Product } from "@/types";
+import { router } from "expo-router";
 import { Plus } from "lucide-react-native";
 import { useState } from "react";
 import { Image, View } from "react-native";
-import { Button } from "./ui/button";
-import { Text } from "./ui/text";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle
 } from '~/components/ui/dialog';
-import { toast } from "sonner-native";
-import { router } from "expo-router";
+import { Button } from "./ui/button";
+import { Text } from "./ui/text";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const { addItem } = useCartStore();
@@ -90,7 +86,7 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean, onClose:
     <Dialog open={show} onOpenChange={onClose}>
       <DialogContent className='sm:w-[425px]'>
         <DialogHeader>
-          <DialogTitle>Agrega al Carrito</DialogTitle>
+          <DialogTitle>Producto Agregado</DialogTitle>
 
         </DialogHeader>
         <View className="flex flex-row items-center space-x-4">
