@@ -1,7 +1,6 @@
 import { useCartStore } from "@/store";
 import { Product } from "@/types";
-import { router } from "expo-router";
-import { Plus } from "lucide-react-native";
+import { PackagePlus, Plus } from "lucide-react-native";
 import { useState } from "react";
 import { Image, View } from "react-native";
 import {
@@ -13,6 +12,7 @@ import {
 } from '~/components/ui/dialog';
 import { Button } from "./ui/button";
 import { Text } from "./ui/text";
+import { toast } from "sonner-native";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const { addItem } = useCartStore();
@@ -25,7 +25,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
     addItem({ ...product, quantity: 1, price: price, name: `${product.name} ${size}` });
   };
   return (
-    <View className="my-4 mr-6  flex web:md:w-60 w-40  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] ">
+    <View className="my-4 mr-6  flex web:md:w-60 w-40  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] hover:scale-105 active:scale-[0.98] focus-within:ring-2 focus-within:ring-primary duration-200 cursor-pointer hover:shadow-lg shadow web:md:shadow-none ">
       <Image source={{ uri: product.image_url }} className="web:md:h-48 h-36  rounded-t-lg " />
       <ProductAddedModal show={showProductAddedModal} onClose={() => setShowProductAddedModal(false)} product={product} />
 
@@ -58,19 +58,17 @@ export const ProductCard = ({ product }: { product: Product }) => {
 
           <Button
             size="icon"
-            hitSlop={
-              {
-                top: 10,
-                bottom: 10,
-                left: 10,
-                right: 10
-              }
-            }
-            className=" rounded-full"
+            hitSlop={{
+              top: 10,
+              bottom: 10,
+              left: 10,
+              right: 10,
+            }}
+            className="rounded-full active:scale-95 duration-100"
             onPress={() => {
-              addItem({ ...product, quantity: 1 })
               setShowProductAddedModal(true);
-            }}>
+            }}
+          >
             <Plus color="white" size={18} />
           </Button>
         </View>}
@@ -80,25 +78,40 @@ export const ProductCard = ({ product }: { product: Product }) => {
 };
 
 
-function ProductAddedModal({ show, onClose, product }: { show: boolean, onClose: () => void, product: Product }) {
+function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose: () => void; product: Product }) {
+  const { addItem } = useCartStore();
+  const handleAddToCart = () => {
+    addItem({ ...product, quantity: 1 });
+    onClose();
+    toast.success('Producto agregado al carrito', {
+      duration: 1000
+    });
+
+  };
   return (
     <Dialog open={show} onOpenChange={onClose}>
-      <DialogContent className='w-[350px] web:md:max-w-[425px]'>
+      <DialogContent className="w-[350px] web:md:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Producto Agregado</DialogTitle>
-
+          <DialogTitle>{product.name}</DialogTitle>
         </DialogHeader>
         <View className="flex flex-row items-center space-x-4">
-          <Image source={{ uri: product.image_url }} className="h-16 w-16 rounded-full" />
-          <View>
-            <Text className="text-lg font-bold">{product.name}</Text>
-            <Text className="text-sm text-muted-foreground">Cantidad: 1</Text>
+          <Image source={{ uri: product.image_url }} className="h-20 w-20 rounded-full" />
+          <View className="flex flex-col">
+            <Text className="text-sm text-muted-foreground">
+              Cantidad: <Text className="font-semibold">1</Text>
+            </Text>
+            {product.categories?.id !== 6 && (
+              <Text className="text-sm text-muted-foreground">
+                Precio: S/ <Text className="font-semibold">{product.price.toFixed(2)}</Text>
+              </Text>
+            )}
           </View>
         </View>
-        {product.categories?.id !== 6 && <Text className="">Precio: S/ {product.price.toFixed(2)}</Text>}
-        <DialogFooter>
-          <Button onPress={() => { router.push('/cart'); onClose() }}>
-            <Text>Ver Carrito</Text>
+        <DialogFooter >
+          <Button onPress={handleAddToCart} className="w-full text-white">
+
+            <Text className="font-semibold">Agregar al carrito</Text>
+
           </Button>
         </DialogFooter>
       </DialogContent>
