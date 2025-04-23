@@ -11,26 +11,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-dev-launcher",
-        {
-          "launchMode": "most-recent"
-        }
-      ],
-      [
-        "@rnmapbox/maps",
-        {
-          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWlndWVsMTU5NDU2NCIsImEiOiJjbTZpM3o3dG8wNDl6MmpwcmlyenBnbDd3In0.tMvbSDsgL69lYp6BLBoAig"
-        }
-      ],
-      [
-        "expo-location",
-        {
-          "locationWhenInUsePermission": "Mostrar mi ubicación actual en el mapa."
-        }
-      ]
-    ],
+      "expo-router"     
+          ],
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
@@ -51,16 +33,14 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.grobles.trackify"
+      }
+  
     },
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "f956c06a-766c-479d-91c2-cb3d37712c3d"
       }
+      
     }
   }
 }

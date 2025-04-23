@@ -22,29 +22,35 @@ const TAGS = [
   'Bebidas',
   'Broster',
   'Alitas',
+  'Platos Criollos'
 ];
 
 const CHEFS: Chef[] = [
   {
-    name: 'Chef Lucía Chen',
+    name: 'Tito Pizarro',
     photo: 'https://randomuser.me/api/portraits/women/44.jpg',
     welcome: '¡Bienvenidos a nuestra fusión de sabores orientales y peruanos! Disfruten cada bocado.',
   },
   {
-    name: 'Chef Mateo López',
+    name: 'Elizabeth Pérez ',
     photo: 'https://randomuser.me/api/portraits/men/46.jpg',
     welcome: 'Cocinar es mi pasión y mi arte. Espero que cada plato sea una experiencia inolvidable.',
   },
   {
-    name: 'Chef Camila Torres',
+    name: 'Dolly Pizarro',
     photo: 'https://randomuser.me/api/portraits/women/65.jpg',
     welcome: 'Nuestra cocina está hecha con amor y los mejores ingredientes. ¡Buen provecho!',
   },
   {
-    name: 'Chef Diego Ríos',
+    name: 'Jhon Pizarro',
     photo: 'https://randomuser.me/api/portraits/men/52.jpg',
     welcome: 'Bienvenidos a casa. Aquí, cada receta cuenta una historia familiar.',
   },
+  {
+    name: 'Jhons Pizarro',
+    photo: 'https://randomuser.me/api/portraits/men/52.jpg',
+    welcome: 'Bienvenidos a casa. Aquí, cada receta cuenta una historia familiar.',
+  }
 ];
 
 export default function LandingHome() {
@@ -69,8 +75,8 @@ export default function LandingHome() {
       <View className="mt-10 mb-10 flex flex-col items-center justify-center">
         {/* Animated Floating Chef Hat */}
         <MotiImage
-          source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3075/3075977.png' }}
-          style={{ width: 90, height: 90 }}
+          source={require('../assets/titos.png')}
+          style={{ width: 120, height: 120 }}
           from={{ translateY: -20, opacity: 0 }}
           animate={{ translateY: 0, opacity: 1 }}
           transition={{ type: 'timing', duration: 900 }}
@@ -108,7 +114,7 @@ export default function LandingHome() {
         >
           <View className="bg-emerald-100 dark:bg-emerald-800 px-4 py-1 rounded-full flex flex-row items-center mx-auto">
             <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/616/616494.png' }} style={{ width: 20, height: 20, marginRight: 6 }} />
-            <Text className="text-emerald-700 dark:text-emerald-200 font-semibold text-sm">Loved by 10,000+ foodies</Text>
+            <Text className="text-emerald-700 dark:text-emerald-200 font-semibold text-sm">Restaurant top de Huanta</Text>
           </View>
         </MotiView>
         {/* Animated Tags */}
@@ -147,11 +153,11 @@ export default function LandingHome() {
         >
           <Button
             onPress={() => router.push('/(cart)')}
-            className="w-56 bg-primary text-zinc-50 py-4 text-xl shadow-xl"
+            size="lg"
             accessibilityLabel="Start your order"
             accessibilityRole="button"
           >
-            <Text className="text-xl font-bold">Start Your Order</Text>
+            <Text className="text-xl font-bold">Ver Menú</Text>
           </Button>
         </MotiView>
       </View>
@@ -160,7 +166,7 @@ export default function LandingHome() {
       <View className="bg-zinc-100 dark:bg-zinc-800 rounded-2xl p-6 mb-8 shadow-sm web:md:w-4/5 web:md:mx-auto mx-4">
         <Text className="text-xl font-bold mb-2 text-zinc-900 dark:text-zinc-100">Nuestra Historia</Text>
         <Text className="text-zinc-700 dark:text-zinc-300 text-base">
-          Fundada por artistas culinarios, Truffle & Thyme une los mejores ingredientes locales y técnicas globales. Nuestra pasión es crear experiencias gastronómicas memorables, ya sea que estés celebrando o simplemente disfrutando de una noche fuera.
+          Fundada por artistas culinarios, Tito's une los mejores ingredientes locales y técnicas globales. Nuestra pasión es crear experiencias gastronómicas memorables, ya sea que estés celebrando o simplemente disfrutando de una noche fuera.
         </Text>
       </View>
 
