@@ -1,8 +1,7 @@
 import { useCartStore } from "@/store";
 import { Product } from "@/types";
-import { Plus } from "lucide-react-native";
 import { useState } from "react";
-import { Image, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import { toast } from "sonner-native";
 import {
   Dialog,
@@ -25,7 +24,8 @@ export const ProductCard = ({ product }: { product: Product }) => {
     addItem({ ...product, quantity: 1, price: price, name: `${product.name} ${size}` });
   };
   return (
-    <View className="my-4 w-1/2 flex web:md:w-60  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] hover:scale-105 active:scale-[0.98] focus-within:ring-2 focus-within:ring-primary duration-200 cursor-pointer hover:shadow-lg shadow-sm web:md:shadow-none ">
+    <TouchableOpacity className="my-4 w-1/2 web:md:mr-4flex web:md:w-60  flex-col justify-between rounded-xl web:md:rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] hover:scale-105 active:scale-[0.98] focus-within:ring-2 focus-within:ring-primary duration-200 cursor-pointer hover:shadow-lg shadow-sm web:md:shadow-none " onPress={() => setShowProductAddedModal(true)}>
+
       <Image source={{ uri: product.image_url }} className="web:md:h-48 h-36  rounded-t-lg " />
       <ProductAddedModal show={showProductAddedModal} onClose={() => setShowProductAddedModal(false)} product={product} />
 
@@ -56,24 +56,11 @@ export const ProductCard = ({ product }: { product: Product }) => {
           <Text className="  p-2 web:md:text-2xl  text-xl font-bold">S/ {product.price.toFixed(2)}</Text>
 
 
-          <Button
-            size="icon"
-            hitSlop={{
-              top: 10,
-              bottom: 10,
-              left: 10,
-              right: 10,
-            }}
-            className="rounded-full active:scale-95 duration-100"
-            onPress={() => {
-              setShowProductAddedModal(true);
-            }}
-          >
-            <Plus color="white" size={18} />
-          </Button>
+
         </View>}
 
-    </View>
+
+    </TouchableOpacity>
   );
 };
 
@@ -94,7 +81,7 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose:
         <DialogHeader>
           <DialogTitle>{product.name}</DialogTitle>
         </DialogHeader>
-        <View className="flex flex-row items-center space-x-4">
+        <View className="flex flex-row items-center gap-4">
           <Image source={{ uri: product.image_url }} className="h-20 w-20 rounded-full" />
           <View className="flex flex-col">
             <Text className="text-sm text-muted-foreground">
@@ -108,7 +95,7 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose:
           </View>
         </View>
         <DialogFooter >
-          <Button onPress={handleAddToCart} className="w-full text-white">
+          <Button onPress={handleAddToCart} size="lg">
 
             <Text className="font-semibold">Agregar al carrito</Text>
 

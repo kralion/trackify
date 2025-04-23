@@ -1,7 +1,8 @@
 import { useSignIn } from "@clerk/clerk-expo";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
-import React, { useEffect } from "react";
+import { ChevronLeft } from "lucide-react-native";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
@@ -11,7 +12,6 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { toast } from "sonner-native";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -50,7 +50,7 @@ export default function SignInScreen() {
 
       if (signInAttempt.status === 'complete') {
         await setActive({ session: signInAttempt.createdSessionId });
-        router.replace('/(cart)');
+        router.replace('/');
       } else {
         console.error(JSON.stringify(signInAttempt, null, 2));
       }
@@ -64,9 +64,12 @@ export default function SignInScreen() {
   return (
     <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
       <ScrollView>
+        <Button className="my-16 flex w-28 flex-row  items-center justify-start" variant="ghost" onPress={() => router.back()}><ChevronLeft color="orange" />
+          <Text className="font-semibold text-orange-500">Atrás</Text>
+        </Button>
         <View
           style={styles.container}
-          className="flex flex-col gap-8 h-screen-safe justify-center p-6 web:md:w-[500px] web:md:mx-auto"
+          className="flex flex-col gap-8  justify-center p-6 web:md:w-[500px] web:md:mx-auto"
         >
           <View className="flex flex-col items-center">
             <Image

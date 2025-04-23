@@ -1,19 +1,25 @@
-import { ClerkLoaded, ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import ShoppingCartIcon from '@/components/ShoppingCartIcon';
+import { ThemeToggle } from '@/components/ThemeToogle';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Text } from '@/components/ui/text';
+import { ClerkLoaded, ClerkProvider, useUser } from '@clerk/clerk-expo';
+import { Lato_400Regular, Lato_700Bold, useFonts } from '@expo-google-fonts/lato';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
-import { router, Slot, SplashScreen, Stack, useSegments } from 'expo-router';
+import { router, SplashScreen, Stack } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
+import { debounce } from 'lodash';
+import { User } from 'lucide-react-native';
 import * as React from 'react';
-import { ActivityIndicator, Platform, useWindowDimensions } from 'react-native';
-import '~/global.css';
-import { useFonts, Lato_400Regular, Lato_700Bold } from '@expo-google-fonts/lato';
-import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
+import { ActivityIndicator, NativeSyntheticEvent, Platform, TextInputFocusEventData, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Toaster } from 'sonner-native';
+import '~/global.css';
+import { setAndroidNavigationBar } from '~/lib/android-navigation-bar';
 import { NAV_THEME } from '~/lib/constants';
 import { useColorScheme } from '~/lib/useColorScheme';
-import { Toaster } from 'sonner-native';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -125,8 +131,102 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const { user } = useUser();
+  const [search, setSearch] = React.useState('');
+
+
+  const handleSearchDebounce = debounce((text: string) => {
+    router.setParams({
+      query: text,
+    });
+  }, 500);
   return (
-    <Stack screenOptions={{ headerShown: false }} />
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          title: 'Tito\'s Menú',
+          headerTitleStyle:
+            Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
+          headerLargeTitle: true,
+          headerShown: true,
+          headerSearchBarOptions: {
+            placeholder: 'Buscar producto...',
+            onSearchButtonPress: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+              const text = event.nativeEvent.text;
+              setSearch(text);
+              handleSearchDebounce(text);
+            },
+            onChangeText: (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+              const text = event.nativeEvent.text;
+              setSearch(text);
+              handleSearchDebounce(text);
+            },
+            cancelButtonText: 'Cancelar',
+            onCancelButtonPress: () => {
+              router.setParams({
+                query: '',
+              });
+              setSearch('');
+            },
+          },
+          headerRight: () => (
+            <View className="flex flex-row items-center gap-4">
+              <ShoppingCartIcon />
+              {
+                user ?
+
+                  <TouchableOpacity
+                    hitSlop={8}
+                    onPress={() => router.push('/profile')}>
+                    <Avatar alt="avatar">
+                      <AvatarImage
+                        source={{
+                          uri: user?.imageUrl,
+                        }}
+                      />
+                      <AvatarFallback>
+                        <Text>{user?.fullName?.split(' ')[0]}</Text>
+                      </AvatarFallback>
+                    </Avatar>
+                  </TouchableOpacity> : <TouchableOpacity
+                    hitSlop={8}
+                    onPress={() => router.push('/(auth)/sign-in')}>
+                    <User color="black" />
+                  </TouchableOpacity>
+
+              }
+            </View>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="cart"
+        options={{
+          title: 'Pedido',
+          headerTitleStyle:
+            Platform.OS === 'web' && { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" },
+
+
+        }}
+      />
+
+      <Stack.Screen
+        name="profile"
+        options={{
+          title: 'Perfil',
+          headerTitleStyle:
+            Platform.OS === 'web' ? { fontSize: 24, fontWeight: 'bold', fontFamily: "Bold" } : undefined,
+          headerShadowVisible: false,
+          headerShown: true,
+          headerRight: () => (
+            <ThemeToggle />
+          ),
+
+        }}
+      />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+    </Stack>
 
   );
 }

@@ -11,7 +11,7 @@ import { useUser } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
 import { Minus, Plus, Trash } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
@@ -178,8 +178,7 @@ export default function ShoppingCart() {
               onChangeText={(text) => setForm({ ...form, customer: text })}
             />
             <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación</Label>
-            {/* <View className="flex flex-row items-center gap-3">
-              <View className="flex-1"> */}
+
             <Input
               placeholder="Av. Oswaldo N Regal 485"
               value={

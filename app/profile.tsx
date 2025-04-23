@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Text } from '@/components/ui/text';
 import { useColorScheme } from '@/lib/useColorScheme';
 import { useAuth, useUser } from '@clerk/clerk-expo';
+import { router } from 'expo-router';
 import { MapPin, Phone } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -159,7 +160,7 @@ export default function Profile() {
       )}
 
 
-      <Button className="mt-4 " size="lg" variant="destructive" onPress={() => signOut()}>
+      <Button className="mt-4 " size="lg" variant="destructive" onPress={() => { signOut(); router.replace('/') }}>
         <Text className="text-white">Cerrar Sesión</Text>
       </Button>
     </ScrollView>
