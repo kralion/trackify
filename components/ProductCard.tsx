@@ -1,8 +1,9 @@
 import { useCartStore } from "@/store";
 import { Product } from "@/types";
-import { PackagePlus, Plus } from "lucide-react-native";
+import { Plus } from "lucide-react-native";
 import { useState } from "react";
 import { Image, View } from "react-native";
+import { toast } from "sonner-native";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,6 @@ import {
 } from '~/components/ui/dialog';
 import { Button } from "./ui/button";
 import { Text } from "./ui/text";
-import { toast } from "sonner-native";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const { addItem } = useCartStore();
@@ -25,7 +25,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
     addItem({ ...product, quantity: 1, price: price, name: `${product.name} ${size}` });
   };
   return (
-    <View className="my-4 mr-6  flex web:md:w-60 w-40  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] hover:scale-105 active:scale-[0.98] focus-within:ring-2 focus-within:ring-primary duration-200 cursor-pointer hover:shadow-lg shadow web:md:shadow-none ">
+    <View className="my-4 w-1/2 flex web:md:w-60  flex-col justify-between rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] hover:scale-105 active:scale-[0.98] focus-within:ring-2 focus-within:ring-primary duration-200 cursor-pointer hover:shadow-lg shadow-sm web:md:shadow-none ">
       <Image source={{ uri: product.image_url }} className="web:md:h-48 h-36  rounded-t-lg " />
       <ProductAddedModal show={showProductAddedModal} onClose={() => setShowProductAddedModal(false)} product={product} />
 

@@ -2,7 +2,7 @@ import { ClerkLoaded, ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
-import { router, Slot, SplashScreen, useSegments } from 'expo-router';
+import { router, Slot, SplashScreen, Stack, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
@@ -126,6 +126,7 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <Slot />
+    <Stack screenOptions={{ headerShown: false }} />
+
   );
 }

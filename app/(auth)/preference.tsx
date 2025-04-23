@@ -26,15 +26,15 @@ const preferencesSchema = z.object({
     .length(9, "El número debe tener 9 dígitos")
     .regex(/^\d+$/, "Solo números permitidos")
     .optional(),
-    firstName: z.string().min(1, "El nombre es requerido"),
-    lastName: z.string().min(1, "El nombre es requerido"),
-  
+  firstName: z.string().min(1, "El nombre es requerido"),
+  lastName: z.string().min(1, "El nombre es requerido"),
+
 });
 
 type PreferencesForm = z.infer<typeof preferencesSchema>;
 
 export default function PreferencesScreen() {
-  const {  signUp, setActive } = useSignUp()
+  const { signUp, setActive } = useSignUp()
   const [isLoading, setIsLoading] = React.useState(false);
 
   const {
@@ -51,9 +51,9 @@ export default function PreferencesScreen() {
     },
   });
 
-  
 
-const onSubmit = async (data: PreferencesForm) => {
+
+  const onSubmit = async (data: PreferencesForm) => {
     try {
       setIsLoading(true);
 
@@ -85,12 +85,12 @@ const onSubmit = async (data: PreferencesForm) => {
         return;
       }
 
-    
+
       await setActive?.({
         session: signUpAttempt.createdSessionId,
       });
 
-      router.replace("/(auth)/(screens)");
+      router.replace("/(cart)");
     } catch (error: any) {
       console.error(error);
       toast.error(error.message || "Error al crear el perfil");
@@ -123,7 +123,7 @@ const onSubmit = async (data: PreferencesForm) => {
           </View>
 
           <View className="flex flex-col gap-4">
-             <View>
+            <View>
               <Text className="font-medium mb-2 text-muted-foreground">
                 Nombres
               </Text>
@@ -146,7 +146,7 @@ const onSubmit = async (data: PreferencesForm) => {
             </View>
             <View>
               <Text className="font-medium mb-2 text-muted-foreground">
-               Apellidos
+                Apellidos
               </Text>
               <Controller
                 control={control}
@@ -187,11 +187,11 @@ const onSubmit = async (data: PreferencesForm) => {
               )}
             </View>
 
-           
 
-         
 
-           
+
+
+
             <View>
               <Text className="font-medium mb-2 text-muted-foreground">
                 Teléfono
@@ -220,7 +220,7 @@ const onSubmit = async (data: PreferencesForm) => {
           <Button
             size="lg"
             onPress={handleSubmit(onSubmit)}
-           
+
           >
             {isLoading ? (
               <ActivityIndicator

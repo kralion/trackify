@@ -128,7 +128,7 @@ export default function HomeScreen() {
         </Animated.View>
 
         <Animated.FlatList
-          contentContainerClassName="pb-24 bg-background md:mx-auto "
+          contentContainerClassName="pb-24 bg-background "
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           ListHeaderComponent={loadingProducts ? <ActivityIndicator size="large" className='my-16' /> : null}
           key={String(isMobile)}
@@ -151,7 +151,7 @@ export default function HomeScreen() {
             </Text>
           </View>}
 
-          contentContainerStyle={{ paddingTop: activeCategory === 6 ? 180 : 120, paddingHorizontal: 16 }}
+          contentContainerStyle={{ paddingTop: activeCategory === 6 ? 180 : 120 }}
         />
       </View>
     </LinearGradient>

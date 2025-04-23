@@ -10,7 +10,7 @@ import { Product } from '@/types';
 import { useUser } from '@clerk/clerk-expo';
 import { router } from 'expo-router';
 import { Minus, Plus, Trash } from 'lucide-react-native';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Image, ScrollView, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
@@ -165,7 +165,7 @@ export default function ShoppingCart() {
   );
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerClassName='pb-16'>
-      <View className="mx-auto  w-fit flex-col-reverse gap-16 p-4 md:pt-16 lg:flex-row">
+      <View className="web:md:mx-auto  w-fit flex-col-reverse gap-16 p-4 md:pt-16 lg:flex-row">
         <View className="mx-auto w-full flex-col  md:gap-8 gap-4 md:w-[500px]">
 
 
@@ -228,13 +228,12 @@ export default function ShoppingCart() {
           </View>
         </View>
         <Animated.View entering={FadeInUp.duration(200).damping(10).delay(100)}>
-          <FlatList
-            data={items}
-            renderItem={renderItem}
-            ItemSeparatorComponent={() => <Separator className="my-4 md:my-8" />}
-            contentContainerClassName=" md:w-[600px] rounded-xl bg-zinc-50 dark:bg-zinc-900 md:p-8 p-4"
-            keyExtractor={(item) => String(item.id)}
-          />
+          {items.map((item) => (
+            <React.Fragment key={String(item.id)}>
+              {renderItem({ item })}
+              <Separator className="my-4 md:my-8" />
+            </React.Fragment>
+          ))}
         </Animated.View>
       </View>
     </ScrollView>

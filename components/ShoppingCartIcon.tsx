@@ -18,7 +18,7 @@ const ShoppingCartIcon: React.FC = () => {
       onPress={() =>
         cartItemsCount === 0
           ? toast.warning('Selecciona al menos un producto')
-          : router.push('/(auth)/(screens)/cart')
+          : router.push('/(cart)/cart')
       }>
       <View style={styles.container}>
         <ShoppingCart
