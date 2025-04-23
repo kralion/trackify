@@ -6,7 +6,7 @@
     "scheme": "trackify",
     "newArchEnabled": true,
     "web": {
-      "bundler": "webpack",
+      "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png"
     },
