@@ -90,16 +90,18 @@ export default function HomeScreen() {
                 onPress={() => setActiveCategory(item.id)}
               />
             )}
-            ListEmptyComponent={() => loadingCategories ? <ActivityIndicator /> : <View className='flex-col gap-2 items-center my-8'>
-              <Image source={{ uri: "https://img.icons8.com/?size=200&id=BkgItq3pNAZa&format=png&color=000000" }} style={{
-                width: 70,
-                height: 70
+            ListEmptyComponent={() => loadingCategories
+              ? <View className='items-center my-8'><ActivityIndicator /></View>
+              : <View className='flex-col gap-2 items-center my-8'>
+                <Image source={{ uri: "https://img.icons8.com/?size=200&id=BkgItq3pNAZa&format=png&color=000000" }} style={{
+                  width: 70,
+                  height: 70
 
-              }} />
-              <Text className="px-8 text-muted-foreground">
-                No se encontraron categorías
-              </Text>
-            </View>}
+                }} />
+                <Text className="px-8 text-muted-foreground">
+                  No se encontraron categorías
+                </Text>
+              </View>}
             keyExtractor={(item) => String(item.id)}
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -130,7 +132,11 @@ export default function HomeScreen() {
         <Animated.FlatList
           contentContainerClassName="pb-24 bg-background "
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          ListHeaderComponent={loadingProducts ? <ActivityIndicator size="large" className='my-16' /> : null}
+          ListHeaderComponent={loadingProducts ? (
+            <View className='items-center my-16'>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : null}
           key={String(isMobile)}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { y: scrollY } } }], // Escucha el scroll
