@@ -13,8 +13,10 @@ import {
 import { Button } from "./ui/button";
 import { Text } from "./ui/text";
 
+
 export const ProductCard = ({ product }: { product: Product }) => {
   const { addItem } = useCartStore();
+
   const [showProductAddedModal, setShowProductAddedModal] = useState(false);
   const [pizzaPrice, setPizzaPrice] = useState(0);
   const [pizzaSize, setPizzaSize] = useState("");
@@ -24,7 +26,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
     addItem({ ...product, quantity: 1, price: price, name: `${product.name} ${size}` });
   };
   return (
-    <TouchableOpacity className="my-4 w-1/2 web:md:mr-4flex web:md:w-60  flex-col justify-between rounded-xl web:md:rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 web:md:h-[400px] hover:scale-105 active:scale-[0.98] focus-within:ring-2 focus-within:ring-primary duration-200 cursor-pointer hover:shadow-lg shadow-sm web:md:shadow-none " onPress={() => setShowProductAddedModal(true)}>
+    <TouchableOpacity className="my-4 w-1/2 web:md:mr-4 flex web:md:w-60   flex-col justify-between rounded-xl web:md:rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 shadow-sm web:md:shadow-none web:md:h-[400px] web:md:hover:scale-105  active:scale-[0.98] focus-within:ring-2 focus-within:ring-primary duration-100 transition-all ease-linear cursor-pointer hover:shadow-lg" onPress={() => setShowProductAddedModal(true)}>
 
       <Image source={{ uri: product.image_url }} className="web:md:h-48 h-36  rounded-t-lg " />
       <ProductAddedModal show={showProductAddedModal} onClose={() => setShowProductAddedModal(false)} product={product} />
@@ -81,8 +83,8 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose:
         <DialogHeader>
           <DialogTitle>{product.name}</DialogTitle>
         </DialogHeader>
-        <View className="flex flex-row items-center gap-4">
-          <Image source={{ uri: product.image_url }} className="h-20 w-20 rounded-full" />
+        <View className="flex flex-row items-start gap-4">
+          <Image source={{ uri: product.image_url }} className="h-20 w-20 rounded-xl shadow" />
           <View className="flex flex-col">
             <Text className="text-sm text-muted-foreground">
               Cantidad: <Text className="font-semibold">1</Text>
@@ -95,7 +97,7 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose:
           </View>
         </View>
         <DialogFooter >
-          <Button onPress={handleAddToCart} size="lg">
+          <Button onPress={handleAddToCart} size="lg" className="w-full">
 
             <Text className="font-semibold">Agregar al carrito</Text>
 

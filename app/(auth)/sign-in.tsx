@@ -64,8 +64,8 @@ export default function SignInScreen() {
   return (
     <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
       <ScrollView>
-        <Button className="my-16 flex w-28 flex-row  items-center justify-start" variant="ghost" onPress={() => router.back()}><ChevronLeft color="orange" />
-          <Text className="font-semibold text-orange-500">Atrás</Text>
+        <Button className="mt-4 gap-1  flex w-28 flex-row  items-center justify-start" variant="ghost" onPress={() => router.back()}><ChevronLeft color="orange" />
+          <Text className="font-semibold text-orange-500">Ver Menú</Text>
         </Button>
         <View
           style={styles.container}

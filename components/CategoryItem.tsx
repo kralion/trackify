@@ -14,11 +14,11 @@ export const CategoryItem = ({
   <TouchableOpacity
     onPress={onPress}
     className={`flex w-24 flex-col items-center gap-1 `}>
-    <View className={`rounded-full  p-2 ${active ? 'bg-primary/70 ' : 'bg-zinc-100 dark:bg-zinc-800'} `}>
+    <View className={`rounded-full  p-2 ${active ? 'bg-orange-600 ' : 'bg-zinc-100 dark:bg-zinc-800'} `}>
 
       <Image source={{ uri: category.icon }} style={{ width: 40, height: 40 }} />
     </View>
-    <Text className={`text-sm ${active ? 'font-semibold' : 'text-muted-foreground'}`} >
+    <Text className={`text-sm ${active ? ' text-black' : 'text-white'}`} >
       {category.name}
     </Text>
   </TouchableOpacity>

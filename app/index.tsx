@@ -3,13 +3,9 @@ import { ProductCard } from '@/components/ProductCard';
 import { Badge } from '@/components/ui/badge';
 import { useColorScheme } from '@/lib/useColorScheme';
 import { useCategoryStore, useProductStore } from '@/store';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Animated, FlatList, Image, RefreshControl, Text, useWindowDimensions, View } from 'react-native';
-
-
-
+import { ImageBackground, ActivityIndicator, Animated, FlatList, Image, RefreshControl, Text, useWindowDimensions, View } from 'react-native';
 
 export default function HomeScreen() {
   const { query } = useLocalSearchParams();
@@ -57,15 +53,12 @@ export default function HomeScreen() {
   }, [activeCategory]);
 
   return (
-
-    <LinearGradient
-      colors={isDarkColorScheme
-        ? ['#1a1a1a', '#ff4500']
-        : ['#ffffff', '#ffa500']}
+    <ImageBackground
+      source={require('../assets/bg.jpg')}
       style={{ flex: 1 }}
+      resizeMode="cover"
     >
-
-      <View className='flex-1'>
+      <View style={{ flex: 1 }}>
 
         <Animated.View
           style={{
@@ -91,21 +84,13 @@ export default function HomeScreen() {
               />
             )}
             ListEmptyComponent={() => loadingCategories
-              ? <View className='items-center my-8'><ActivityIndicator /></View>
-              : <View className='flex-col gap-2 items-center my-8'>
-                <Image source={{ uri: "https://img.icons8.com/?size=200&id=BkgItq3pNAZa&format=png&color=000000" }} style={{
-                  width: 70,
-                  height: 70
-
-                }} />
-                <Text className="px-8 text-muted-foreground">
-                  No se encontraron categorías
-                </Text>
-              </View>}
+              ? <View className='items-center my-8 mx-auto'><ActivityIndicator color="white" /></View>
+              : null
+            }
             keyExtractor={(item) => String(item.id)}
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ marginBottom: 16 }}
+            contentContainerStyle={{ marginBottom: 16, marginHorizontal: "auto" }}
           />
 
 
@@ -130,11 +115,11 @@ export default function HomeScreen() {
         </Animated.View>
 
         <Animated.FlatList
-          contentContainerClassName="pb-24 bg-background "
+          contentContainerStyle={{ paddingBottom: 24, backgroundColor: "background", paddingTop: activeCategory === 6 ? 180 : 120, marginHorizontal: isMobile ? 0 : "auto" }}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           ListHeaderComponent={loadingProducts ? (
             <View className='items-center my-16'>
-              <ActivityIndicator size="large" />
+              <ActivityIndicator size="large" color="white" />
             </View>
           ) : null}
           key={String(isMobile)}
@@ -146,21 +131,9 @@ export default function HomeScreen() {
           renderItem={({ item }) => <ProductCard product={item} />}
           keyExtractor={(item) => String(item.id)}
           numColumns={isMobile ? 2 : 5}
-          ListEmptyComponent={() => <View className='flex-col gap-2 items-center my-8'>
-            <Image source={{ uri: "https://img.icons8.com/?size=200&id=BkgItq3pNAZa&format=png&color=000000" }} style={{
-              width: 70,
-              height: 70
-
-            }} />
-            <Text className="px-8 text-muted-foreground">
-              No se encontraron productos
-            </Text>
-          </View>}
-
-          contentContainerStyle={{ paddingTop: activeCategory === 6 ? 180 : 120 }}
         />
       </View>
-    </LinearGradient>
+    </ImageBackground>
 
   );
 }
