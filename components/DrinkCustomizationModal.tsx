@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { toast } from "sonner-native";
 import { Image, View } from "react-native";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "~/components/ui/dialog";
 import { Button } from "./ui/button";
@@ -31,7 +32,7 @@ export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomi
   const handleAddToCart = () => {
     if (!selectedBrand) return;
     const brandObj = BRANDS.find(b => b.id === selectedBrand);
-    addItem({
+    const added = addItem({
       ...product,
       quantity: 1,
       customizations: {
@@ -41,7 +42,16 @@ export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomi
     });
     setSelectedBrand(null);
     onClose();
-  };
+    if (added) {
+      toast.success('Producto agregado al carrito', {
+        duration: 1000
+      });
+    } else {
+      toast.warning('El producto ya está en tu carrito', {
+        duration: 1600
+      });
+    }
+  }
 
   return (
     <Dialog open={show} onOpenChange={onClose}>
