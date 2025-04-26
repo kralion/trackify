@@ -12,7 +12,6 @@ export default function HomeScreen() {
   const { products, getProductsByCategoryOrSearch, loading: loadingProducts } = useProductStore();
   const { categories, getCategories, loading: loadingCategories } = useCategoryStore();
   const [refreshing, setRefreshing] = useState(false);
-  const { isDarkColorScheme } = useColorScheme();
   const [activeCategory, setActiveCategory] = useState<number | null>(1);
   const width = useWindowDimensions().width;
   const isMobile = width < 768;

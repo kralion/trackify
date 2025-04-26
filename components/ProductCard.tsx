@@ -118,7 +118,7 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose:
             multiline
             numberOfLines={3}
             value={notes}
-            onChangeText={setNotes}
+            onChangeText={(text) => setNotes(text)}
             placeholder="Ej: Con poca sal, poco arroz, etc."
             className="w-full min-h-[60px] text-sm bg-zinc-100 dark:bg-zinc-800 rounded-xl px-3 py-2"
             accessibilityLabel="Notas para el producto"

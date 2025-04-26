@@ -18,7 +18,7 @@ export const CategoryItem = ({
 
       <Image source={{ uri: category.icon }} style={{ width: 40, height: 40 }} />
     </View>
-    <Text className={`text-sm ${active ? ' text-black' : 'text-white'}`} >
+    <Text className={`text-sm text-center ${active ? ' text-black' : 'text-white'}`} >
       {category.name}
     </Text>
   </TouchableOpacity>

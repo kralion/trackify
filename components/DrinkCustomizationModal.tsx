@@ -7,11 +7,35 @@ import { Text } from "./ui/text";
 import { Product } from "@/types";
 import { useCartStore } from "@/store";
 
-const BRANDS = [
-  { id: "coca_cola", name: "CocaCola", price: 15 },
-  { id: "fanta", name: "Fanta", price: 13 },
-  { id: "pepsi", name: "Pepsi", price: 12 },
+
+
+const BRANDHALFLITER = [
+  { id: "coca_cola", name: "Coca Cola", price: 4 },
+  { id: "inca_kola", name: "Inca Kola", price: 4 },
+  { id: "sprite", name: "Sprite", price: 3 },
+  { id: "fanta", name: "Fanta", price: 3 }
 ];
+const BRANDLITERANDHALF = [
+  { id: "coca_cola", name: "Coca Cola", price: 10 },
+  { id: "inca_kola", name: "Inca Kola", price: 10 },
+];
+
+const BRANDS2LITERS = [
+  { id: "coca_cola", name: "Coca Cola", price: 12 },
+  { id: "inca_kola", name: "Inca Kola", price: 12 },
+];
+
+const TEMPERATURE = [
+  { id: "helada", name: "Helada" },
+  { id: "regular", name: "Regular" },
+];
+
+const getBrandsByProductId = (id: number) => {
+  if (id === 75) return BRANDHALFLITER;
+  if (id === 73) return BRANDLITERANDHALF;
+  if (id === 72) return BRANDS2LITERS;
+  return [];
+};
 
 interface DrinkCustomizationModalProps {
   show: boolean;
@@ -22,6 +46,9 @@ interface DrinkCustomizationModalProps {
 export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomizationModalProps) => {
   const { addItem } = useCartStore();
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [selectedTemperature, setSelectedTemperature] = useState<string | null>(null);
+
+  const brands = getBrandsByProductId(product.id);
 
   useEffect(() => {
     if (!show) {
@@ -31,7 +58,7 @@ export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomi
 
   const handleAddToCart = () => {
     if (!selectedBrand) return;
-    const brandObj = BRANDS.find(b => b.id === selectedBrand);
+    const brandObj = brands.find(b => b.id === selectedBrand);
     const added = addItem({
       ...product,
       quantity: 1,
@@ -67,7 +94,7 @@ export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomi
         <View className="gap-4">
           <Text className="font-semibold mt-2">Marca</Text>
           <View className="flex-row flex-wrap gap-2">
-            {BRANDS.map(brand => (
+            {brands.map(brand => (
               <Button
                 key={brand.id}
                 variant={selectedBrand === brand.id ? "default" : "outline"}
@@ -77,6 +104,23 @@ export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomi
                 accessibilityLabel={`Seleccionar ${brand.name}`}
               >
                 <Text>{brand.name} - S/.{brand.price.toFixed(2)}</Text>
+              </Button>
+            ))}
+          </View>
+        </View>
+        <View className="gap-4">
+          <Text className="font-semibold mt-2">Temperatura</Text>
+          <View className="flex-row flex-wrap gap-2">
+            {TEMPERATURE.map(temp => (
+              <Button
+                key={temp.id}
+                variant={selectedTemperature === temp.id ? "default" : "outline"}
+                size="sm"
+                className="rounded-full"
+                onPress={() => setSelectedTemperature(temp.id)}
+                accessibilityLabel={`Seleccionar ${temp.name}`}
+              >
+                <Text>{temp.name}</Text>
               </Button>
             ))}
           </View>
