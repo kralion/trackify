@@ -150,6 +150,27 @@ export default function ShoppingCart() {
               <Plus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
             </Button>
           </View>
+
+          {/* Render customizations if present */}
+          {item.customizations && (
+            <View className="mt-2 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800">
+              {(item.customizations.sauces?.length ?? 0) > 0 && (
+                <Text className="text-xs text-muted-foreground">
+                  <Text className='text-xs' >Cremas:</Text> {(item.customizations.sauces ?? []).join(', ')}
+                </Text>
+              )}
+              {(item.customizations.sides?.length ?? 0) > 0 && (
+                <Text className="text-xs text-muted-foreground">
+                  <Text className='text-xs' >Acompañamiento:</Text> {(item.customizations.sides ?? []).join(', ')}
+                </Text>
+              )}
+              {item.customizations.brand && (
+                <Text className="text-xs text-muted-foreground">
+                  <Text className='text-xs'>Marca:</Text> {item.customizations.brand}
+                </Text>
+              )}
+            </View>
+          )}
         </View>
       </View>
       <Button
@@ -228,7 +249,7 @@ export default function ShoppingCart() {
         </View>
         <Animated.View entering={FadeInUp.duration(200).damping(10).delay(100)}>
           {items.map((item) => (
-            <React.Fragment key={String(item.id)}>
+            <React.Fragment key={String(item.cartItemId ?? item.id)}>
               {renderItem({ item })}
               <Separator className="my-4 md:my-8" />
             </React.Fragment>

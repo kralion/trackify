@@ -22,11 +22,20 @@ export type Delivery = {
 
 export interface Product {
   id: number;
+  cartItemId?: string;
   name: string;
   price: number;
   description: string;
   image_url: string;
   quantity: number;
+  customizations?: {
+    sauces?: string[];
+    sides?: string[];
+    brand?: string;
+    notas?: string;
+  };
+
+
   stock: boolean;
   id_category: number;
   categories?: Category;
@@ -59,7 +68,7 @@ export interface CategoryStore {
 }
 export interface CartState {
   items: Product[];
-  addItem: (item: Product) => void;
+  addItem: (item: Product) => boolean;
   setItems: (items: Product[]) => void;
   removeItem: (id: number) => void;
   itemCount: number;

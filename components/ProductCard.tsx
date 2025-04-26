@@ -3,6 +3,9 @@ import { Product } from "@/types";
 import { useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { toast } from "sonner-native";
+import React from "react";
+import { DrinkCustomizationModal } from "./DrinkCustomizationModal";
+import { Input } from "./ui/input";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +15,10 @@ import {
 } from '~/components/ui/dialog';
 import { Button } from "./ui/button";
 import { Text } from "./ui/text";
-
+import { BurgerCustomizationModal } from "./BurgerCustomizationModal";
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const { addItem } = useCartStore();
-
   const [showProductAddedModal, setShowProductAddedModal] = useState(false);
   const [pizzaPrice, setPizzaPrice] = useState(0);
   const [pizzaSize, setPizzaSize] = useState("");
@@ -67,40 +69,64 @@ export const ProductCard = ({ product }: { product: Product }) => {
 };
 
 
-function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose: () => void; product: Product }) {
-  const { addItem } = useCartStore();
-  const handleAddToCart = () => {
-    addItem({ ...product, quantity: 1 });
-    onClose();
-    toast.success('Producto agregado al carrito', {
-      duration: 1000
-    });
 
-  };
+function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose: () => void; product: Product }) {
+  // Si es hamburguesa (category === 5), muestra el modal de personalización
+  if (product.categories?.id === 5) {
+    return (
+      <BurgerCustomizationModal show={show} onClose={onClose} product={product} />
+    );
+  }
+  // Si es bebida (category === 7) Y NO es id 74 ni 76, muestra el modal de personalización de bebidas
+  if (product.categories?.id === 7 && product.id !== 74 && product.id !== 76) {
+    return (
+      <DrinkCustomizationModal show={show} onClose={onClose} product={product} />
+    );
+  }
+  // Modal simple para otros productos
+  const { addItem } = useCartStore();
+  const [notes, setNotes] = React.useState<string>(""); // Define correctamente el estado notes y setNotes
+  const handleAddToCart = () => {
+    const added = addItem({
+      ...product,
+      quantity: 1,
+      customizations: notes ? { notas: notes } : undefined,
+    });
+    setNotes("");
+    onClose();
+    if (added) {
+      toast.success('Producto agregado al carrito', {
+        duration: 1000
+      });
+    } else {
+      toast.warning('El producto ya está en tu carrito', {
+        duration: 1600
+      });
+    }
+  }
+
   return (
     <Dialog open={show} onOpenChange={onClose}>
       <DialogContent className="w-[350px] web:md:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{product.name}</DialogTitle>
+          <Image source={{ uri: product.image_url }} className="h-20 w-20 rounded-xl shadow mt-2" />
         </DialogHeader>
-        <View className="flex flex-row items-start gap-4">
-          <Image source={{ uri: product.image_url }} className="h-20 w-20 rounded-xl shadow" />
-          <View className="flex flex-col">
-            <Text className="text-sm text-muted-foreground">
-              Cantidad: <Text className="font-semibold">1</Text>
-            </Text>
-            {product.categories?.id !== 6 && (
-              <Text className="text-sm text-muted-foreground">
-                Precio: S/ <Text className="font-semibold">{product.price.toFixed(2)}</Text>
-              </Text>
-            )}
-          </View>
+        <View className="mt-2">
+          <Text className="font-semibold mb-1">Notas</Text>
+          <Input
+            multiline
+            numberOfLines={3}
+            value={notes}
+            onChangeText={setNotes}
+            placeholder="Ej: Con poca sal, poco arroz, etc."
+            className="w-full min-h-[60px] text-sm bg-zinc-100 dark:bg-zinc-800 rounded-xl px-3 py-2"
+            accessibilityLabel="Notas para el producto"
+          />
         </View>
-        <DialogFooter >
+        <DialogFooter>
           <Button onPress={handleAddToCart} size="lg" className="w-full">
-
             <Text className="font-semibold">Agregar al carrito</Text>
-
           </Button>
         </DialogFooter>
       </DialogContent>
