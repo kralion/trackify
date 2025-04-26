@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Text } from "./ui/text";
 import { Product } from "@/types";
 import { useCartStore } from "@/store";
+import { toast } from "sonner-native";
 
 // Opciones fijas, puedes moverlas a un archivo de constantes luego
 const SAUCES = [
@@ -44,7 +45,7 @@ export const BurgerCustomizationModal = ({ show, onClose, product }: BurgerCusto
   };
 
   const handleAddToCart = () => {
-    addItem({
+    const added = addItem({
       ...product,
       quantity: 1,
       customizations: {
@@ -55,7 +56,16 @@ export const BurgerCustomizationModal = ({ show, onClose, product }: BurgerCusto
     setSelectedSauces([]);
     setSelectedSides([]);
     onClose();
-  };
+    if (added) {
+      toast.success('Producto agregado al carrito', {
+        duration: 1000
+      });
+    } else {
+      toast.warning('El producto ya está en tu carrito', {
+        duration: 1600
+      });
+    }
+  }
 
   return (
     <Dialog open={show} onOpenChange={onClose}>
