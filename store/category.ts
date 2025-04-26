@@ -16,7 +16,7 @@ export const useCategoryStore = create<CategoryStore>((set) => ({
     set(() => ({
       loading: true,
     }));
-      const { data, error } = await supabase.from('categories').select('*').order('id', { ascending: true });
+      const { data, error } = await supabase.from('categories').select('*').order('order', { ascending: true });
     if (error) throw error;
     set(() => ({
       categories: data,
