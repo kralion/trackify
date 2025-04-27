@@ -8,10 +8,15 @@ import { useCartStore } from '@/store';
 import { useOrder } from '@/store/order';
 import { Product } from '@/types';
 import { useUser } from '@clerk/clerk-expo';
+import { FontAwesome5 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from 'expo-router';
 import { Minus, Plus, Trash } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ActivityIndicator, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { toast } from 'sonner-native';
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
@@ -31,48 +36,64 @@ export default function ShoppingCart() {
   const { items, removeItem } = useCartStore();
   const { isDarkColorScheme } = useColorScheme();
   const { setItems } = useCartStore();
-  const [form, setForm] = useState<Order>({
-    location: user?.unsafeMetadata.location as string || '',
-    customer: user?.fullName || '',
-    user_id: user?.id || '',
-    phone: user?.unsafeMetadata.phone as string || '',
-    paymentMethod: 'efectivo',
-    items: [],
+
+  // Zod schema
+  const cartFormSchema = z.object({
+    customer: z.string().min(1, 'El nombre es obligatorio'),
+    location: z.string().min(1, 'La ubicación es obligatoria'),
+    paymentMethod: z.enum(['efectivo', 'yape']),
+    paymentBill: z.string().optional(),
+  }).superRefine((data, ctx) => {
+    if (data.paymentMethod === 'efectivo' && (!data.paymentBill || data.paymentBill.trim() === '')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Este campo es obligatorio si paga en efectivo',
+        path: ['paymentBill'],
+      });
+    }
   });
 
-  function onLabelPress(label: string) {
+  type CartForm = z.infer<typeof cartFormSchema>;
+
+  const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<CartForm>({
+    resolver: zodResolver(cartFormSchema),
+    defaultValues: {
+      customer: user?.fullName || '',
+      location: (user?.unsafeMetadata.location as string) || '',
+      paymentMethod: 'efectivo',
+      paymentBill: '',
+    },
+  });
+
+  const paymentMethod = watch('paymentMethod');
+
+  function onLabelPress(label: string, onChange: (val: string) => void) {
     return () => {
-      setForm({ ...form, paymentMethod: label });
+      onChange(label);
     };
   }
 
   useEffect(() => {
-    items.length <= 0 ? router.back() : null;
+    if (items.length <= 0) router.back();
   }, [items]);
 
   const handleReset = () => {
-    setForm({
-      location: '',
-      customer: '',
-      phone: '',
-      paymentMethod: 'efectivo',
-      items: [],
-    });
+    setValue('location', '');
+    setValue('customer', '');
+    setValue('paymentMethod', 'efectivo');
+    setValue('paymentBill', '');
     setItems([]);
     router.back();
   }
-  const handleSubmit = () => {
-    if (!form.items || !form.location || !form.customer) {
-      toast.error('Todos los campos son obligatorios');
-      return;
-    }
+
+  const onSubmit = (data: CartForm) => {
     addOrder({
-      ...form,
+      ...data,
       items,
-      customer: user?.fullName || form.customer,
+      customer: user?.fullName || data.customer,
       user_id: user?.id,
-      phone: user?.unsafeMetadata.phone as string || form.phone,
-      location: form.location,
+      phone: user?.unsafeMetadata.phone as string || '',
+      location: data.location,
       totalPrice: total(),
     });
     handleReset();
@@ -105,16 +126,9 @@ export default function ShoppingCart() {
     }, 0);
   };
 
-  const taxes = (cartItems: { price: number; quantity: number }[]) => {
-    return subTotal(cartItems) * 0.18;
-  };
-
-  const delivery = () => {
-    return subTotal(items) > 50 ? 0 : 5;
-  };
 
   const total = () => {
-    return subTotal(items) + taxes(items) + delivery();
+    return subTotal(items) + 3;
   };
 
   const renderItem = ({ item }: { item: Product }) => (
@@ -192,45 +206,108 @@ export default function ShoppingCart() {
 
           <Text className="md:mb-4 md:text-center text-2xl font-bold" style={{ fontFamily: "Bold" }}>Resumen </Text>
           <View>
-            <Label className="my-2 px-2 text-muted-foreground">Nombre del Cliente</Label>
-            <Input
-              placeholder="Ingresa tu nombre"
-              value={form.customer}
-              onChangeText={(text) => setForm({ ...form, customer: text })}
+
+            <Controller
+              control={control}
+              name="customer"
+              render={({ field }) => (
+                <Input
+                  placeholder="Ingresa tu nombre"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                />
+              )}
             />
+            {errors.customer && (
+              <Text className="text-red-500 px-2">{errors.customer.message}</Text>
+            )}
             <Label className="my-2 mt-4 px-2 text-muted-foreground">Ubicación</Label>
-
-            <Input
-              placeholder="Av. Oswaldo N Regal 485"
-              value={
-                form.location.length > 30
-                  ? `${form.location.slice(0, 30)}...`
-                  : form.location
-              }
-              onChangeText={(text) => setForm({ ...form, location: text })}
+            <Controller
+              control={control}
+              name="location"
+              render={({ field }) => (
+                <Input
+                  placeholder="Av. Oswaldo N Regal 485 - Ref Fiscalía"
+                  value={field.value}
+                  onChangeText={field.onChange}
+                />
+              )}
             />
-
+            {errors.location && (
+              <Text className="text-red-500 px-2">{errors.location.message}</Text>
+            )}
             <Label className="mt-4 mb-2 px-2 text-muted-foreground">Método de Pago</Label>
-            <RadioGroup value={form.paymentMethod} onValueChange={(value) => setForm({ ...form, paymentMethod: value })} className='gap-3'>
-              <RadioGroupItemWithLabel value='efectivo' onLabelPress={onLabelPress('efectivo')} />
-              <RadioGroupItemWithLabel value='yape' onLabelPress={onLabelPress('yape')} />
-            </RadioGroup>
+            <Controller
+              control={control}
+              name="paymentMethod"
+              render={({ field }) => (
+                <RadioGroup
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  className="gap-3"
+                >
+                  <RadioGroupItemWithLabel value='efectivo' onLabelPress={onLabelPress('efectivo', field.onChange)} />
+                  <RadioGroupItemWithLabel value='yape' onLabelPress={onLabelPress('yape', field.onChange)} />
+                </RadioGroup>
+              )}
+            />
+            {paymentMethod === 'efectivo' && (
+              <>
+                <Label className="mt-4 mb-2 px-2 text-muted-foreground">
+                  Con cuanto va a cancelar
+                </Label>
+                <Controller
+                  control={control}
+                  name="paymentBill"
+                  render={({ field }) => (
+                    <Input
+                      placeholder="S/ 50.00"
+                      value={field.value}
+                      onChangeText={field.onChange}
+                    />
+                  )}
+                />
+                {errors.paymentBill && (
+                  <Text className="text-red-500 px-2">{errors.paymentBill.message}</Text>
+                )}
+              </>
+            )}
           </View>
+          <LinearGradient
+            colors={["#FF6347", "#FF4500"]}
+            style={{ marginTop: 10, borderRadius: 10, width: "100%" }}
+          >
+            <TouchableOpacity
+              className="flex-row flex items-center justify-between  p-4"
+              onPress={() =>
 
+                router.push("/(auth)/sign-up")
+              }
+            >
+              <View className=" flex flex-col gap-2 w-4/5">
+                <Text
+                  className='text-white font-bold text-2xl'
+                >
+                  Créate una cuenta
+                </Text>
+                <Text className="opacity-80 " style={{ color: "white" }}>
+                  Para que la próxima vez no tengas que estar rellenando el formulario
+                </Text>
+              </View>
+              <View className="bg-white/20 rounded-full p-2 ">
+                <FontAwesome5 name="key" size={28} color="white" />
+              </View>
+            </TouchableOpacity>
+          </LinearGradient>
           <View className="flex flex-col gap-3 rounded-lg border border-dashed border-zinc-400 p-4 dark:border-zinc-800 ">
             <View className="flex flex-row justify-between">
               <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Sub total:</Text>
               <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>S/ {subTotal(items)}</Text>
             </View>
-            <View className="flex flex-row justify-between">
-              <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>IGV & Impuestos:</Text>
-              <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>
-                S/ {taxes(items).toFixed(2)}
-              </Text>
-            </View>
+
             <View className="flex flex-row justify-between">
               <Text className="mb-1 text-lg font-semibold" style={{ fontFamily: "Bold" }}>Delivery:</Text>
-              <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>S/ {delivery().toFixed(2)}</Text>
+              <Text className="mb-1 text-lg text-muted-foreground" style={{ fontFamily: "Bold" }}>S/ {3.00.toFixed(2)}</Text>
             </View>
             <Separator decorative orientation="horizontal" />
             <View className="flex flex-row justify-between">
@@ -239,7 +316,7 @@ export default function ShoppingCart() {
             </View>
           </View>
           <View className='flex flex-col gap-4'>
-            <Button size="lg" onPress={handleSubmit}>
+            <Button size="lg" onPress={handleSubmit(onSubmit)}>
               {loading ? <ActivityIndicator size='small' /> : <Text className="font-semibold" >Enviar pedido</Text>}
             </Button>
             <Button size="lg" variant="secondary" onPress={handleReset}>
