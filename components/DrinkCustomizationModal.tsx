@@ -63,7 +63,7 @@ export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomi
       ...product,
       quantity: 1,
       customizations: {
-        brand: brandObj ? brandObj.name : "",
+        Marca: brandObj ? brandObj.name : "",
       },
       price: brandObj ? brandObj.price : product.price,
     });
@@ -108,23 +108,7 @@ export const DrinkCustomizationModal = ({ show, onClose, product }: DrinkCustomi
             ))}
           </View>
         </View>
-        <View className="gap-4">
-          <Text className="font-semibold mt-2">Temperatura</Text>
-          <View className="flex-row flex-wrap gap-2">
-            {TEMPERATURE.map(temp => (
-              <Button
-                key={temp.id}
-                variant={selectedTemperature === temp.id ? "default" : "outline"}
-                size="sm"
-                className="rounded-full"
-                onPress={() => setSelectedTemperature(temp.id)}
-                accessibilityLabel={`Seleccionar ${temp.name}`}
-              >
-                <Text>{temp.name}</Text>
-              </Button>
-            ))}
-          </View>
-        </View>
+
         <DialogFooter>
           <Button onPress={handleAddToCart} size="lg" className="w-full" disabled={!selectedBrand}>
             <Text className="font-semibold">Agregar al carrito</Text>

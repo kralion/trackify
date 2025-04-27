@@ -2,9 +2,16 @@ export type Order = {
   id: number;
   customer: string,
   paymentMethod: string ;
+  customizations: {
+    Salsas?: string[];
+    Papas?: string;
+    Marca?: string;
+    Notas?: string;
+  }[];
   items: Product[];
   phone: string;
-  user_id?: string
+  paymentBill?: string;
+  user_id?: string;
   totalPrice: number;
   location: string;
 };
@@ -29,10 +36,10 @@ export interface Product {
   image_url: string;
   quantity: number;
   customizations?: {
-    sauces?: string[];
-    sides?: string[];
-    brand?: string;
-    notas?: string;
+    Salsas?: string[];
+    Papas?: string;
+    Marca?: string;
+    Notas?: string;
   };
 
 

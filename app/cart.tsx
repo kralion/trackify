@@ -18,17 +18,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ActivityIndicator, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { toast } from 'sonner-native';
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
 
-type Order = {
-  location: string;
-  customer: string;
-  phone: string;
-  user_id?: string;
-  paymentMethod: string;
-  items: Product[];
-};
 
 export default function ShoppingCart() {
   const { addOrder, loading } = useOrder();
@@ -40,6 +31,12 @@ export default function ShoppingCart() {
   // Zod schema
   const cartFormSchema = z.object({
     customer: z.string().min(1, 'El nombre es obligatorio'),
+    customizations: z.object({
+      Salsas: z.array(z.string()).optional(),
+      Papas: z.string().optional(),
+      Marca: z.string().optional(),
+      Notas: z.string().optional(),
+    }).optional(),
     location: z.string().min(1, 'La ubicación es obligatoria'),
     paymentMethod: z.enum(['efectivo', 'yape']),
     paymentBill: z.string().optional(),
@@ -91,6 +88,7 @@ export default function ShoppingCart() {
       ...data,
       items,
       customer: user?.fullName || data.customer,
+      customizations: items.map((item) => item.customizations || { Salsas: [], Papas: '', Marca: '', Notas: '' }),
       user_id: user?.id,
       phone: user?.unsafeMetadata.phone as string || '',
       location: data.location,
@@ -132,70 +130,80 @@ export default function ShoppingCart() {
   };
 
   const renderItem = ({ item }: { item: Product }) => (
-    <View className="   flex-row items-center  gap-4  md:gap-8">
-      <Image
-        source={{ uri: item.image_url }}
-        className="rounded-xl"
-        style={{ marginRight: 10, width: 100, height: 100 }}
-      />
-      <View className="  flex-1">
-        <View className="flex flex-col gap-2">
-          <Text className="text-lg font-bold" style={{ fontFamily: "Lato" }}>{item.name} </Text>
-          <Text className="text-gray-500">S/. {item.price.toFixed(2)} x porcion</Text>
+    <View className='flex flex-col '>
+      <View className="   flex-row items-start  gap-4  md:gap-8">
 
-          <View className="flex-row items-center">
-            <Button
-              size="icon"
-              className="rounded-full"
-              variant="secondary"
-              onPress={() => {
-                decreaseQuantity(item.id);
-              }}>
-              <Minus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
-            </Button>
-            <Text className="mx-2 text-lg">{item.quantity}</Text>
-            <Button
-              size="icon"
-              variant="secondary"
-              className="rounded-full"
-              onPress={() => {
-                increaseQuantity(item);
-              }}>
-              <Plus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
-            </Button>
-          </View>
+        <Image
+          source={{ uri: item.image_url }}
+          className="rounded-xl"
+          style={{ width: 100, height: 100 }}
+        />
+        <View className="  flex-1">
+          <View className="flex flex-col gap-2">
+            <View className='flex flex-col'>
 
-          {/* Render customizations if present */}
-          {item.customizations && (
-            <View className="mt-2 px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800">
-              {(item.customizations.sauces?.length ?? 0) > 0 && (
-                <Text className="text-xs text-muted-foreground">
-                  <Text className='text-xs' >Cremas:</Text> {(item.customizations.sauces ?? []).join(', ')}
-                </Text>
-              )}
-              {(item.customizations.sides?.length ?? 0) > 0 && (
-                <Text className="text-xs text-muted-foreground">
-                  <Text className='text-xs' >Acompañamiento:</Text> {(item.customizations.sides ?? []).join(', ')}
-                </Text>
-              )}
-              {item.customizations.brand && (
-                <Text className="text-xs text-muted-foreground">
-                  <Text className='text-xs'>Marca:</Text> {item.customizations.brand}
-                </Text>
-              )}
+              <Text className="md:text-lg font-bold" style={{ fontFamily: "Lato" }}>{item.name} </Text>
+              <Text className="text-gray-500">S/. {item.price.toFixed(2)} x porcion</Text>
             </View>
+
+            <View className="flex-row items-center">
+              <Button
+                size="icon"
+                className="rounded-full"
+                variant="secondary"
+                onPress={() => {
+                  decreaseQuantity(item.id);
+                }}>
+                <Minus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
+              </Button>
+              <Text className="mx-2 text-lg">{item.quantity}</Text>
+              <Button
+                size="icon"
+                variant="secondary"
+                className="rounded-full"
+                onPress={() => {
+                  increaseQuantity(item);
+                }}>
+                <Plus color={isDarkColorScheme ? 'white' : 'black'} size={18} />
+              </Button>
+            </View>
+
+          </View>
+        </View>
+
+        <Button
+          size="icon"
+          className="rounded-full"
+          variant="destructive"
+          onPress={() => {
+            removeItem(item.id);
+          }}>
+          <Trash color="white" size={18} />
+        </Button> </View>
+      {item.customizations && (
+        <View className="mt-2 p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800">
+          {(item.customizations.Salsas?.length ?? 0) > 0 && (
+            <Text className="text-xs text-muted-foreground">
+              <Text className='text-xs' >Cremas:</Text> {(item.customizations.Salsas ?? []).join(', ')}
+            </Text>
+          )}
+          {(item.customizations.Papas?.length ?? 0) > 0 && (
+            <Text className="text-xs text-muted-foreground">
+              <Text className='text-xs' >Papas:</Text> {(item.customizations.Papas)}
+            </Text>
+          )}
+          {item.customizations.Marca && (
+            <Text className="text-xs text-muted-foreground">
+              <Text className='text-xs'>Marca:</Text> {item.customizations.Marca}
+            </Text>
+          )}
+          {item.customizations.Notas && (
+            <Text className="text-xs text-muted-foreground">
+              <Text className='text-xs'>Notas:</Text> {item.customizations.Notas}
+            </Text>
           )}
         </View>
-      </View>
-      <Button
-        size="icon"
-        className="rounded-full"
-        variant="destructive"
-        onPress={() => {
-          removeItem(item.id);
-        }}>
-        <Trash color="white" size={18} />
-      </Button>
+      )}
     </View>
   );
   return (
@@ -263,6 +271,7 @@ export default function ShoppingCart() {
                     <Input
                       placeholder="S/ 50.00"
                       value={field.value}
+                      inputMode='numeric'
                       onChangeText={field.onChange}
                     />
                   )}
@@ -278,7 +287,7 @@ export default function ShoppingCart() {
             style={{ marginTop: 10, borderRadius: 10, width: "100%" }}
           >
             <TouchableOpacity
-              className="flex-row flex items-center justify-between  p-4"
+              className="flex-row flex items-center justify-between  animate-pulse p-4"
               onPress={() =>
 
                 router.push("/(auth)/sign-up")
@@ -294,7 +303,7 @@ export default function ShoppingCart() {
                   Para que la próxima vez no tengas que estar rellenando el formulario
                 </Text>
               </View>
-              <View className="bg-white/20 rounded-full p-2 ">
+              <View className="bg-white/20 rounded-full p-2 dark:bg-white/20 ">
                 <FontAwesome5 name="key" size={28} color="white" />
               </View>
             </TouchableOpacity>
@@ -325,12 +334,15 @@ export default function ShoppingCart() {
           </View>
         </View>
         <Animated.View entering={FadeInUp.duration(200).damping(10).delay(100)}>
-          {items.map((item) => (
-            <React.Fragment key={String(item.cartItemId ?? item.id)}>
-              {renderItem({ item })}
-              <Separator className="my-4 md:my-8" />
-            </React.Fragment>
-          ))}
+          {items
+            .slice()
+            .reverse()
+            .map((item) => (
+              <React.Fragment key={String(item.cartItemId ?? item.id)}>
+                {renderItem({ item })}
+                <Separator className="my-4 md:my-8" />
+              </React.Fragment>
+            ))}
         </Animated.View>
       </View>
     </ScrollView>

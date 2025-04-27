@@ -90,9 +90,8 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose:
     const added = addItem({
       ...product,
       quantity: 1,
-      customizations: notes ? { notas: notes } : undefined,
+      customizations: notes ? { Notas: notes } : undefined,
     });
-    setNotes("");
     onClose();
     if (added) {
       toast.success('Producto agregado al carrito', {
@@ -118,7 +117,7 @@ function ProductAddedModal({ show, onClose, product }: { show: boolean; onClose:
             multiline
             numberOfLines={3}
             value={notes}
-            onChangeText={(text) => setNotes(text)}
+            onChangeText={setNotes}
             placeholder="Ej: Con poca sal, poco arroz, etc."
             className="w-full min-h-[60px] text-sm bg-zinc-100 dark:bg-zinc-800 rounded-xl px-3 py-2"
             accessibilityLabel="Notas para el producto"

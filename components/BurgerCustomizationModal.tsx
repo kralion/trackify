@@ -19,7 +19,7 @@ const SAUCES = [
 const FRIES = [
   { id: "fritas", name: "Fritas" },
   { id: "al_hilo", name: "Al hilo" },
-];
+]; // Mantener el array para mapear las opciones
 
 
 interface BurgerCustomizationModalProps {
@@ -30,16 +30,15 @@ interface BurgerCustomizationModalProps {
 
 export const BurgerCustomizationModal = ({ show, onClose, product }: BurgerCustomizationModalProps) => {
   const { addItem } = useCartStore();
-  const [selectedSauces, setSelectedSauces] = useState<string[]>([]);
-  const [selectedSides, setSelectedSides] = useState<string[]>([]);
-  const [notes, setNotes] = useState<string>("");
-  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
 
-  // Limpia los estados al cerrar el modal
+  const [selectedSauces, setSelectedSauces] = useState<string[]>([]);
+  // Solo se puede seleccionar una opción de papas, por defecto 'Al hilo'
+  const [selectedSide, setSelectedSide] = useState<string>('Al hilo');
+  const [notes, setNotes] = useState<string>("");
   useEffect(() => {
     if (!show) {
       setSelectedSauces([]);
-      setSelectedSides([]);
+      setSelectedSide('Al hilo');
     }
   }, [show]);
 
@@ -52,12 +51,13 @@ export const BurgerCustomizationModal = ({ show, onClose, product }: BurgerCusto
       ...product,
       quantity: 1,
       customizations: {
-        sauces: selectedSauces,
-        sides: selectedSides,
+        Salsas: selectedSauces,
+        Papas: selectedSide,
+        Notas: notes
       },
     });
     setSelectedSauces([]);
-    setSelectedSides([]);
+    setSelectedSide('Al hilo');
     onClose();
     if (added) {
       toast.success('Producto agregado al carrito', {
@@ -84,26 +84,27 @@ export const BurgerCustomizationModal = ({ show, onClose, product }: BurgerCusto
             {SAUCES.map(sauce => (
               <Button
                 key={sauce.id}
-                variant={selectedSauces.includes(sauce.id) ? "default" : "outline"}
+                variant={selectedSauces.includes(sauce.name) ? "default" : "outline"}
                 size="sm"
                 className="rounded-full"
-                onPress={() => handleToggle(selectedSauces, setSelectedSauces, sauce.id)}
+                onPress={() => handleToggle(selectedSauces, setSelectedSauces, sauce.name)}
                 accessibilityLabel={`Seleccionar ${sauce.name}`}
               >
                 <Text>{sauce.name}</Text>
               </Button>
             ))}
           </View>
+
           {/* Papas */}
-          <Text className="font-semibold mt-4">Papas</Text>
-          <View className="flex-row gap-2">
+          <Text className="font-semibold mt-2">Papas</Text>
+          <View className="flex-row flex-wrap gap-2">
             {FRIES.map(fry => (
               <Button
                 key={fry.id}
-                variant={selectedSides.includes(fry.id) ? "default" : "outline"}
+                variant={selectedSide === fry.name ? "default" : "outline"}
                 size="sm"
                 className="rounded-full"
-                onPress={() => handleToggle(selectedSides, setSelectedSides, fry.id)}
+                onPress={() => setSelectedSide(fry.name)}
                 accessibilityLabel={`Seleccionar ${fry.name}`}
               >
                 <Text>{fry.name}</Text>

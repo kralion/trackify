@@ -1,18 +1,17 @@
 import { CategoryItem } from '@/components/CategoryItem';
 import { ProductCard } from '@/components/ProductCard';
 import { Badge } from '@/components/ui/badge';
-import { useColorScheme } from '@/lib/useColorScheme';
 import { useCategoryStore, useProductStore } from '@/store';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { ImageBackground, ActivityIndicator, Animated, FlatList, Image, RefreshControl, Text, useWindowDimensions, View } from 'react-native';
+import { ActivityIndicator, Animated, FlatList, ImageBackground, RefreshControl, Text, useWindowDimensions, View } from 'react-native';
 
 export default function HomeScreen() {
   const { query } = useLocalSearchParams();
   const { products, getProductsByCategoryOrSearch, loading: loadingProducts } = useProductStore();
   const { categories, getCategories, loading: loadingCategories } = useCategoryStore();
   const [refreshing, setRefreshing] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<number | null>(1);
+  const [activeCategory, setActiveCategory] = useState<number | null>(12);
   const width = useWindowDimensions().width;
   const isMobile = width < 768;
   const scrollY = useRef(new Animated.Value(0)).current; // 🔥 Trackea el scroll vertical
@@ -97,7 +96,7 @@ export default function HomeScreen() {
 
 
 
-            <View className='ml-4 flex flex-row flex-wrap gap-2'>
+            <View className='ml-4 flex flex-row flex-wrap gap-2 mx-auto'>
               <Badge variant="secondary">
                 <Text className=' web:md:text-lg dark:text-foreground'>Personal s/. 15.00</Text>
               </Badge>
