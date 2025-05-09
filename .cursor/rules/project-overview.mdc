@@ -1,0 +1,55 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Trackify Project Overview
+
+This is a React Native/Expo mobile application built with modern tooling and best practices.
+
+## Project Structure
+
+- `app/` - Main application code using Expo Router
+  - `index.tsx` - Home screen
+  - `cart.tsx` - Shopping cart functionality
+  - `profile.tsx` - User profile management
+  - `_layout.tsx` - Root layout configuration
+  - `(auth)/` - Authentication related screens
+  - `+html.tsx` - HTML configuration for web
+
+- `components/` - Reusable UI components
+- `lib/` - Utility libraries and shared code
+- `store/` - State management (Zustand)
+- `types/` - TypeScript type definitions
+- `utils/` - Helper functions and utilities
+- `assets/` - Static assets like images and fonts
+
+## Key Technologies
+
+- Expo/React Native for cross-platform mobile development
+- Expo Router for navigation
+- NativeWind (TailwindCSS) for styling
+- Zustand for state management
+- Clerk for authentication
+- Supabase for backend services
+- React Hook Form for form handling
+- Zod for schema validation
+
+## Getting Started
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start the development server:
+```bash
+npm start
+```
+
+3. Run on specific platforms:
+- iOS: `npm run ios`
+- Android: `npm run android`
+- Web: `npm run web`
+
+

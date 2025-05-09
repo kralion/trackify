@@ -1,0 +1,71 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# State Management
+
+This project uses Zustand for state management, providing a simple and efficient way to manage application state.
+
+## Store Structure
+
+The `store/` directory contains all state management logic:
+
+- `use-cart-store.ts` - Shopping cart state
+- `use-auth-store.ts` - Authentication state
+- `use-settings-store.ts` - App settings state
+
+## Key Features
+
+- Uses Zustand for state management
+- Implements TypeScript for type safety
+- Provides hooks for state access
+- Supports persistence where needed
+
+## Usage Example
+
+```typescript
+import { useCartStore } from '@/store/use-cart-store';
+
+function CartComponent() {
+  const { items, addItem, removeItem } = useCartStore();
+  
+  return (
+    <View>
+      {items.map(item => (
+        <CartItem 
+          key={item.id}
+          item={item}
+          onRemove={() => removeItem(item.id)}
+        />
+      ))}
+    </View>
+  );
+}
+```
+
+## Best Practices
+
+1. Keep stores focused and single-purpose
+2. Use TypeScript interfaces for store state
+3. Implement proper error handling
+4. Use selectors for derived state
+5. Consider persistence for important state
+
+## Store Creation Pattern
+
+```typescript
+import { create } from 'zustand';
+
+interface StoreState {
+  // state properties
+}
+
+interface StoreActions {
+  // action methods
+}
+
+export const useStore = create<StoreState & StoreActions>((set) => ({
+  // state and actions implementation
+}));
+```

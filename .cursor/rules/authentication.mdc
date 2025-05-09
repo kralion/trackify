@@ -1,0 +1,46 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Authentication System
+
+This project uses Clerk for authentication. The authentication system is implemented using Expo's secure storage and Clerk's SDK.
+
+## Key Files
+
+- [app/(auth)/_layout.tsx](mdc:app/(auth)/_layout.tsx) - Authentication layout and routing
+- [app/(auth)/sign-in.tsx](mdc:app/(auth)/sign-in.tsx) - Sign in screen
+- [app/(auth)/sign-up.tsx](mdc:app/(auth)/sign-up.tsx) - Sign up screen
+
+## Authentication Flow
+
+1. Users can sign in or sign up through the auth screens
+2. Clerk handles the authentication process
+3. User session is stored securely using `expo-secure-store`
+4. Protected routes are handled through the auth layout
+
+## Implementation Details
+
+- Uses `@clerk/clerk-expo` for authentication
+- Implements secure token storage with `expo-secure-store`
+- Handles authentication state through Clerk's hooks
+- Provides protected routes and authentication guards
+
+## Usage
+
+To protect a route or component:
+
+```typescript
+import { useAuth } from '@clerk/clerk-expo';
+
+function ProtectedComponent() {
+  const { isSignedIn, userId } = useAuth();
+  
+  if (!isSignedIn) {
+    return <Redirect href="/sign-in" />;
+  }
+  
+  return <YourComponent />;
+}
+```

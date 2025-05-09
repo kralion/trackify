@@ -1,0 +1,55 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# UI Components and Styling
+
+This project uses NativeWind (TailwindCSS) for styling and includes a set of reusable UI components.
+
+## Styling System
+
+- Uses NativeWind v4 for styling
+- TailwindCSS configuration in [tailwind.config.js](mdc:tailwind.config.js)
+- Global styles in [global.css](mdc:global.css)
+
+## Component Structure
+
+The `components/` directory contains reusable UI components:
+
+- `ui/` - Basic UI components
+- `forms/` - Form-related components
+- `layout/` - Layout components
+- `shared/` - Shared components across features
+
+## Key UI Libraries
+
+- `@rn-primitives/*` - Primitive UI components
+- `lucide-react-native` - Icons
+- `moti` - Animations
+- `react-native-reanimated` - Advanced animations
+- `sonner-native` - Toast notifications
+
+## Usage Example
+
+```typescript
+import { View, Text } from 'react-native';
+
+export function MyComponent() {
+  return (
+    <View className="flex-1 items-center justify-center bg-white">
+      <Text className="text-lg font-bold text-gray-900">
+        Hello World
+      </Text>
+    </View>
+  );
+}
+```
+
+## Best Practices
+
+1. Use Tailwind classes for styling
+2. Keep components small and focused
+3. Use TypeScript for type safety
+4. Follow the project's component structure
+5. Use the provided UI primitives when possible
